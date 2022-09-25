@@ -1,0 +1,18 @@
+program myProgram;
+
+var int: myInt[2,5], x, y;
+var float: myFloat;
+var char: myChar;
+
+func int myFunc(int a) {
+    var int: f;
+    #content
+    f = a * f;
+
+    return f;
+}
+
+main() {
+    var int: m;
+    end
+}

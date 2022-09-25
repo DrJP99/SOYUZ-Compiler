@@ -1,0 +1,263 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    COMMENT
+    CTEC
+    DOT
+    FALSE
+    NULL
+    TRUE
+
+Grammar
+
+Rule 0     S' -> program_start
+Rule 1     program_start -> PROGRAM ID SEMICOL program_start_1 program_start_2 main
+Rule 2     program_start_1 -> vars
+Rule 3     program_start_1 -> empty
+Rule 4     program_start_2 -> funcs
+Rule 5     program_start_2 -> empty
+Rule 6     vars -> VAR type COL vars_1 SEMICOL vars
+Rule 7     vars -> empty
+Rule 8     vars_1 -> ID vars_2 vars_3
+Rule 9     vars_2 -> dims
+Rule 10    vars_2 -> empty
+Rule 11    vars_3 -> COMMA vars_1
+Rule 12    vars_3 -> empty
+Rule 13    type -> INT
+Rule 14    type -> FLOAT
+Rule 15    type -> CHAR
+Rule 16    type -> BOOL
+Rule 17    rtype -> INT
+Rule 18    rtype -> FLOAT
+Rule 19    rtype -> CHAR
+Rule 20    rtype -> BOOL
+Rule 21    rtype -> VOID
+Rule 22    block -> LBRACK block_1 RBRACK
+Rule 23    block_1 -> statement
+Rule 24    block_1 -> empty
+Rule 25    funcs -> FUNC rtype ID params LCURLY funcs_1 statement funcs_2 RCURLY funcs_3
+Rule 26    funcs_1 -> vars
+Rule 27    funcs_1 -> empty
+Rule 28    funcs_2 -> RETURN expresion
+Rule 29    funcs_2 -> empty
+Rule 30    funcs_3 -> funcs
+Rule 31    funcs_3 -> empty
+Rule 32    params -> LPAR params_1 RPAR
+Rule 33    params_1 -> type ID params_2 params_3
+Rule 34    params_1 -> empty
+Rule 35    params_2 -> dims
+Rule 36    params_2 -> empty
+Rule 37    params_3 -> COMMA params_1
+Rule 38    params_3 -> empty
+Rule 39    assign -> ID assign_1 EQUAL expresion SEMICOL
+Rule 40    assign_1 -> dims
+Rule 41    assign_1 -> empty
+Rule 42    dims -> LBRACK expresion dims_1 RBRACK
+Rule 43    dims_1 -> COMMA expresion
+Rule 44    dims_1 -> empty
+Rule 45    statement -> statement_1 statement
+Rule 46    statement -> empty
+Rule 47    statement_1 -> assign
+Rule 48    statement_1 -> cond
+Rule 49    statement_1 -> cloop
+Rule 50    statement_1 -> nloop
+Rule 51    statement_1 -> callfunc
+Rule 52    statement_1 -> read
+Rule 53    statement_1 -> write
+Rule 54    statement_1 -> loadfile
+Rule 55    cond -> IF LPAR expresion RPAR block cond_1
+Rule 56    cond_1 -> ELSE cond_2
+Rule 57    cond_2 -> IF LPAR expresion RPAR block cond_3
+Rule 58    cond_2 -> block
+Rule 59    cond_3 -> cond_1
+Rule 60    cond_3 -> empty
+Rule 61    cloop -> WHILE LPAR expression RPAR block
+Rule 62    nloop -> FROM ID nloop_1 nloop_2 TO expresion block
+Rule 63    nloop_1 -> dims
+Rule 64    nloop_1 -> empty
+Rule 65    nloop_2 -> EQUAL expresion
+Rule 66    nloop_2 -> empty
+Rule 67    callfunc -> ID LPAR callfunc_1 RPAR SEMICOL
+Rule 68    callfunc_1 -> ID callfunc_2 callfunc_3
+Rule 69    callfunc_2 -> dims
+Rule 70    callfunc_2 -> empty
+Rule 71    callfunc_3 -> COMMA callfunc_1
+Rule 72    callfunc_3 -> empty
+Rule 73    read -> READ LPAR read_1 RPAR SEMICOL
+Rule 74    read_1 -> ID read_2 read_3
+Rule 75    read_2 -> dims
+Rule 76    read_2 -> empty
+Rule 77    read_3 -> COMMA read_1
+Rule 78    read_3 -> empty
+Rule 79    write -> WRITE LPAR write_1 RPAR SEMICOL
+Rule 80    write_1 -> write_2 write_3
+Rule 81    write_2 -> expresion
+Rule 82    write_2 -> CTES
+Rule 83    write_3 -> COMMA write_1
+Rule 84    write_3 -> empty
+Rule 85    loadfile -> LOADFILE LPAR ID COMMA CTES COMMA loadfile_1 COMMA loadfile_2 RPAR SEMICOL
+Rule 86    loadfile_1 -> CTEI
+Rule 87    loadfile_1 -> ID
+Rule 88    loadfile_2 -> CTEI
+Rule 89    loadfile_2 -> ID
+Rule 90    expresion -> sexp expresion_1
+Rule 91    expresion_1 -> expresion_2 expresion
+Rule 92    expresion_1 -> empty
+Rule 93    expresion_2 -> OR
+Rule 94    expresion_2 -> AND
+Rule 95    sexp -> exp sexp_1
+Rule 96    sexp_1 -> sexp_2 exp
+Rule 97    sexp_1 -> empty
+Rule 98    sexp_2 -> ISEQUAL
+Rule 99    sexp_2 -> EQUAL
+Rule 100   sexp_2 -> NOTEQUAL
+Rule 101   sexp_2 -> GREATERTHAN
+Rule 102   sexp_2 -> GREATERORQUAL
+Rule 103   sexp_2 -> LESSTHAN
+Rule 104   sexp_2 -> LESSOREQUAL
+Rule 105   exp -> term exp_1
+Rule 106   exp_1 -> exp_2 exp
+Rule 107   exp_1 -> empty
+Rule 108   exp_2 -> PLUS
+Rule 109   exp_2 -> MINUS
+Rule 110   term -> factor term_1
+Rule 111   term_1 -> term_2 term
+Rule 112   term_1 -> empty
+Rule 113   term_2 -> TIMES
+Rule 114   term_2 -> DIV
+Rule 115   factor -> factor_1 factor_2
+Rule 116   factor_1 -> ID
+Rule 117   factor_1 -> callfunc
+Rule 118   factor_1 -> CTEI
+Rule 119   factor_1 -> CTEF
+Rule 120   factor_2 -> LPAR expresion RPAR
+Rule 121   factor_2 -> empty
+Rule 122   main -> MAIN LPAR RPAR LCURLY main_1 statement END RCURLY
+Rule 123   empty -> <empty>
+
+Terminals, with rules where they appear
+
+AND                  : 94
+BOOL                 : 16 20
+CHAR                 : 15 19
+COL                  : 6
+COMMA                : 11 37 43 71 77 83 85 85 85
+COMMENT              : 
+CTEC                 : 
+CTEF                 : 119
+CTEI                 : 86 88 118
+CTES                 : 82 85
+DIV                  : 114
+DOT                  : 
+ELSE                 : 56
+END                  : 122
+EQUAL                : 39 65 99
+FALSE                : 
+FLOAT                : 14 18
+FROM                 : 62
+FUNC                 : 25
+GREATERORQUAL        : 102
+GREATERTHAN          : 101
+ID                   : 1 8 25 33 39 62 67 68 74 85 87 89 116
+IF                   : 55 57
+INT                  : 13 17
+ISEQUAL              : 98
+LBRACK               : 22 42
+LCURLY               : 25 122
+LESSOREQUAL          : 104
+LESSTHAN             : 103
+LOADFILE             : 85
+LPAR                 : 32 55 57 61 67 73 79 85 120 122
+MAIN                 : 122
+MINUS                : 109
+NOTEQUAL             : 100
+NULL                 : 
+OR                   : 93
+PLUS                 : 108
+RBRACK               : 22 42
+RCURLY               : 25 122
+READ                 : 73
+RETURN               : 28
+RPAR                 : 32 55 57 61 67 73 79 85 120 122
+SEMICOL              : 1 6 39 67 73 79 85
+TIMES                : 113
+TO                   : 62
+TRUE                 : 
+VAR                  : 6
+VOID                 : 21
+WHILE                : 61
+WRITE                : 79
+error                : 
+
+Nonterminals, with rules where they appear
+
+PROGRAM              : 1
+assign               : 47
+assign_1             : 39
+block                : 55 57 58 61 62
+block_1              : 22
+callfunc             : 51 117
+callfunc_1           : 67 71
+callfunc_2           : 68
+callfunc_3           : 68
+cloop                : 49
+cond                 : 48
+cond_1               : 55 59
+cond_2               : 56
+cond_3               : 57
+dims                 : 9 35 40 63 69 75
+dims_1               : 42
+empty                : 3 5 7 10 12 24 27 29 31 34 36 38 41 44 46 60 64 66 70 72 76 78 84 92 97 107 112 121
+exp                  : 95 96 106
+exp_1                : 105
+exp_2                : 106
+expresion            : 28 39 42 43 55 57 62 65 81 91 120
+expresion_1          : 90
+expresion_2          : 91
+expression           : 61
+factor               : 110
+factor_1             : 115
+factor_2             : 115
+funcs                : 4 30
+funcs_1              : 25
+funcs_2              : 25
+funcs_3              : 25
+loadfile             : 54
+loadfile_1           : 85
+loadfile_2           : 85
+main                 : 1
+main_1               : 122
+nloop                : 50
+nloop_1              : 62
+nloop_2              : 62
+params               : 25
+params_1             : 32 37
+params_2             : 33
+params_3             : 33
+program_start        : 0
+program_start_1      : 1
+program_start_2      : 1
+read                 : 52
+read_1               : 73 77
+read_2               : 74
+read_3               : 74
+rtype                : 25
+sexp                 : 90
+sexp_1               : 95
+sexp_2               : 96
+statement            : 23 25 45 122
+statement_1          : 45
+term                 : 105 111
+term_1               : 110
+term_2               : 111
+type                 : 6 33
+vars                 : 2 6 26
+vars_1               : 6 11
+vars_2               : 8
+vars_3               : 8
+write                : 53
+write_1              : 79 83
+write_2              : 80
+write_3              : 80
+

@@ -2,26 +2,27 @@ import ply.lex as lex
 
 #List of reserved tokens
 reserved = {
-	'var' : 'VAR',
-	'int' : 'INT',
-	'float' : 'FLOAT',
-	'char' : 'CHAR',
-	'bool' : 'BOOL',
-	'void' : 'VOID',
-	'func' : 'FUNC',
-	'return' : 'RETURN',
-	'null' : 'NULL',
-	'true' : 'TRUE',
-	'false' : 'FALSE',
-	'if' : 'IF',
-	'else' : 'ELSE',
-	'while' : 'WHILE',
-	'from' : 'FROM',
-	'to' : 'TO',
-	'main' : 'MAIN',
-	'read' : 'READ',
-	'write' : 'WRITE',
-	'loadFile' : 'LOADFILE'
+	'var' 		: 'VAR',
+	'int' 		: 'INT',
+	'float' 	: 'FLOAT',
+	'char' 		: 'CHAR',
+	'bool' 		: 'BOOL',
+	'void' 		: 'VOID',
+	'func' 		: 'FUNC',
+	'return'	: 'RETURN',
+	'null' 		: 'NULL',
+	'true' 		: 'TRUE',
+	'false' 	: 'FALSE',
+	'if' 		: 'IF',
+	'else' 		: 'ELSE',
+	'while' 	: 'WHILE',
+	'from' 		: 'FROM',
+	'to' 		: 'TO',
+	'main' 		: 'MAIN',
+	'end'		: 'END',
+	'read' 		: 'READ',
+	'write' 	: 'WRITE',
+	'loadFile'	: 'LOADFILE'
 }
 
 #List of tokens
@@ -89,13 +90,14 @@ def t_ID(t):
 	return t
 
 def t_CTEF(t):
-	r'[-+]?[0-9]+\.[0-9]+(E[\-\+]?[0-9]+(\.[0-9]+)?)?'
-	#t.value = float(t.value)
+	r'[-+]?[0-9]+\.[0-9]+(e[\-\+]?[0-9]+(\.[0-9]+)?)?'
+	t.value = float(t.value)
 	return t
 
 def t_CTEI(t):
-	r'[-+]?[0-9]+(E[\-\+]?[0-9]+(\.[0-9]+)?)?'
-	#t.value = int(t.value)
+	#r'[-+]?[0-9]+(e[\-\+][0-9]+(\.[0-9]+)?)?'
+	r'[-+]?[0-9]+'
+	t.value = int(t.value)
 	return t
 
 def t_CTEC(t):
@@ -124,18 +126,18 @@ def t_error(t):
 
 lexer = lex.lex()
 
-data = 'hello'
+# data = 'hello'
 
-while (data != "0"):
+# while (data != "0"):
 
 
-	data = input("$> ")
+# 	data = input("$> ")
 
-	lexer.input(data)
+# 	lexer.input(data)
 
-	# Tokenize
-	while True:
-		tok = lexer.token()
-		if not tok:
-			break      # No more input
-		print(tok)
+# 	# Tokenize
+# 	while True:
+# 		tok = lexer.token()
+# 		if not tok:
+# 			break      # No more input
+# 		print(tok)
