@@ -2,6 +2,7 @@ import ply.lex as lex
 
 #List of reserved tokens
 reserved = {
+	'program'	: 'PROGRAM',
 	'var' 		: 'VAR',
 	'int' 		: 'INT',
 	'float' 	: 'FLOAT',
@@ -10,9 +11,7 @@ reserved = {
 	'void' 		: 'VOID',
 	'func' 		: 'FUNC',
 	'return'	: 'RETURN',
-	'null' 		: 'NULL',
-	'true' 		: 'TRUE',
-	'false' 	: 'FALSE',
+#	'null' 		: 'NULL',
 	'if' 		: 'IF',
 	'else' 		: 'ELSE',
 	'while' 	: 'WHILE',
@@ -28,7 +27,7 @@ reserved = {
 #List of tokens
 tokens = [
 	'COMMA',
-	'DOT',
+#	'DOT',
 	'COL',
 	'SEMICOL',
 	'LCURLY',
@@ -55,12 +54,13 @@ tokens = [
 	'CTEI',
 	'CTEF',
 	'CTEC',
-	'CTES'
+	'CTES',
+	'CTEB'
 ]  + list(reserved.values())
 
 #Regular expresions for simple tokens
 t_COMMA				= r'\,'
-t_DOT				= r'\.'
+# t_DOT				= r'\.'
 t_COL				= r'\:'
 t_SEMICOL			= r'\;'
 t_LCURLY			= r'\{'
@@ -83,6 +83,11 @@ t_DIV				= r'\/'
 t_AND				= r'\&\&'
 t_OR				= r'\|\|'
 t_ignore_COMMENT	= r'\#.*'
+
+def t_CTEB(t):
+	r'([Tt][Rr][Uu][Ee])|([Ff][Aa][Ll][Ss][Ee])'
+	t.value = bool(t.value)
+	return t
 
 def t_ID(t):
 	r'[a-zA-Z][a-zA-Z_0-9]*'

@@ -12,7 +12,6 @@ def p_program_start(p):
 def p_program_start_1(p):
 	'''
 	program_start_1		: vars
-						| empty
 	'''
 
 # Can have funcs or not
@@ -63,12 +62,11 @@ def p_rtype(p):
 
 def p_block(p):
 	'''
-	block				: LBRACK block_1 RBRACK
+	block				: LCURLY block_1 RCURLY
 	'''
 def p_block_1(p):
 	'''
 	block_1				: statement
-						| empty
 	'''
 
 def p_funcs(p):
@@ -78,11 +76,10 @@ def p_funcs(p):
 def p_funcs_1(p):
 	'''
 	funcs_1				: vars
-						| empty
 	'''
 def p_funcs_2(p):
 	'''
-	funcs_2				: RETURN expresion
+	funcs_2				: RETURN expression SEMICOL
 						| empty
 	'''
 def p_funcs_3(p):
@@ -113,7 +110,7 @@ def p_params_3(p):
 
 def p_assign(p):
 	'''
-	assign				: ID assign_1 EQUAL expresion SEMICOL
+	assign				: ID assign_1 EQUAL expression SEMICOL
 	'''
 def p_assign_1(p):
 	'''
@@ -123,11 +120,11 @@ def p_assign_1(p):
 
 def p_dims(p):
 	'''
-	dims				: LBRACK expresion dims_1 RBRACK
+	dims				: LBRACK expression dims_1 RBRACK
 	'''
 def p_dims_1(p):
 	'''
-	dims_1				: COMMA expresion
+	dims_1				: COMMA expression
 						| empty
 	'''
 
@@ -150,7 +147,7 @@ def p_statement_1(p):
 
 def p_cond(p):
 	'''
-	cond				: IF LPAR expresion RPAR block cond_1
+	cond				: IF LPAR expression RPAR block cond_1
 	'''
 def p_cond_1(p):
 	'''
@@ -158,7 +155,7 @@ def p_cond_1(p):
 	'''
 def p_cond_2(p):
 	'''
-	cond_2				: IF LPAR expresion RPAR block cond_3
+	cond_2				: IF LPAR expression RPAR block cond_3
 						| block
 	'''
 def p_cond_3(p):
@@ -176,7 +173,7 @@ def p_cloop(p):
 # Non-conditional loop [from x = 1 to 10]
 def p_nloop(p):
 	'''
-	nloop				: FROM ID nloop_1 nloop_2 TO expresion block
+	nloop				: FROM ID nloop_1 nloop_2 TO expression block
 	'''
 def p_nloop_1(p):
 	'''
@@ -185,17 +182,18 @@ def p_nloop_1(p):
 	'''
 def p_nloop_2(p):
 	'''
-	nloop_2				: EQUAL expresion
+	nloop_2				: EQUAL expression
 						| empty
 	'''
 
 def p_callfunc(p):
 	'''
-	callfunc			: ID LPAR callfunc_1 RPAR SEMICOL
+	callfunc			: ID LPAR callfunc_1 RPAR
 	'''
 def p_callfunc_1(p):
 	'''
 	callfunc_1			: ID callfunc_2 callfunc_3
+						| empty
 	'''
 def p_callfunc_2(p):
 	'''
@@ -237,7 +235,7 @@ def p_write_1(p):
 	'''
 def p_write_2(p):
 	'''
-	write_2				: expresion
+	write_2				: expression
 						| CTES
 	'''
 def p_write_3(p):
@@ -264,18 +262,18 @@ def p_loadfile_2(p):
 						| ID
 	'''
 
-def p_expresion(p):
+def p_expression(p):
 	'''
-	expresion			: sexp expresion_1
+	expression			: sexp expression_1
 	'''
-def p_expresion_1(p):
+def p_expression_1(p):
 	'''
-	expresion_1			: expresion_2 expresion
+	expression_1		: expression_2 expression
 						| empty
 	'''
-def p_expresion_2(p):
+def p_expression_2(p):
 	'''
-	expresion_2			: OR
+	expression_2		: OR
 						| AND
 	'''
 
@@ -335,27 +333,39 @@ def p_factor(p):
 	'''
 def p_factor_1(p):
 	'''
-	factor_1			: ID
+	factor_1			: ID factor_3
 						| callfunc
 						| CTEI
 						| CTEF
+						| CTEB
+						| CTEC
+						| empty
 	'''
 def p_factor_2(p):
 	'''
-	factor_2			: LPAR expresion RPAR
+	factor_2			: LPAR expression RPAR
+						| empty
+	'''
+def p_factor_3(p):
+	'''
+	factor_3			: dims
 						| empty
 	'''
 
 def p_main(p):
 	'''
-	main				: MAIN LPAR RPAR LCURLY main_1 statement END RCURLY
+	main				: MAIN LPAR RPAR LCURLY main_1 statement END SEMICOL RCURLY
+	'''
+def p_main_1(p):
+	'''
+	main_1				: vars
 	'''
 
 
 # Empty symbol = ε
 def p_empty(p):
 	'''
-	empty       :
+	empty				: 
 	'''
 	pass
 
@@ -366,6 +376,8 @@ def p_error(p):
 	else:
 		print ("Unexpected end of input")
 	exit()
+
+
 
 parser = yacc.yacc()
 

@@ -6,13 +6,35 @@ var char: myChar;
 
 func int myFunc(int a) {
     var int: f;
-    #content
-    f = a * f;
+    var char: myChar;
+    # my comment goes here!
+    write("Please write the values of a and myChar: ", a);
+    read(f, myChar);
+
+
+    if (myChar == 'x') {
+        f = a * f;
+
+    } else if (myChar == 'y') {
+        f = 0 - f;
+    } else {
+        f = (f + a) / (a * f);
+    }
 
     return f;
 }
 
 main() {
-    var int: m;
-    end
+    var int: m, matrix[10, 9];
+
+    while (matrix[m, 1] < 10) {
+        matrix[m, 1] = 4 * matrix[m + 1, 1];
+    }
+
+    from m to 15 {
+        loadFile(myFile, "hello.txt", 10, 9);
+        y = myFunc(m, y);
+    }
+
+    end;
 }
