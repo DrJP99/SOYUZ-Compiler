@@ -192,7 +192,7 @@ def p_callfunc(p):
 	'''
 def p_callfunc_1(p):
 	'''
-	callfunc_1			: ID callfunc_2 callfunc_3
+	callfunc_1			: callfunc_4 callfunc_2 callfunc_3
 						| empty
 	'''
 def p_callfunc_2(p):
@@ -203,6 +203,16 @@ def p_callfunc_2(p):
 def p_callfunc_3(p):
 	'''
 	callfunc_3			: COMMA callfunc_1
+						| empty
+	'''
+def p_callfunc_4(p):
+	'''
+	callfunc_4			: ID callfunc_2
+						| callfunc
+						| CTEI
+						| CTEF
+						| CTEB
+						| CTEC
 						| empty
 	'''
 
