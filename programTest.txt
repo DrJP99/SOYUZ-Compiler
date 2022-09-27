@@ -30,7 +30,7 @@ main() {
     while (matrix[m, 1] < 10) {
         matrix[m, 1] = 4 * matrix[m + 1, 1];
     }
-
+    
     from m to 15 {
         loadFile(myFile, "hello.txt", 10, 9);
         y = myFunc(m, y);

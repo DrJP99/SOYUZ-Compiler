@@ -139,7 +139,7 @@ def p_statement_1(p):
 						| cond
 						| cloop
 						| nloop
-						| callfunc
+						| callfunc SEMICOL
 						| read
 						| write
 						| loadfile
@@ -192,7 +192,7 @@ def p_callfunc(p):
 	'''
 def p_callfunc_1(p):
 	'''
-	callfunc_1			: callfunc_4 callfunc_2 callfunc_3
+	callfunc_1			: callfunc_4 callfunc_3
 						| empty
 	'''
 def p_callfunc_2(p):
@@ -213,7 +213,6 @@ def p_callfunc_4(p):
 						| CTEF
 						| CTEB
 						| CTEC
-						| empty
 	'''
 
 def p_read(p):
@@ -339,7 +338,8 @@ def p_term_2(p):
 
 def p_factor(p):
 	'''
-	factor				: factor_1 factor_2
+	factor				: factor_1 
+						| factor_2
 	'''
 def p_factor_1(p):
 	'''
@@ -349,12 +349,10 @@ def p_factor_1(p):
 						| CTEF
 						| CTEB
 						| CTEC
-						| empty
 	'''
 def p_factor_2(p):
 	'''
 	factor_2			: LPAR expression RPAR
-						| empty
 	'''
 def p_factor_3(p):
 	'''
