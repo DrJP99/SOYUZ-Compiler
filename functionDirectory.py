@@ -8,7 +8,9 @@ class DirFunc:
 				"name": "global", "returnType": "int", "vars": {}
 			}
 		}
-	
+
+	# TODO add function params to list
+	# see if function exists
 
 	# Creates a new function on the dictionary using the directory of the nth scope
 	def addFunction(self, scope, name, returnT):
@@ -61,6 +63,18 @@ class DirFunc:
 				print("Variable has ", self.table[newScope]["vars"][name]["dims"], " dimensions")
 				# TODO: impelemnt a function to deal with lists and matrixes
 	
+	# Set the value for variables of 0 dimensions
+	def setVarValue(self, scope, name, value):
+		newScope = self.findVar(scope, name)
+		if (newScope == -1):
+			print(name, " has not been declared in this scope")
+		else:
+			if (self.table[newScope]["vars"][name]["dims"] == 0):
+				self.table[newScope]["vars"][name]["value"] = value
+			else:
+				print("Variable has ", self.table[newScope]["vars"][name]["dims"], " dimensions")
+				# TODO: impelemnt a function to deal with lists and matrixes
+
 
 	# Sees if a variable exists or not
 	def findVar(self, scope, name):

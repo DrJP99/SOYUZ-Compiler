@@ -1,6 +1,16 @@
 import ply.yacc as yacc
 from myC_Lex import tokens
+from functionDirectory import DirFunc as DF
+from functionDirectory import varAttributes as VA
 
+df = DF()
+vAtts = VA()
+
+currId = ""
+currType = ""
+currScope = 0
+currDims = 0
+currReturnType = ""
 
 # Start of program
 def p_program_start(p):
@@ -28,7 +38,7 @@ def p_vars(p):
 	'''
 def p_vars_1(p):
 	'''
-	vars_1				: ID vars_2 vars_3
+	vars_1				: ID see_id vars_2 push_var vars_3
 	'''
 def p_vars_2(p):
 	'''
@@ -49,6 +59,9 @@ def p_type(p):
 						| CHAR
 						| BOOL
 	'''
+	global currType
+	currType = p[1]
+	# print(currType)
 
 # Return type for functions
 def p_rtype(p):
@@ -71,7 +84,7 @@ def p_block_1(p):
 
 def p_funcs(p):
 	'''
-	funcs				: FUNC rtype ID params LCURLY funcs_1 statement funcs_2 RCURLY funcs_3
+	funcs				: FUNC rtype see_return_type ID see_id see_func_start params LCURLY funcs_1 statement funcs_2 see_func_end RCURLY funcs_3
 	'''
 def p_funcs_1(p):
 	'''
@@ -120,11 +133,11 @@ def p_assign_1(p):
 
 def p_dims(p):
 	'''
-	dims				: LBRACK expression dims_1 RBRACK
+	dims				: LBRACK expression see_dims dims_1 RBRACK
 	'''
 def p_dims_1(p):
 	'''
-	dims_1				: COMMA expression
+	dims_1				: COMMA expression see_dims
 						| empty
 	'''
 
@@ -192,7 +205,7 @@ def p_callfunc(p):
 	'''
 def p_callfunc_1(p):
 	'''
-	callfunc_1			: callfunc_4 callfunc_3
+	callfunc_1			: expression callfunc_3
 						| empty
 	'''
 def p_callfunc_2(p):
@@ -205,15 +218,15 @@ def p_callfunc_3(p):
 	callfunc_3			: COMMA callfunc_1
 						| empty
 	'''
-def p_callfunc_4(p):
-	'''
-	callfunc_4			: ID callfunc_2
-						| callfunc
-						| CTEI
-						| CTEF
-						| CTEB
-						| CTEC
-	'''
+# def p_callfunc_4(p):
+# 	'''
+# 	callfunc_4			: ID callfunc_2
+# 						| callfunc
+# 						| CTEI
+# 						| CTEF
+# 						| CTEB
+# 						| CTEC
+# 	'''
 
 def p_read(p):
 	'''
@@ -221,11 +234,11 @@ def p_read(p):
 	'''
 def p_read_1(p):
 	'''
-	read_1				: ID read_2 read_3
+	read_1				: ID see_id read_2 read_3
 	'''
 def p_read_2(p):
 	'''
-	read_2				: dims
+	read_2				: dims reset_dims
 						| empty
 	'''
 def p_read_3(p):
@@ -343,12 +356,13 @@ def p_factor(p):
 	'''
 def p_factor_1(p):
 	'''
-	factor_1			: ID factor_3
+	factor_1			: ID see_id factor_3 print_value reset_dims
 						| callfunc
 						| CTEI
 						| CTEF
 						| CTEB
 						| CTEC
+						| MINUS factor_1
 	'''
 def p_factor_2(p):
 	'''
@@ -362,12 +376,76 @@ def p_factor_3(p):
 
 def p_main(p):
 	'''
-	main				: MAIN LPAR RPAR LCURLY main_1 statement END SEMICOL RCURLY
+	main				: MAIN see_id LPAR RPAR LCURLY see_func_start main_1 statement END SEMICOL RCURLY see_func_end
 	'''
 def p_main_1(p):
 	'''
 	main_1				: vars
 	'''
+
+# Neuralgic points
+
+def p_see_id(p):
+	'''
+	see_id				: empty
+	'''
+	global currId
+	currId = p[-1]
+
+def p_see_dims(p):
+	'''
+	see_dims			: empty
+	'''
+	global currDims
+	currDims = currDims + 1
+
+def p_push_var(p):
+	'''
+	push_var			: empty
+	'''
+	global currId, currType, currDims, currScope, vAtts, df
+	print("Variable added:", currId, "\ttype:", currType, "\tdims:", currDims, "\tscope: ", currScope)
+	df.addVar(currScope, vAtts.createVar(currId, currType, currDims, None))
+	currDims = 0
+
+def p_see_return_type(p):
+	'''
+	see_return_type		: empty
+	'''
+	global currReturnType
+	currReturnType = p[-1]
+
+def p_see_func_start(p):
+	'''
+	see_func_start		: empty
+	'''
+	global currId, currReturnType, currScope, df
+	currScope = currScope + 1
+	df.addFunction(currScope, currId, currReturnType)
+
+def p_see_func_end(p):
+	'''
+	see_func_end		: empty
+	'''
+	global currScope, df
+	df.printFunc()
+	df.removeFunction(currScope)
+	currScope = currScope - 1
+
+def p_reset_dims(p):
+	'''
+	reset_dims			: empty
+	'''
+	global currDims
+	currDims = 0
+
+def p_print_value(p):
+	'''
+	print_value			: empty
+	'''
+	global currId, currDims, currScope, df
+	print(currId, ":", df.getVarValue(currScope, currId))
+
 
 
 # Empty symbol = ε
