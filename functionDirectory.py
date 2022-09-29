@@ -10,6 +10,7 @@ class DirFunc:
 		}
 
 	# TODO see if function exists
+	# TODO Maybe create a different list for declared funcs that will not get popped to see if they exist and so on
 
 	# Creates a new function on the dictionary using the directory of the nth scope
 	def addFunction(self, scope, name, returnT):
