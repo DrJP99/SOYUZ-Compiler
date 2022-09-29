@@ -9,14 +9,14 @@ class DirFunc:
 			}
 		}
 
-	# TODO add function params to list
-	# see if function exists
+	# TODO see if function exists
 
 	# Creates a new function on the dictionary using the directory of the nth scope
 	def addFunction(self, scope, name, returnT):
 		self.table[scope] = {}
 		self.table[scope]["name"] = name
 		self.table[scope]["returnType"] = returnT
+		self.table[scope]["params"] = {}
 		self.table[scope]["vars"] = {}
 	
 
@@ -28,6 +28,23 @@ class DirFunc:
 	# Returns the current scope's function's return type
 	def getReturnType(self, scope):
 		return self.table[scope]["returnType"]
+	
+
+	# Adds Param to list of function's parameters and adds those variables to list of variables
+	def addParam(self, scope, newVar):
+		varName = list(newVar.keys())[0]
+		varType = newVar[varName]["type"]
+		if (self.findParam(scope, varName)):
+			print("Error: Param is already declared")
+		else:
+			param = {varName: {"type": varType}}
+			self.table[scope]["params"].update(param)
+			self.addVar(scope, newVar)
+			
+
+	# Check if a param has already been declared
+	def findParam(self, scope, varName):
+		return varName in self.table[scope]["params"]
 
 
 	# Adds a variable to the scope's list of variables

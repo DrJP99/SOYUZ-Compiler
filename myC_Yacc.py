@@ -78,6 +78,8 @@ def p_rtype(p):
 						| BOOL
 						| VOID
 	'''
+	global currReturnType
+	currReturnType = p[1]
 
 def p_block(p):
 	'''
@@ -90,7 +92,7 @@ def p_block_1(p):
 
 def p_funcs(p):
 	'''
-	funcs				: FUNC rtype see_return_type ID see_id see_func_start params LCURLY funcs_1 statement funcs_2 see_func_end RCURLY funcs_3
+	funcs				: FUNC rtype ID see_id see_func_start params LCURLY funcs_1 statement funcs_2 see_func_end RCURLY funcs_3
 	'''
 def p_funcs_1(p):
 	'''
@@ -113,7 +115,7 @@ def p_params(p):
 	'''
 def p_params_1(p):
 	'''
-	params_1			: type ID params_2 params_3
+	params_1			: type ID see_id params_2 see_end_param reset_dims params_3
 						| empty
 	'''
 def p_params_2(p):
@@ -214,11 +216,11 @@ def p_callfunc_1(p):
 	callfunc_1			: expression callfunc_3
 						| empty
 	'''
-def p_callfunc_2(p):
-	'''
-	callfunc_2			: dims
-						| empty
-	'''
+# def p_callfunc_2(p):
+# 	'''
+# 	callfunc_2			: dims
+# 						| empty
+# 	'''
 def p_callfunc_3(p):
 	'''
 	callfunc_3			: COMMA callfunc_1
@@ -414,12 +416,12 @@ def p_push_var(p):
 	df.addVar(currScope, vAtts.createVar(currId, currType, currDims, None))
 	currDims = 0
 
-def p_see_return_type(p):
-	'''
-	see_return_type		: empty
-	'''
-	global currReturnType
-	currReturnType = p[-1]
+# def p_see_return_type(p):
+# 	'''
+# 	see_return_type		: empty
+# 	'''
+# 	global currReturnType
+# 	currReturnType = p[-1]
 
 def p_see_func_start(p):
 	'''
@@ -437,6 +439,13 @@ def p_see_func_end(p):
 	df.printFunc()
 	df.removeFunction(currScope)
 	currScope = currScope - 1
+
+def p_see_end_param(p):
+	'''
+	see_end_param		: empty
+	'''
+	global currScope, currId, currDims, df, vAtts
+	df.addParam(currScope, vAtts.createVar(currId, currType, currDims, None))
 
 def p_reset_dims(p):
 	'''
@@ -471,7 +480,7 @@ def p_error(p):
 
 
 
-parser = yacc.yacc()
+parser = yacc.yacc(debug=True)
 
 filename = input("file name: ")
 
