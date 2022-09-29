@@ -1,3 +1,9 @@
+'''
+Grammar for the SOYUZ Programming Language
+Created by Juan Pablo González 2022(C)
+Created for the Compiler Design Course
+'''
+
 import ply.yacc as yacc
 from myC_Lex import tokens
 from functionDirectory import DirFunc as DF
