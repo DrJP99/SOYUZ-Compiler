@@ -8,6 +8,7 @@ import ply.yacc as yacc
 from myC_Lex import tokens
 from functionDirectory import DirFunc as DF
 from functionDirectory import varAttributes as VA
+from quadruples import QuadrupleTable 
 
 df = DF()
 vAtts = VA()
@@ -17,6 +18,8 @@ currType = ""
 currScope = 0
 currDims = 0
 currReturnType = ""
+
+quad = QuadrupleTable()
 
 # Start of program
 def p_program_start(p):
@@ -294,11 +297,11 @@ def p_loadfile_2(p):
 
 def p_expression(p):
 	'''
-	expression			: sexp expression_1
+	expression			: sexp check_and_or expression_1
 	'''
 def p_expression_1(p):
 	'''
-	expression_1		: expression_2 expression
+	expression_1		: expression_2 push_and_or expression
 						| empty
 	'''
 def p_expression_2(p):
@@ -306,14 +309,16 @@ def p_expression_2(p):
 	expression_2		: OR
 						| AND
 	'''
+	global quad
+	quad.push_operator(f'{p[1]}')
 
 def p_sexp(p):
 	'''
-	sexp				: exp sexp_1
+	sexp				: exp check_relational sexp_1
 	'''
 def p_sexp_1(p):
 	'''
-	sexp_1				: sexp_2 exp
+	sexp_1				: sexp_2 push_relational exp
 						| empty
 	'''
 def p_sexp_2(p):
@@ -326,14 +331,16 @@ def p_sexp_2(p):
 						| LESSTHAN		
 						| LESSOREQUAL	
 	'''
+	global quad
+	quad.push_operator(f'{p[1]}')
 
 def p_exp(p):
 	'''
-	exp					: term exp_1
+	exp					: term check_sum exp_1
 	'''
 def p_exp_1(p):
 	'''
-	exp_1				: exp_2 exp
+	exp_1				: exp_2 push_sum exp
 						| empty
 	'''
 def p_exp_2(p):
@@ -341,14 +348,16 @@ def p_exp_2(p):
 	exp_2				: PLUS
 						| MINUS
 	'''
+	global quad
+	quad.push_operator(f'{p[1]}')
 
 def p_term(p):
 	'''
-	term				: factor term_1
+	term				: factor check_mul_div term_1
 	'''
 def p_term_1(p):
 	'''
-	term_1				: term_2 term
+	term_1				: term_2 push_mul_div term
 						| empty
 	'''
 def p_term_2(p):
@@ -356,6 +365,8 @@ def p_term_2(p):
 	term_2				: TIMES
 						| DIV
 	'''
+	global quad
+	quad.push_operator(f'{p[1]}')
 
 def p_factor(p):
 	'''
@@ -364,17 +375,17 @@ def p_factor(p):
 	'''
 def p_factor_1(p):
 	'''
-	factor_1			: ID see_id factor_3 print_value reset_dims
+	factor_1			: ID see_id factor_3 push_id print_value reset_dims
 						| callfunc
-						| CTEI
-						| CTEF
-						| CTEB
-						| CTEC
+						| CTEI push_int
+						| CTEF push_float
+						| CTEB push_bool
+						| CTEC push_char
 						| MINUS factor_1
 	'''
 def p_factor_2(p):
 	'''
-	factor_2			: LPAR expression RPAR
+	factor_2			: LPAR add_ff expression pop_ff RPAR
 	'''
 def p_factor_3(p):
 	'''
@@ -412,7 +423,7 @@ def p_push_var(p):
 	push_var			: empty
 	'''
 	global currId, currType, currDims, currScope, vAtts, df
-	print("Variable added:", currId, "\ttype:", currType, "\tdims:", currDims, "\tscope: ", currScope)
+	# print("Variable added:", currId, "\ttype:", currType, "\tdims:", currDims, "\tscope: ", currScope)
 	df.addVar(currScope, vAtts.createVar(currId, currType, currDims, None))
 	currDims = 0
 
@@ -436,7 +447,7 @@ def p_see_func_end(p):
 	see_func_end		: empty
 	'''
 	global currScope, df
-	df.printFunc()
+	# df.printFunc()
 	df.removeFunction(currScope)
 	currScope = currScope - 1
 
@@ -459,8 +470,119 @@ def p_print_value(p):
 	print_value			: empty
 	'''
 	global currId, currDims, currScope, df
-	print(currId, ":", df.getVarValue(currScope, currId))
+	# print(currId, ":", df.getVarValue(currScope, currId))
 
+def p_check_and_or(p):
+	'''
+	check_and_or		: empty
+	'''
+	global quad
+	if (quad.top_operators() == '&&' or quad.top_operators() == '||'):
+		quad.generate()
+
+def p_push_and_or(p):
+	'''
+	push_and_or			: empty
+	'''
+	# global quad
+	# quad.push_operator(f'{p[-1]}')
+
+def p_check_relational(p):
+	'''
+	check_relational	: empty
+	'''
+	global quad
+	if (quad.top_operators() == '==' or quad.top_operators() == '!=' or quad.top_operators() == '>' or quad.top_operators() == '>=' or quad.top_operators() == '<' or quad.top_operators() == '<='):
+		quad.generate()
+
+def p_push_relational(p):
+	'''
+	push_relational		: empty
+	'''
+	# global quad
+	# quad.push_operator(f'{p[-1]}')
+
+def p_check_sum(p):
+	'''
+	check_sum			: empty
+	'''
+	global quad
+	# print('checking sum...')
+	if (quad.top_operators() == '+' or quad.top_operators() == '-'):
+		quad.generate()
+
+def p_push_sum(p):
+	'''
+	push_sum			: empty
+	'''
+	# global quad
+	# quad.push_operator(f'{p[-1]}')
+
+def p_check_mul_div(p):
+	'''
+	check_mul_div		: empty
+	'''
+	global quad
+	# print('checking mul/div...')
+	if (quad.top_operators() == '*' or quad.top_operators() == '/'):
+		quad.generate()
+
+def p_push_mul_div(p):
+	'''
+	push_mul_div		: empty
+	'''
+	# global quad
+	# quad.push_operator(f'{p[-1]}')
+
+def p_add_ff(p):
+	'''
+	add_ff				: empty
+	'''
+	global quad
+	quad.push_ff()
+
+def p_pop_ff(p):
+	'''
+	pop_ff				: empty
+	'''
+	global quad
+	quad.pop_ff()
+
+def p_push_int(p):
+	'''
+	push_int			: empty
+	'''
+	global quad
+	quad.push_id_type(p[-1], 'int')
+
+def p_push_float(p):
+	'''
+	push_float			: empty
+	'''
+	global quad
+	quad.push_id_type(p[-1], 'float')
+
+def p_push_bool(p):
+	'''
+	push_bool			: empty
+	'''
+	global quad
+	quad.push_id_type(p[-1], 'bool')
+
+def p_push_char(p):
+	'''
+	push_char			: empty
+	'''
+	global quad
+	quad.push_id_type(p[-1], 'char')
+
+def p_push_id(p):
+	'''
+	push_id				: empty
+	'''
+	global df, currId, currDims, currScope, quad
+	# print('trying to push id: ', currId)
+	quad.push_id_type(currId, df.getVarType(currScope, currId))
 
 
 # Empty symbol = ε
@@ -489,6 +611,7 @@ try:
 	data = f.read()
 	f.close()
 	result = parser.parse(data)
+	quad.print()
 	print('Success!')
 except EOFError:
 	print(EOFError)

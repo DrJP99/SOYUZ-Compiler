@@ -1,0 +1,13 @@
+program myProgram;
+
+var int: x, y, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p;
+var float: myFloat;
+var char: myChar;
+
+main() {
+
+    # a = 10 - 15;
+    a = b * (c / (d + e * f) * g + h - i * (j + k) - m) + p;
+
+    end;
+}
