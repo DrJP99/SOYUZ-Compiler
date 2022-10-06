@@ -134,7 +134,7 @@ def p_params_3(p):
 
 def p_assign(p):
 	'''
-	assign				: ID assign_1 EQUAL expression SEMICOL
+	assign				: ID see_id assign_1 push_id EQUAL push_equal expression generate_assign SEMICOL
 	'''
 def p_assign_1(p):
 	'''
@@ -171,20 +171,20 @@ def p_statement_1(p):
 
 def p_cond(p):
 	'''
-	cond				: IF LPAR expression RPAR block cond_1
+	cond				: IF LPAR expression RPAR generate_g_if block cond_1 finish_if
 	'''
 def p_cond_1(p):
 	'''
-	cond_1				: ELSE cond_2
+	cond_1				: ELSE generate_g_else cond_2
 	'''
 def p_cond_2(p):
 	'''
-	cond_2				: IF LPAR expression RPAR block cond_3
+	cond_2				: cond_3
 						| block
 	'''
 def p_cond_3(p):
 	'''
-	cond_3				: cond_1
+	cond_3				: cond
 						| empty
 	'''
 
@@ -318,7 +318,7 @@ def p_sexp(p):
 	'''
 def p_sexp_1(p):
 	'''
-	sexp_1				: sexp_2 push_relational exp
+	sexp_1				: sexp_2 push_relational sexp
 						| empty
 	'''
 def p_sexp_2(p):
@@ -385,7 +385,7 @@ def p_factor_1(p):
 	'''
 def p_factor_2(p):
 	'''
-	factor_2			: LPAR add_ff expression pop_ff RPAR
+	factor_2			: LPAR add_ff expression RPAR pop_ff
 	'''
 def p_factor_3(p):
 	'''
@@ -492,7 +492,10 @@ def p_check_relational(p):
 	check_relational	: empty
 	'''
 	global quad
-	if (quad.top_operators() == '==' or quad.top_operators() == '!=' or quad.top_operators() == '>' or quad.top_operators() == '>=' or quad.top_operators() == '<' or quad.top_operators() == '<='):
+	# print('checking relational... ', quad.top_operators())
+	rel = ['==', '!=', '>', '>=', '<', '<=',]
+	if (quad.top_operators() in rel):
+		# print('generating relational...')
 		quad.generate()
 
 def p_push_relational(p):
@@ -507,7 +510,7 @@ def p_check_sum(p):
 	check_sum			: empty
 	'''
 	global quad
-	# print('checking sum...')
+	# print('checking sum...', quad.top_operators())
 	if (quad.top_operators() == '+' or quad.top_operators() == '-'):
 		quad.generate()
 
@@ -523,7 +526,7 @@ def p_check_mul_div(p):
 	check_mul_div		: empty
 	'''
 	global quad
-	# print('checking mul/div...')
+	# print('checking mul/div... ', quad.top_operators())
 	if (quad.top_operators() == '*' or quad.top_operators() == '/'):
 		quad.generate()
 
@@ -584,6 +587,42 @@ def p_push_id(p):
 	# print('trying to push id: ', currId)
 	quad.push_id_type(currId, df.getVarType(currScope, currId))
 
+def p_push_equal(p):
+	'''
+	push_equal			: empty
+	'''
+	global quad
+	quad.push_operator('=')
+
+def p_generate_assign(p):
+	'''
+	generate_assign		: empty
+	'''
+	global quad
+	# print('trying to assign')
+	quad.generate()
+
+def p_generate_g_if(p):
+	'''
+	generate_g_if		: empty
+	'''
+	global quad
+	quad.generate_g_if()
+
+def p_finish_if(p):
+	'''
+	finish_if			: empty
+	'''
+	global quad
+	quad.fill_jump(quad.pop_jumps(), quad.get_curr_counter()-1)
+
+def p_generate_g_else(p):
+	'''
+	generate_g_else		: empty
+	'''
+	global quad
+	quad.generate_g_else()
+
 
 # Empty symbol = ε
 def p_empty(p):
@@ -612,6 +651,6 @@ try:
 	f.close()
 	result = parser.parse(data)
 	quad.print()
-	print('Success!')
+	print('File compiled successfully!')
 except EOFError:
 	print(EOFError)

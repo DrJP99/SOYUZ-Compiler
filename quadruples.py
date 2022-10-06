@@ -24,12 +24,47 @@ class QuadrupleTable:
 
 		operator = self.pop_operators()
 
-		typeRes = self.check_for_missmatch(typeLeft, typeRight, operator)
-		newQuad = Quadruple(operator, opLeft, opRight, f't{self.temp}')
-		self.listOfQuadruples.append(newQuad)
-		self.push_id_type(f't{self.temp}', typeRes)
+		typeRes = self.check_for_mismatch(typeLeft, typeRight, operator)
+		if (not operator == '='):
+			newQuad = Quadruple(operator, opLeft, opRight, f't{self.temp}')
+			self.listOfQuadruples.append(newQuad)
+			self.push_id_type(f't{self.temp}', typeRes)
+			newQuad.print()
+		else:
+			print('generating equal...')
+			self.generate_equal(opRight, opLeft)
 
 		self.temp += 1
+		self.count += 1
+
+	def generate_equal(self, assignFrom, assignTo):
+		newQuad = Quadruple('=', assignFrom, None, assignTo)
+		self.listOfQuadruples.append(newQuad)
+		newQuad.print()
+
+	def generate_g_if(self):
+		cond = self.pop_operands()
+		typeCond = self.pop_types()
+
+		if (not typeCond == 'bool'):
+			print("ERROR, conditional must be of type BOOL")
+			exit()
+		else:
+			newQuad = Quadruple('gotoF', cond, None, None)
+			self.listOfQuadruples.append(newQuad)
+			newQuad.print()
+			self.stackJumps.append(self.count-1)
+			self.count += 1
+		
+	def fill_jump(self, qFrom, qTarget):
+		self.listOfQuadruples[qFrom].fill_jump(qTarget)
+	
+	def generate_g_else(self):
+		false = self.pop_jumps()
+		newQuad = Quadruple('goto', None, None, None)
+		self.listOfQuadruples.append(newQuad)
+		self.stackJumps.append(self.count-1)
+		self.fill_jump(false, self.count)
 		self.count += 1
 
 
@@ -42,7 +77,7 @@ class QuadrupleTable:
 
 	def push_operator(self, op):
 		self.stackOperators.append(op)
-		print(self.stackOperators)
+		print('oprtors : ', self.stackOperators)
 	
 	def push_ff(self):
 		self.stackOperators.append('(')
@@ -69,13 +104,13 @@ class QuadrupleTable:
 	
 	def top_operators(self):
 		if (self.stackOperators):
-			return self.stackOperators[-1]
+			return f'{self.stackOperators[-1]}'
 		else:
 			return None
 
 	def top_operands(self):
 		if (self.stackOperands):
-			return self.stackOperands[-1]
+			return f'{self.stackOperands[-1]}'
 		else:
 			return None
 	
@@ -94,13 +129,14 @@ class QuadrupleTable:
 	def get_curr_counter(self):
 		return self.count
 	
-	def check_for_missmatch(self, typeL, typeR, op):
+	def check_for_mismatch(self, typeL, typeR, op):
 		print('trying to check types:', typeL, typeR, op)
 		try:
 			resType = TIRESIAS[typeL][typeR][op]
+			print ('results in: ', resType)
 			return resType
 		except:
-			print("Type missmatch!")
+			print(f'Type mismatch! Impossible to {typeL} {op} {typeR}')
 			exit()
 	
 	def print(self):
@@ -121,5 +157,8 @@ class Quadruple:
 		self.rightOperand = rightOperand
 		self.temp = temp
 	
+	def fill_jump(self, target):
+		self.rightOperand = target
+
 	def print(self):
 		print(f'[{self.operator}, {self.leftOperand}, {self.rightOperand}, {self.temp}]', end='\n')
