@@ -58,6 +58,7 @@ class QuadrupleTable:
 			self.stackJumps.append(self.count-1)
 			self.count += 1
 	
+	
 	# Fills the GOTO jump from qFrom to qTarget
 	def fill_jump(self, qFrom, qTarget):
 		self.listOfQuadruples[qFrom].fill_jump(qTarget)
@@ -70,7 +71,19 @@ class QuadrupleTable:
 		self.stackJumps.append(self.count-1)
 		self.fill_jump(false, self.count)
 		self.count += 1
+	
+	
+	def generate_g_read(self):
+		op = self.pop_operands()
+		newQuad = Quadruple('read', None, None, op)
+		self.listOfQuadruples.append(newQuad)
+		self.count += 1
 
+	def generate_g_write(self):
+		op = self.pop_operands()
+		newQuad = Quadruple('write', op, None, None)
+		self.listOfQuadruples.append(newQuad)
+		self.count += 1
 
 	## PUSH ##
 	# Since ID and TYPE are always pushed at the same time, they are combined in this function
@@ -164,11 +177,11 @@ class QuadrupleTable:
 
 # Quadruples class helps with atomic Quadruples
 class Quadruple:
-	def __init__(self, operator, leftOperand, rightOperand, temp):
+	def __init__(self, operator, leftOperand, rightOperand, result):
 		self.operator = operator
 		self.leftOperand = leftOperand
 		self.rightOperand = rightOperand
-		self.temp = temp
+		self.result = result
 	
 	# Fills the jump target of a GOTO quadruple
 	def fill_jump(self, target):
@@ -176,4 +189,4 @@ class Quadruple:
 
 	# Prints an individual quadruple
 	def print(self):
-		print(f'[{self.operator}, {self.leftOperand}, {self.rightOperand}, {self.temp}]', end='\n')
+		print(f'[{self.operator}, {self.leftOperand}, {self.rightOperand}, {self.result}]', end='\n')

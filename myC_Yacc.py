@@ -245,7 +245,7 @@ def p_read(p):
 	'''
 def p_read_1(p):
 	'''
-	read_1				: ID see_id read_2 read_3
+	read_1				: ID see_id read_2 push_id generate_g_read read_3
 	'''
 def p_read_2(p):
 	'''
@@ -264,12 +264,12 @@ def p_write(p):
 	'''
 def p_write_1(p):
 	'''
-	write_1				: write_2 write_3
+	write_1				: write_2 generate_g_write write_3
 	'''
 def p_write_2(p):
 	'''
 	write_2				: expression
-						| CTES
+						| CTES push_string
 	'''
 def p_write_3(p):
 	'''
@@ -579,6 +579,13 @@ def p_push_char(p):
 	global quad
 	quad.push_id_type(p[-1], 'char')
 
+def p_push_string(p):
+	'''
+	push_string			: empty
+	'''
+	global quad
+	quad.push_id_type(f'{p[-1]}', 'string')
+
 def p_push_id(p):
 	'''
 	push_id				: empty
@@ -593,6 +600,7 @@ def p_push_equal(p):
 	'''
 	global quad
 	quad.push_operator('=')
+
 
 def p_generate_assign(p):
 	'''
@@ -623,6 +631,19 @@ def p_generate_g_else(p):
 	global quad
 	quad.generate_g_else()
 
+def p_generate_g_read(p):
+	'''
+	generate_g_read		: empty
+	'''
+	global quad
+	quad.generate_g_read()
+
+def p_generate_g_write(p):
+	'''
+	generate_g_write	: empty
+	'''
+	global quad
+	quad.generate_g_write()
 
 # Empty symbol = ε
 def p_empty(p):
