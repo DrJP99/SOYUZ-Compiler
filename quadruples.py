@@ -1,5 +1,7 @@
 from oracle import TIRESIAS
 
+# TODO generate QUADS for WHILE and FOR loops
+
 # Quadruple Table class deals with storing all the Quadruples plus the auxiliary stacks
 class QuadrupleTable:
 	def __init__(self):
