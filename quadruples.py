@@ -58,6 +58,26 @@ class QuadrupleTable:
 			self.stackJumps.append(self.count-1)
 			self.count += 1
 	
+	# Generates a quadruple for the CONDITIONAL LOOP
+	def generate_g_cond_loop_s(self):
+		typeExp = self.pop_types()
+		if (not typeExp == 'bool'):
+			print("ERROR, conditional must be of type BOOL")
+			exit()
+		else:
+			result = self.pop_operands()
+			newQuad = Quadruple('gotoF', result, None, None)
+			self.listOfQuadruples.append(newQuad)
+			self.stackJumps.append(self.count-1)
+			self.count += 1
+	
+	def generate_g_cond_loop_e(self):
+		end = self.pop_jumps()
+		ret = self.pop_jumps()
+		newQuad = Quadruple('goto', ret, None, None)
+		self.listOfQuadruples.append(newQuad)
+		self.fill_jump(end, self.count)
+			
 	
 	# Fills the GOTO jump from qFrom to qTarget
 	def fill_jump(self, qFrom, qTarget):
@@ -101,6 +121,9 @@ class QuadrupleTable:
 	# Pushes a fake bottom FF to the stack of operators
 	def push_ff(self):
 		self.stackOperators.append('(')
+
+	def push_jump(self, jump):
+		self.stackJumps.append(self.count + jump)
 
 	## POP ##
 

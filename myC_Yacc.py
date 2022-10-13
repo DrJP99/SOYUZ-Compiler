@@ -191,7 +191,7 @@ def p_cond_3(p):
 # Conditional loop
 def p_cloop(p):
 	'''
-	cloop				: WHILE LPAR expression RPAR block
+	cloop				: WHILE cloop_push_jump LPAR expression generate_g_cloop_start RPAR block generate_g_cloop_end
 	'''
 
 # Non-conditional loop [from x = 1 to 10]
@@ -644,6 +644,28 @@ def p_generate_g_write(p):
 	'''
 	global quad
 	quad.generate_g_write()
+
+def p_cloop_push_jump(p):
+	'''
+	cloop_push_jump		: empty
+	'''
+	global quad
+	quad.push_jump(0)
+
+def p_generate_g_cloop_start(p):
+	'''
+	generate_g_cloop_start	: empty
+	'''
+	global quad
+	quad.generate_g_cond_loop_s()
+
+def p_generate_g_cloop_end(p):
+	'''
+	generate_g_cloop_end	: empty
+	'''
+	global quad
+	quad.generate_g_cond_loop_e()
+
 
 # Empty symbol = ε
 def p_empty(p):

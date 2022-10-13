@@ -7,17 +7,8 @@ var bool: myBool;
 
 main() {
 
-	write("hello", a + b / c, "world");
-	read(a, b);
-
-	myBool = (x > y);
-	
-	if (a + b > c * d) {
-		a = b + c;
-	} else if (a > b || x == y) {
-		x = y + o;
-	} else {
-		a = a * b;
+	while(a > b) {
+		a = a + b;
 	}
 
 	end;
