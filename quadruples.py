@@ -44,6 +44,7 @@ class QuadrupleTable:
 	def generate_equal(self, assignFrom, assignTo):
 		newQuad = Quadruple('=', assignFrom, None, assignTo)
 		self.listOfQuadruples.append(newQuad)
+		# newQuad.print()
 
 	# Generates a quadruple for the first NP of the IF
 	def generate_g_if(self):
@@ -60,6 +61,11 @@ class QuadrupleTable:
 			self.stackJumps.append(self.count-1)
 			self.count += 1
 	
+	def generate_end(self):
+		newQuad = Quadruple('END', None, None, None)
+		self.listOfQuadruples.append(newQuad)
+		self.count += 1
+
 	# Generates a quadruple for the CONDITIONAL LOOP
 	def generate_g_cond_loop_s(self):
 		typeExp = self.pop_types()
@@ -79,7 +85,68 @@ class QuadrupleTable:
 		newQuad = Quadruple('goto', ret, None, None)
 		self.listOfQuadruples.append(newQuad)
 		self.fill_jump(end, self.count)
-			
+		self.count += 1
+	
+	def generate_g_nloop_s(self):
+		self.stackJumps.append(self.count-1)
+		self.stackJumps.append(self.count)
+		
+		self.push_operator('<')
+		opRight = self.pop_operands()
+		typeRight = self.pop_types()
+
+		opLeft = self.pop_operands()
+		typeLeft = self.pop_types()
+
+		operator = '<'
+
+		typeRes = self.check_for_mismatch(typeLeft, typeRight, operator)
+		newQuad = Quadruple(operator, opLeft, opRight, f't{self.temp}')
+		self.listOfQuadruples.append(newQuad)
+
+		self.push_id_type(opLeft, typeLeft)
+		self.push_id_type(f't{self.temp}', typeRes)
+		# newQuad.print()
+
+		self.temp += 1
+		self.count += 1
+
+
+		res = self.pop_operands()
+		resType = self.pop_types()
+
+		newQuad = Quadruple('gotoF', res, None, None)
+		self.listOfQuadruples.append(newQuad)
+		self.count += 1
+		print('jumps : ', self.stackJumps)
+
+	def generate_g_nloop_e(self):
+		end = self.pop_jumps()
+		ret = self.pop_jumps()
+
+		my = self.pop_operands()
+		myType = self.pop_types()
+
+		resType = self.check_for_mismatch(myType, 'int', '+')
+		newQuad = Quadruple('+', my, 1, f't{self.temp}')
+		self.listOfQuadruples.append(newQuad)
+		self.stackTypes.append(resType)
+		self.push_id_type(f't{self.temp}', resType)
+
+		self.count += 1
+		self.temp += 1 
+
+		res = self.top_operands()
+		newQuad = Quadruple('=', res, None, my)
+		self.listOfQuadruples.append(newQuad)
+
+		self.count += 1
+		self.fill_jump(end, self.count)
+
+		newQuad = Quadruple('goto', ret, None, None)
+		self.listOfQuadruples.append(newQuad)
+		self.count += 1
+
 	
 	# Fills the GOTO jump from qFrom to qTarget
 	def fill_jump(self, qFrom, qTarget):

@@ -197,7 +197,7 @@ def p_cloop(p):
 # Non-conditional loop [from x = 1 to 10]
 def p_nloop(p):
 	'''
-	nloop				: FROM ID nloop_1 nloop_2 TO expression block
+	nloop				: FROM ID see_id nloop_1 push_id nloop_2 TO expression generate_g_nloop_s block generate_g_nloop_e
 	'''
 def p_nloop_1(p):
 	'''
@@ -206,7 +206,7 @@ def p_nloop_1(p):
 	'''
 def p_nloop_2(p):
 	'''
-	nloop_2				: EQUAL expression
+	nloop_2				: push_id EQUAL push_equal expression generate_assign
 						| empty
 	'''
 
@@ -395,7 +395,7 @@ def p_factor_3(p):
 
 def p_main(p):
 	'''
-	main				: MAIN see_id LPAR RPAR LCURLY see_func_start main_1 statement END SEMICOL RCURLY see_func_end
+	main				: MAIN see_id LPAR RPAR LCURLY see_func_start main_1 statement END SEMICOL RCURLY see_func_end generate_end
 	'''
 def p_main_1(p):
 	'''
@@ -410,6 +410,7 @@ def p_see_id(p):
 	'''
 	global currId
 	currId = p[-1]
+
 
 def p_see_dims(p):
 	'''
@@ -666,6 +667,26 @@ def p_generate_g_cloop_end(p):
 	global quad
 	quad.generate_g_cond_loop_e()
 
+def p_generate_g_nloop_s(p):
+	'''
+	generate_g_nloop_s	: empty
+	'''
+	global quad
+	quad.generate_g_nloop_s()
+
+def p_generate_g_nloop_e(p):
+	'''
+	generate_g_nloop_e	: empty
+	'''
+	global quad
+	quad.generate_g_nloop_e()
+
+def p_generate_end(p):
+	'''
+	generate_end		: empty
+	'''
+	global quad
+	quad.generate_end()
 
 # Empty symbol = ε
 def p_empty(p):

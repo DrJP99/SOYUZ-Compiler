@@ -64,7 +64,8 @@ class DirFunc:
 	def getVarType(self, scope, name):
 		newScope = self.findVar(scope, name)
 		if (newScope == -1):
-			print(name, " has not been declared in this scope")
+			print("ERROR: ", name, " has not been declared in this scope")
+
 		else:
 			return self.table[newScope]["vars"][name]["type"]
 	
