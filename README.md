@@ -1,4 +1,4 @@
-# Compilador SOYUZ (Nombre Tentativo)
+# Compilador SOYUZ
 
 ## Entregable #1
 
@@ -7,3 +7,7 @@ Durante esta primer semana de trabajo, primero decidí que estaré utilizando **
 ## Entregable #2
 
 Durante la segunda semana, cree el directorio de funciones `functionDirectory.py` que contiene `DirFunc` que tiene el diccionario de funciones y variables ademas de varias funciones que facilitan la manipulación de dicho diccionario desde `myC_Yacc.py`; contiene también la clase `varAttributes` que facilita la creación de variables para agregar al diccionario. Se utilizaron estas funciones en `myC_Yacc.py` en los llamados _puntos neurálgicos_. Finalmente, hice el archivo `oracle.py` que contiene al oráculo `TIRESIAS` que utiliza un diccionario como cubo semántico para decirnos qué tipo tendrá el resultado de una operación de acuerdo a los tipos de sus operandos.
+
+## Entregable #3
+
+Durante la tercer semana, se creó el archivo `quadruples.py` que contiene las clases `QuadrupleTable` y `Quadruple`. Estas clases tienen diferentes métodos sirven para generar, modificar y sacar datos de los cuádruplos que se generarán durante la compilación. Se agregaron los _puntos neurálgicos_ en la gramática para generar los cuádruplos. Hasta ahora se generan correctamente los cuádruplos para las operaciones simples, incluyendo la asignación, `READ` y `WRITE` y con los condicionales `IF`, `ELSE IF` y `ELSE`. Las variables temporales que se generan no tienen espacio de memoria asignado.
