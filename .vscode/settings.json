@@ -1,7 +1,8 @@
 {
-    "cSpell.language": "es",
+    "cSpell.language": "es, en",
     "cSpell.words": [
         "operandos"
     ],
-    "python.defaultInterpreterPath": "C:\\Program Files\\PostgreSQL\\13\\pgAdmin 4\\python"
+    "python.defaultInterpreterPath": "C:\\Program Files\\PostgreSQL\\13\\pgAdmin 4\\python",
+    "python.analysis.typeCheckingMode": "basic"
 }

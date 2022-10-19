@@ -18,6 +18,7 @@ class QuadrupleTable:
 	# 	count += 1
 
 	# Automatically generates the next quadruple
+	# Needs to send temporary direction
 	def generate(self):
 		opRight = self.pop_operands()
 		typeRight = self.pop_types()
@@ -87,6 +88,7 @@ class QuadrupleTable:
 		self.fill_jump(end, self.count)
 		self.count += 1
 	
+	# Needs to send temporary direction
 	def generate_g_nloop_s(self):
 		self.stackJumps.append(self.count-1)
 		self.stackJumps.append(self.count)
@@ -111,15 +113,15 @@ class QuadrupleTable:
 		self.temp += 1
 		self.count += 1
 
-
 		res = self.pop_operands()
 		resType = self.pop_types()
 
 		newQuad = Quadruple('gotoF', res, None, None)
 		self.listOfQuadruples.append(newQuad)
 		self.count += 1
-		print('jumps : ', self.stackJumps)
+		# print('jumps : ', self.stackJumps)
 
+	# Needs to send temporary direction
 	def generate_g_nloop_e(self):
 		end = self.pop_jumps()
 		ret = self.pop_jumps()
