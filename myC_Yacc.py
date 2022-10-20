@@ -4,6 +4,7 @@ Created by Juan Pablo González 2022(C)
 Created for the Compiler Design Course
 '''
 
+import pickle
 import ply.yacc as yacc
 from myC_Lex import tokens
 from functionDirectory import DirFunc as DF
@@ -740,6 +741,19 @@ try:
 	result = parser.parse(data)
 	df.print()
 	quad.print()
+
+	# Generate OBJECT (.ovj) file
+	with open('object.ovj', 'wb') as handle:
+		pickle.dump(
+			{
+				"quadruples": quad.listOfQuadruples,
+				"dirFunc": df.table,
+				"memory": df.memory
+			}, handle
+		)
+
+
+
 	print('File compiled successfully!')
 except EOFError:
 	print(EOFError)
