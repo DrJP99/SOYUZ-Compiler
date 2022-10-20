@@ -425,7 +425,7 @@ def p_push_var(p):
 	'''
 	global currId, currType, currDims, currScope, vAtts, df
 	# print("Variable added:", currId, "\ttype:", currType, "\tdims:", currDims, "\tscope: ", currScope)
-	df.addVar(currScope, vAtts.createVar(currId, currType, currDims, None))
+	df.addVar(currScope, vAtts.createVar(currId, currType, currDims))
 	currDims = 0
 
 # def p_see_return_type(p):
@@ -457,7 +457,7 @@ def p_see_end_param(p):
 	see_end_param		: empty
 	'''
 	global currScope, currId, currDims, df, vAtts
-	df.addParam(currScope, vAtts.createVar(currId, currType, currDims, None))
+	df.addParam(currScope, vAtts.createVar(currId, currType, currDims))
 
 def p_reset_dims(p):
 	'''
@@ -714,6 +714,7 @@ try:
 	data = f.read()
 	f.close()
 	result = parser.parse(data)
+	df.print()
 	quad.print()
 	print('File compiled successfully!')
 except EOFError:

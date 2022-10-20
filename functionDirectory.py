@@ -1,4 +1,5 @@
 from virtualMemory import *
+import json
 
 # Deals with all the functions related to the functions/variables tables
 class DirFunc:
@@ -60,8 +61,8 @@ class DirFunc:
 			exit()
 		else:
 			# If the variable is NOT found in the current scope or is found in the global scope (if the current scope is not the global), the variable is stored
-			dir = self.memory.create_memory(scope, newVar.getType())
-			newVar.setDir(dir)
+			direction = self.memory.create_memory(scope, newVar[varName]["type"])
+			newVar[varName]["direction"] = direction
 			self.table[scope]["vars"].update(newVar)
 	
 
@@ -82,7 +83,8 @@ class DirFunc:
 			print(name, " has not been declared in this scope")
 		else:
 			if (self.table[newScope]["vars"][name]["dims"] == 0):
-				return self.table[newScope]["vars"][name]["value"]
+				direction = self.table[newScope]["vars"][name]["direction"]
+				return self.memory.get_value(direction)
 			else:
 				print("Variable has ", self.table[newScope]["vars"][name]["dims"], " dimensions")
 				# TODO: impelemnt a function to deal with lists and matrixes
@@ -94,7 +96,8 @@ class DirFunc:
 			print(name, " has not been declared in this scope")
 		else:
 			if (self.table[newScope]["vars"][name]["dims"] == 0):
-				self.table[newScope]["vars"][name]["value"] = value
+				direction = self.table[newScope]["vars"][name]["direction"]
+				self.memory.set_value(direction, value)
 			else:
 				print("Variable has ", self.table[newScope]["vars"][name]["dims"], " dimensions")
 				# TODO: impelemnt a function to deal with lists and matrixes
@@ -114,8 +117,8 @@ class DirFunc:
 				return -1
 
 
-	def printFunc(self):
-		print(self.table)
+	def print(self):
+		print(json.dumps(self.table, indent=4, sort_keys=False))
 
 
 
@@ -129,6 +132,9 @@ class varAttributes:
 
 	def setDirection(self, name, direction):
 		self.atts[name]["direction"] = direction
+	
+	def getDirection(self, name):
+		return self.atts[name]["direction"]
 
 	def getName(self):
 		return list(self.atts.keys())[0]
