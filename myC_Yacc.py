@@ -480,8 +480,8 @@ def p_check_and_or(p):
 	global quad, currScope, df
 	if (quad.top_operators() == '&&' or quad.top_operators() == '||'):
 		operator, opLeft, opRight, typeRes = quad.get_ops_type()
-		direction = df.generate_memory(currScope, typeRes)
-		quad.generate(operator, opLeft, opRight, typeRes, direction)
+		address = df.generate_memory(currScope, typeRes)
+		quad.generate(operator, opLeft, opRight, typeRes, address)
 
 def p_push_and_or(p):
 	'''
@@ -500,8 +500,8 @@ def p_check_relational(p):
 	if (quad.top_operators() in rel):
 		# print('generating relational...')
 		operator, opLeft, opRight, typeRes = quad.get_ops_type()
-		direction = df.generate_memory(currScope, typeRes)
-		quad.generate(operator, opLeft, opRight, typeRes, direction)
+		address = df.generate_memory(currScope, typeRes)
+		quad.generate(operator, opLeft, opRight, typeRes, address)
 
 def p_push_relational(p):
 	'''
@@ -518,8 +518,8 @@ def p_check_sum(p):
 	# print('checking sum...', quad.top_operators())
 	if (quad.top_operators() == '+' or quad.top_operators() == '-'):
 		operator, opLeft, opRight, typeRes = quad.get_ops_type()
-		direction = df.generate_memory(currScope, typeRes)
-		quad.generate(operator, opLeft, opRight, typeRes, direction)
+		address = df.generate_memory(currScope, typeRes)
+		quad.generate(operator, opLeft, opRight, typeRes, address)
 
 def p_push_sum(p):
 	'''
@@ -536,8 +536,8 @@ def p_check_mul_div(p):
 	# print('checking mul/div... ', quad.top_operators())
 	if (quad.top_operators() == '*' or quad.top_operators() == '/'):
 		operator, opLeft, opRight, typeRes = quad.get_ops_type()
-		direction = df.generate_memory(currScope, typeRes)
-		quad.generate(operator, opLeft, opRight, typeRes, direction)
+		address = df.generate_memory(currScope, typeRes)
+		quad.generate(operator, opLeft, opRight, typeRes, address)
 
 def p_push_mul_div(p):
 	'''
@@ -565,36 +565,36 @@ def p_push_int(p):
 	push_int			: empty
 	'''
 	global quad, currScope, df
-	direction = df.generate_memory(currScope, 'int')
-	df.set_value_at_direction(direction, p[-1])
-	quad.push_id_type(direction, 'int')
+	address = df.generate_memory(currScope, 'int')
+	df.set_value_at_address(address, p[-1])
+	quad.push_id_type(address, 'int')
 
 def p_push_float(p):
 	'''
 	push_float			: empty
 	'''
 	global quad, currScope, df
-	direction = df.generate_memory(currScope, 'float')
-	df.set_value_at_direction(direction, p[-1])
-	quad.push_id_type(direction, 'float')
+	address = df.generate_memory(currScope, 'float')
+	df.set_value_at_address(address, p[-1])
+	quad.push_id_type(address, 'float')
 
 def p_push_bool(p):
 	'''
 	push_bool			: empty
 	'''
 	global quad, currScope, df
-	direction = df.generate_memory(currScope, 'bool')
-	df.set_value_at_direction(direction, p[-1])
-	quad.push_id_type(direction, 'bool')
+	address = df.generate_memory(currScope, 'bool')
+	df.set_value_at_address(address, p[-1])
+	quad.push_id_type(address, 'bool')
 
 def p_push_char(p):
 	'''
 	push_char			: empty
 	'''
 	global quad
-	direction = df.generate_memory(currScope, 'char')
-	df.set_value_at_direction(direction, p[-1])
-	quad.push_id_type(direction, 'char')
+	address = df.generate_memory(currScope, 'char')
+	df.set_value_at_address(address, p[-1])
+	quad.push_id_type(address, 'char')
 
 def p_push_string(p):
 	'''
@@ -610,8 +610,8 @@ def p_push_id(p):
 	'''
 	global df, currId, currDims, currScope, quad
 	# print('trying to push id: ', currId)
-	direction = df.getVarDirection(currScope, currId)
-	quad.push_id_type(direction, df.getVarType(currScope, currId))
+	address = df.getVarAddress(currScope, currId)
+	quad.push_id_type(address, df.getVarType(currScope, currId))
 
 def p_push_equal(p):
 	'''
@@ -628,8 +628,8 @@ def p_generate_assign(p):
 	global quad, currScope, df
 	# print('trying to assign')
 	operator, opLeft, opRight, typeRes = quad.get_ops_type()
-	direction = df.generate_memory(currScope, typeRes)
-	quad.generate(operator, opLeft, opRight, typeRes, direction)
+	address = df.generate_memory(currScope, typeRes)
+	quad.generate(operator, opLeft, opRight, typeRes, address)
 
 def p_generate_g_if(p):
 	'''
@@ -693,8 +693,8 @@ def p_generate_g_nloop_s(p):
 	'''
 	global quad, df, currScope
 	operator, opLeft, typeLeft, opRight, typeRes = quad.generate_g_nloop_s_pre()
-	direction = df.generate_memory(currScope, typeRes)
-	quad.generate_g_nloop_s(operator, opLeft, typeLeft, opRight, typeRes, direction)
+	address = df.generate_memory(currScope, typeRes)
+	quad.generate_g_nloop_s(operator, opLeft, typeLeft, opRight, typeRes, address)
 
 def p_generate_g_nloop_e(p):
 	'''
@@ -702,8 +702,8 @@ def p_generate_g_nloop_e(p):
 	'''
 	global quad, df, currScope
 	end, ret, my, resType = quad.generate_g_nloop_e_pre()
-	direction = df.generate_memory(currScope, resType)
-	quad.generate_g_nloop_e(end, ret, my, resType, direction)
+	address = df.generate_memory(currScope, resType)
+	quad.generate_g_nloop_e(end, ret, my, resType, address)
 
 def p_generate_end(p):
 	'''

@@ -30,9 +30,9 @@ class QuadrupleTable:
 		return operator, opLeft, opRight, typeRes
 
 	# Automatically generates the next quadruple
-	def generate(self, operator, opLeft, opRight, typeRes, direction):
+	def generate(self, operator, opLeft, opRight, typeRes, address):
 		
-		temp = direction
+		temp = address
 		# Normal operators have two operands but '=' has only one so we need to make a different function
 		if (not operator == '='):
 			newQuad = Quadruple(operator, opLeft, opRight, temp)
@@ -109,13 +109,13 @@ class QuadrupleTable:
 
 		return operator, opLeft, typeLeft, opRight, typeRes
 
-	def generate_g_nloop_s(self, operator, opLeft, typeLeft, opRight, typeRes, direction):
+	def generate_g_nloop_s(self, operator, opLeft, typeLeft, opRight, typeRes, address):
 		
-		newQuad = Quadruple(operator, opLeft, opRight, direction)
+		newQuad = Quadruple(operator, opLeft, opRight, address)
 		self.listOfQuadruples.append(newQuad)
 
 		self.push_id_type(opLeft, typeLeft)
-		self.push_id_type(direction, typeRes)
+		self.push_id_type(address, typeRes)
 		# newQuad.print()
 
 		# self.temp += 1
@@ -141,12 +141,12 @@ class QuadrupleTable:
 		return end, ret, my, resType
 
 
-	def generate_g_nloop_e(self, end, ret, my, resType, direction):
+	def generate_g_nloop_e(self, end, ret, my, resType, address):
 		
-		newQuad = Quadruple('+', my, 1, direction)
+		newQuad = Quadruple('+', my, 1, address)
 		self.listOfQuadruples.append(newQuad)
 		self.stackTypes.append(resType)
-		self.push_id_type(direction, resType)
+		self.push_id_type(address, resType)
 
 		self.count += 1
 		# self.temp += 1 

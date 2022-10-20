@@ -61,8 +61,8 @@ class DirFunc:
 			exit()
 		else:
 			# If the variable is NOT found in the current scope or is found in the global scope (if the current scope is not the global), the variable is stored
-			direction = self.memory.create_memory(scope, newVar[varName]["type"])
-			newVar[varName]["direction"] = direction
+			address = self.memory.create_memory(scope, newVar[varName]["type"])
+			newVar[varName]["address"] = address
 			self.table[scope]["vars"].update(newVar)
 	
 
@@ -83,8 +83,8 @@ class DirFunc:
 			print(name, " has not been declared in this scope")
 		else:
 			if (self.table[newScope]["vars"][name]["dims"] == 0):
-				direction = self.table[newScope]["vars"][name]["direction"]
-				return self.memory.get_value(direction)
+				address = self.table[newScope]["vars"][name]["address"]
+				return self.memory.get_value(address)
 			else:
 				print("Variable has ", self.table[newScope]["vars"][name]["dims"], " dimensions")
 				# TODO: impelemnt a function to deal with lists and matrixes
@@ -96,22 +96,22 @@ class DirFunc:
 			print(name, " has not been declared in this scope")
 		else:
 			if (self.table[newScope]["vars"][name]["dims"] == 0):
-				direction = self.table[newScope]["vars"][name]["direction"]
-				self.memory.set_value(direction, value)
+				address = self.table[newScope]["vars"][name]["address"]
+				self.memory.set_value(address, value)
 			else:
 				print("Variable has ", self.table[newScope]["vars"][name]["dims"], " dimensions")
 				# TODO: impelemnt a function to deal with lists and matrixes
 
-	def set_value_at_direction(self, direction, value):
-		self.memory.set_value(direction, value)
+	def set_value_at_address(self, address, value):
+		self.memory.set_value(address, value)
 
-	def getVarDirection(self, scope, name):
+	def getVarAddress(self, scope, name):
 		newScope = self.findVar(scope, name)
 		if (newScope == -1):
 			print(name, " has not been declared in this scope")
 		else:
 			if (self.table[newScope]["vars"][name]["dims"] == 0):
-				return self.table[newScope]["vars"][name]["direction"]
+				return self.table[newScope]["vars"][name]["address"]
 			else:
 				print("Variable has ", self.table[newScope]["vars"][name]["dims"], " dimensions")
 				# TODO: impelemnt a function to deal with lists and matrixes
@@ -147,11 +147,11 @@ class varAttributes:
 		self.atts = {name: {"type": type, "dims": dims}}
 		return self.atts
 
-	def setDirection(self, name, direction):
-		self.atts[name]["direction"] = direction
+	def setAddress(self, name, address):
+		self.atts[name]["address"] = address
 	
-	def getDirection(self, name):
-		return self.atts[name]["direction"]
+	def getAddress(self, name):
+		return self.atts[name]["address"]
 
 	def getName(self):
 		return list(self.atts.keys())[0]

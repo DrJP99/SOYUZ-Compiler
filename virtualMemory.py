@@ -47,7 +47,7 @@ class VirtualMemory:
 
 		self.memory = {}
 	
-	# Creates virtual memory direction for declared variables
+	# Creates virtual memory address for declared variables
 	def create_global_int(self):
 		if (self.g_i_counter <= self.max_global_int):
 			self.memory[self.g_i_counter] = 0
@@ -143,32 +143,32 @@ class VirtualMemory:
 			print(f"Error: Trying to create memory for {scope} {type} but does not exist")
 			exit()
 	
-	# Checks if direction exists in memory
-	def check_direction(self, direction):
-		if (direction in self.memory):
+	# Checks if address exists in memory
+	def check_address(self, address):
+		if (address in self.memory):
 			return True
 		else:
 			return False
 	
-	# Gets the value at direction
-	def get_value(self, direction):
-		if self.check_direction(direction):
-			return self.memory[direction]
+	# Gets the value at address
+	def get_value(self, address):
+		if self.check_address(address):
+			return self.memory[address]
 		else:
-			print(f"Error: Trying to get direction {direction} but does not exist")
+			print(f"Error: Trying to get address {address} but does not exist")
 			exit()
 	
-	# Sets the value at direction
-	def set_value(self, direction, value):
-		if self.check_direction(direction):
+	# Sets the value at address
+	def set_value(self, address, value):
+		if self.check_address(address):
 			# Fix char 
-			if ((direction >= self.global_char_start and direction <= self.max_global_char) or (direction >= self.local_char_start and direction <= self.max_local_char)):
+			if ((address >= self.global_char_start and address <= self.max_global_char) or (address >= self.local_char_start and address <= self.max_local_char)):
 				if (value[0] == '\'' and value[2] == '\''):
 					value = ord(ascii(value[1]))
 				value %= 128
-			self.memory[direction] = value
+			self.memory[address] = value
 		else:
-			print(f"Error: Trying to set direction {direction} but does not exist")
+			print(f"Error: Trying to set address {address} but does not exist")
 			exit()
 	
 	# Pop variables that are no longer used
