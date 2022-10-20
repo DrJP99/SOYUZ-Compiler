@@ -11,15 +11,13 @@ class QuadrupleTable:
 		self.stackJumps = []		# stack of JUMPS for IFs and LOOPs
 		self.listOfQuadruples = []	# list of generated Quadruples
 		self.count = 1				# Points to the next Quadruple
-		self.temp = 1				# Used to assign temporary variables
+		# self.temp = 1				# Used to assign temporary variables
 
 	# def generate(self, operator, operandL, operandR):
 	# 	self.listOfQuadruples.append(quad)
 	# 	count += 1
 
-	# Automatically generates the next quadruple
-	# Needs to send temporary direction
-	def generate(self):
+	def get_ops_type(self):
 		opRight = self.pop_operands()
 		typeRight = self.pop_types()
 
@@ -29,16 +27,22 @@ class QuadrupleTable:
 		operator = self.pop_operators()
 
 		typeRes = self.check_for_mismatch(typeLeft, typeRight, operator)
+		return operator, opLeft, opRight, typeRes
+
+	# Automatically generates the next quadruple
+	def generate(self, operator, opLeft, opRight, typeRes, direction):
+		
+		temp = direction
 		# Normal operators have two operands but '=' has only one so we need to make a different function
 		if (not operator == '='):
-			newQuad = Quadruple(operator, opLeft, opRight, f't{self.temp}')
+			newQuad = Quadruple(operator, opLeft, opRight, temp)
 			self.listOfQuadruples.append(newQuad)
-			self.push_id_type(f't{self.temp}', typeRes)
+			self.push_id_type(temp, typeRes)
 			# newQuad.print()
 		else:
 			self.generate_equal(opRight, opLeft)
 
-		self.temp += 1
+		# self.temp += 1
 		self.count += 1
 
 	# Generates a quadruple for the '=' operator
@@ -88,8 +92,7 @@ class QuadrupleTable:
 		self.fill_jump(end, self.count)
 		self.count += 1
 	
-	# Needs to send temporary direction
-	def generate_g_nloop_s(self):
+	def generate_g_nloop_s_pre(self):
 		self.stackJumps.append(self.count-1)
 		self.stackJumps.append(self.count)
 		
@@ -103,14 +106,19 @@ class QuadrupleTable:
 		operator = '<'
 
 		typeRes = self.check_for_mismatch(typeLeft, typeRight, operator)
-		newQuad = Quadruple(operator, opLeft, opRight, f't{self.temp}')
+
+		return operator, opLeft, typeLeft, opRight, typeRes
+
+	def generate_g_nloop_s(self, operator, opLeft, typeLeft, opRight, typeRes, direction):
+		
+		newQuad = Quadruple(operator, opLeft, opRight, direction)
 		self.listOfQuadruples.append(newQuad)
 
 		self.push_id_type(opLeft, typeLeft)
-		self.push_id_type(f't{self.temp}', typeRes)
+		self.push_id_type(direction, typeRes)
 		# newQuad.print()
 
-		self.temp += 1
+		# self.temp += 1
 		self.count += 1
 
 		res = self.pop_operands()
@@ -121,8 +129,7 @@ class QuadrupleTable:
 		self.count += 1
 		# print('jumps : ', self.stackJumps)
 
-	# Needs to send temporary direction
-	def generate_g_nloop_e(self):
+	def generate_g_nloop_e_pre(self):
 		end = self.pop_jumps()
 		ret = self.pop_jumps()
 
@@ -130,13 +137,19 @@ class QuadrupleTable:
 		myType = self.pop_types()
 
 		resType = self.check_for_mismatch(myType, 'int', '+')
-		newQuad = Quadruple('+', my, 1, f't{self.temp}')
+
+		return end, ret, my, resType
+
+
+	def generate_g_nloop_e(self, end, ret, my, resType, direction):
+		
+		newQuad = Quadruple('+', my, 1, direction)
 		self.listOfQuadruples.append(newQuad)
 		self.stackTypes.append(resType)
-		self.push_id_type(f't{self.temp}', resType)
+		self.push_id_type(direction, resType)
 
 		self.count += 1
-		self.temp += 1 
+		# self.temp += 1 
 
 		res = self.top_operands()
 		newQuad = Quadruple('=', res, None, my)

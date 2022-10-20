@@ -130,7 +130,7 @@ class VirtualMemory:
 				return self.create_global_char()
 			elif (type == "bool"):
 				return self.create_global_bool()
-		elif (scope > 1):
+		elif (scope > 0):
 			if (type == "int"):
 				return self.create_local_int()
 			elif (type == "float"):
@@ -161,7 +161,10 @@ class VirtualMemory:
 	# Sets the value at direction
 	def set_value(self, direction, value):
 		if self.check_direction(direction):
+			# Fix char 
 			if ((direction >= self.global_char_start and direction <= self.max_global_char) or (direction >= self.local_char_start and direction <= self.max_local_char)):
+				if (value[0] == '\'' and value[2] == '\''):
+					value = ord(ascii(value[1]))
 				value %= 128
 			self.memory[direction] = value
 		else:

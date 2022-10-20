@@ -102,6 +102,20 @@ class DirFunc:
 				print("Variable has ", self.table[newScope]["vars"][name]["dims"], " dimensions")
 				# TODO: impelemnt a function to deal with lists and matrixes
 
+	def set_value_at_direction(self, direction, value):
+		self.memory.set_value(direction, value)
+
+	def getVarDirection(self, scope, name):
+		newScope = self.findVar(scope, name)
+		if (newScope == -1):
+			print(name, " has not been declared in this scope")
+		else:
+			if (self.table[newScope]["vars"][name]["dims"] == 0):
+				return self.table[newScope]["vars"][name]["direction"]
+			else:
+				print("Variable has ", self.table[newScope]["vars"][name]["dims"], " dimensions")
+				# TODO: impelemnt a function to deal with lists and matrixes
+
 
 	# Sees if a variable exists or not
 	def findVar(self, scope, name):
@@ -115,6 +129,9 @@ class DirFunc:
 			else:
 				# Return -1 if it's NOT found in the current scope or the global scope
 				return -1
+	
+	def generate_memory(self, scope, type):
+		return self.memory.create_memory(scope, type)
 
 
 	def print(self):
