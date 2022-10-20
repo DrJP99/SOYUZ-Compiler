@@ -1,3 +1,4 @@
+from virtualMemory import *
 
 # Deals with all the functions related to the functions/variables tables
 class DirFunc:
@@ -8,6 +9,8 @@ class DirFunc:
 				"name": "global", "returnType": "int", "vars": {}
 			}
 		}
+		# Use Virtual Memory inside the function directory to make things easier
+		self.memory = VirtualMemory()
 
 	# TODO see if function exists
 	# TODO Maybe create a different list for declared funcs that will not get popped to see if they exist and so on
@@ -57,6 +60,8 @@ class DirFunc:
 			exit()
 		else:
 			# If the variable is NOT found in the current scope or is found in the global scope (if the current scope is not the global), the variable is stored
+			dir = self.memory.create_memory(scope, newVar.getType())
+			newVar.setDir(dir)
 			self.table[scope]["vars"].update(newVar)
 	
 
@@ -118,7 +123,15 @@ class varAttributes:
 	def __init__(self):
 		self.atts = {}
 	
-	def createVar(self, name, type, dims, value):
-		self.atts = {name: {"type": type, "dims": dims, "value": value}}
+	def createVar(self, name, type, dims):
+		self.atts = {name: {"type": type, "dims": dims}}
 		return self.atts
 
+	def setDirection(self, name, direction):
+		self.atts[name]["direction"] = direction
+
+	def getName(self):
+		return list(self.atts.keys())[0]
+	
+	def getType(self, name):
+		return self.atts[name]["type"]

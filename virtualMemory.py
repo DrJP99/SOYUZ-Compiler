@@ -94,6 +94,25 @@ class VirtualMemory:
 			print("Error: no more local char memory available")
 			exit()
 	
+	def create_memory(self, scope, type):
+		if (scope == 0):
+			if (type == "int"):
+				return self.create_global_int()
+			elif (type == "float"):
+				return self.create_global_float()
+			elif (type == "char"):
+				return self.create_global_char()
+		elif (scope > 1):
+			if (type == "int"):
+				return self.create_local_int()
+			elif (type == "float"):
+				return self.create_local_float()
+			elif (type == "char"):
+				return self.create_local_char()
+		else:
+			print(f"Error: Trying to create memory for {scope} {type} but does not exist")
+			exit()
+	
 	# Checks if direction exists in memory
 	def check_direction(self, direction):
 		if (direction in self.memory):
