@@ -427,7 +427,7 @@ def p_push_var(p):
 	'''
 	global currId, currType, currDims, currScope, vAtts, df
 	# print("Variable added:", currId, "\ttype:", currType, "\tdims:", currDims, "\tscope: ", currScope)
-	df.addVar(currScope, vAtts.createVar(currId, currType, currDims))
+	df.add_var(currScope, vAtts.create_var(currId, currType, currDims))
 	currDims = 0
 
 # def p_see_return_type(p):
@@ -442,7 +442,7 @@ def p_see_func_start(p):
 	see_func_start		: empty
 	'''
 	global currId, currReturnType, currScope, df
-	currScope = currScope + 1
+	currScope += 1
 	df.addFunction(currScope, currId, currReturnType)
 
 def p_see_func_end(p):
@@ -451,11 +451,11 @@ def p_see_func_end(p):
 	'''
 	global currScope, df, quad
 	# df.printFunc()
-	df.removeFunction(currScope)
-	# currScope = currScope - 1
 	quad.generate_g_end_func()
 	ints, floats, bools, chars = quad.reset_counts()
 	df.add_resources(currScope, ints, floats, bools, chars)
+	df.remove_function(currScope)
+	currScope -= 1
 
 def p_set_func_init(p):
 	'''
@@ -469,7 +469,7 @@ def p_see_end_param(p):
 	see_end_param		: empty
 	'''
 	global currScope, currId, currDims, df, vAtts
-	df.addParam(currScope, vAtts.createVar(currId, currType, currDims))
+	df.add_param(currScope, vAtts.create_var(currId, currType, currDims))
 
 def p_reset_dims(p):
 	'''
@@ -622,8 +622,8 @@ def p_push_id(p):
 	'''
 	global df, currId, currDims, currScope, quad
 	# print('trying to push id: ', currId)
-	address = df.getVarAddress(currScope, currId)
-	quad.push_id_type(address, df.getVarType(currScope, currId))
+	address = df.get_var_address(currScope, currId)
+	quad.push_id_type(address, df.get_var_type(currScope, currId))
 
 def p_push_equal(p):
 	'''
