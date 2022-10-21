@@ -5,11 +5,18 @@ var float: myFloat;
 var char: myChar;
 var bool: myBool;
 
-main() {
+func void myFunc(int a, int b) {
+	print(a + b);
+}
 
-	from a = b + y to (10 * j) {
-		x = a + b;
+main() {
+	
+	read(x);
+
+	from a = x to 10 {
+		write(a);
 	}
+
 
 	end;
 }

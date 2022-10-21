@@ -4,6 +4,7 @@ Created by Juan Pablo González 2022(C)
 Created for the Compiler Design Course
 '''
 
+import subprocess
 import pickle
 import ply.yacc as yacc
 from myC_Lex import tokens
@@ -96,7 +97,7 @@ def p_block_1(p):
 
 def p_funcs(p):
 	'''
-	funcs				: FUNC rtype ID see_id see_func_start params LCURLY funcs_1 statement funcs_2 see_func_end RCURLY funcs_3
+	funcs				: FUNC rtype ID see_id see_func_start params LCURLY funcs_1 set_func_init statement funcs_2 see_func_end RCURLY funcs_3
 	'''
 def p_funcs_1(p):
 	'''
@@ -213,7 +214,7 @@ def p_nloop_2(p):
 
 def p_callfunc(p):
 	'''
-	callfunc			: ID LPAR callfunc_1 RPAR
+	callfunc			: ID see_id LPAR callfunc_1 RPAR
 	'''
 def p_callfunc_1(p):
 	'''
@@ -448,10 +449,20 @@ def p_see_func_end(p):
 	'''
 	see_func_end		: empty
 	'''
-	global currScope, df
+	global currScope, df, quad
 	# df.printFunc()
 	df.removeFunction(currScope)
-	currScope = currScope - 1
+	# currScope = currScope - 1
+	quad.generate_g_end_func()
+	ints, floats, bools, chars = quad.reset_counts()
+	df.add_resources(currScope, ints, floats, bools, chars)
+
+def p_set_func_init(p):
+	'''
+	set_func_init		: empty
+	'''
+	global currScope, df, quad
+	df.update_init(currScope, quad.get_curr_counter())
 
 def p_see_end_param(p):
 	'''
@@ -703,8 +714,10 @@ def p_generate_g_nloop_e(p):
 	'''
 	global quad, df, currScope
 	end, ret, my, resType = quad.generate_g_nloop_e_pre()
+	address_1 = df.generate_memory(currScope, "int")
 	address = df.generate_memory(currScope, resType)
-	quad.generate_g_nloop_e(end, ret, my, resType, address)
+	df.set_value_at_address(address_1, 1)
+	quad.generate_g_nloop_e(end, ret, my, resType, address, address_1)
 
 def p_generate_end(p):
 	'''
@@ -712,6 +725,9 @@ def p_generate_end(p):
 	'''
 	global quad
 	quad.generate_end()
+
+
+
 
 # Empty symbol = ε
 def p_empty(p):
@@ -752,7 +768,9 @@ try:
 			}, handle
 		)
 
-
+	print("\n=============================================")
+	subprocess.call(['python', 'VirtualMachine.py'])
+	print("=============================================\n\n")
 
 	print('File compiled successfully!')
 except EOFError:

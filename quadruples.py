@@ -12,6 +12,10 @@ class QuadrupleTable:
 		self.listOfQuadruples = []	# list of generated Quadruples
 		self.count = 1				# Points to the next Quadruple
 		# self.temp = 1				# Used to assign temporary variables
+		self.resourceInt = 0		# Used to count int temporary variables
+		self.resourceFloat = 0		# Used to count float temporary variables
+		self.resourceBool = 0		# Used to count bool temporary variables
+		self.resourceChar = 0		# Used to count char temporary variables
 
 	# def generate(self, operator, operandL, operandR):
 	# 	self.listOfQuadruples.append(quad)
@@ -33,6 +37,8 @@ class QuadrupleTable:
 	def generate(self, operator, opLeft, opRight, typeRes, address):
 		
 		temp = address
+		self.add_count(typeRes)
+
 		# Normal operators have two operands but '=' has only one so we need to make a different function
 		if (not operator == '='):
 			newQuad = Quadruple(operator, opLeft, opRight, temp)
@@ -87,16 +93,17 @@ class QuadrupleTable:
 	def generate_g_cond_loop_e(self):
 		end = self.pop_jumps()
 		ret = self.pop_jumps()
-		newQuad = Quadruple('goto', ret, None, None)
+		newQuad = Quadruple('goto', ret, None, None)	# GOTO brginning of loop
 		self.listOfQuadruples.append(newQuad)
-		self.fill_jump(end, self.count)
+
+		self.fill_jump(end, self.count)					# Fill the jump to the end of the loop
 		self.count += 1
 	
 	def generate_g_nloop_s_pre(self):
-		self.stackJumps.append(self.count-1)
+		self.stackJumps.append(self.count-1)	# Push the jump to the start
 		self.stackJumps.append(self.count)
 		
-		self.push_operator('<')
+		# self.push_operator('<')
 		opRight = self.pop_operands()
 		typeRight = self.pop_types()
 
@@ -110,7 +117,8 @@ class QuadrupleTable:
 		return operator, opLeft, typeLeft, opRight, typeRes
 
 	def generate_g_nloop_s(self, operator, opLeft, typeLeft, opRight, typeRes, address):
-		
+		self.add_count(typeRes)
+
 		newQuad = Quadruple(operator, opLeft, opRight, address)
 		self.listOfQuadruples.append(newQuad)
 
@@ -141,9 +149,10 @@ class QuadrupleTable:
 		return end, ret, my, resType
 
 
-	def generate_g_nloop_e(self, end, ret, my, resType, address):
-		
-		newQuad = Quadruple('+', my, 1, address)
+	def generate_g_nloop_e(self, end, ret, my, resType, address, address_1):
+		self.add_count(resType)
+
+		newQuad = Quadruple('+', my, address_1, address)
 		self.listOfQuadruples.append(newQuad)
 		self.stackTypes.append(resType)
 		self.push_id_type(address, resType)
@@ -158,7 +167,7 @@ class QuadrupleTable:
 		self.count += 1
 		self.fill_jump(end, self.count)
 
-		newQuad = Quadruple('goto', ret, None, None)
+		newQuad = Quadruple('goto', None, ret, None)
 		self.listOfQuadruples.append(newQuad)
 		self.count += 1
 
@@ -239,7 +248,7 @@ class QuadrupleTable:
 
 	def top_operands(self):
 		if (self.stackOperands):
-			return f'{self.stackOperands[-1]}'
+			return self.stackOperands[-1]
 		else:
 			return None
 	
@@ -270,13 +279,48 @@ class QuadrupleTable:
 			print(f'Type mismatch! Impossible to {typeL} {op} {typeR}')
 			exit()
 	
+	def get_list_of_quadruples(self):
+		return self.listOfQuadruples
+	
+	def generate_g_end_func(self):
+		newQuad = Quadruple('ENDFUNC', None, None, None)
+		self.listOfQuadruples.append(newQuad)
+		self.count += 1
+
+	def add_count(self, type):
+		if type == 'int':
+			self.resourceInt += 1
+		elif type == 'float':
+			self.resourceFloat += 1
+		elif type == 'char':
+			self.resourceChar += 1
+		elif type == 'bool':
+			self.resourceBool += 1
+		else:
+			print('ERROR: Type not found')
+			exit()
+	
+	def reset_counts(self):
+		ints = self.resourceInt
+		floats = self.resourceFloat
+		chars = self.resourceChar
+		bools = self.resourceBool
+
+		self.resourceInt = 0
+		self.resourceFloat = 0
+		self.resourceChar = 0
+		self.resourceBool = 0
+
+		return ints, floats, chars, bools
+
 	# Prints all the quadruples generated
 	def print(self):
 		cont = 0
 		# print(len(self.listOfQuadruples))
 		# print(self.stackOperators)
 		# print(self.stackOperands)
-		print("\n~~~>Quadruples generated<~~~")
+
+		print("\n=========== Quadruples  generated ===========\n")
 		while cont < len(self.listOfQuadruples):
 			print(f'#{cont}:', end='\t')
 			self.listOfQuadruples[cont].print()
@@ -297,3 +341,15 @@ class Quadruple:
 	# Prints an individual quadruple
 	def print(self):
 		print(f'[{self.operator}, {self.leftOperand}, {self.rightOperand}, {self.result}]', end='\n')
+	
+	def get_operator(self):
+		return self.operator
+	
+	def get_left_operand(self):
+		return self.leftOperand
+	
+	def get_right_operand(self):
+		return self.rightOperand
+	
+	def get_result(self):
+		return self.result

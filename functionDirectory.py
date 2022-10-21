@@ -7,7 +7,9 @@ class DirFunc:
 		# Creates the dict for the global scope
 		self.table = {
 			0: {
-				"name": "global", "returnType": "int", "vars": {}
+				"name": "global", "returnType": "int", "resources":
+					{"int": 0, "float": 0, "char": 0, "bool": 0},
+				 "vars": {}
 			}
 		}
 		# Use Virtual Memory inside the function directory to make things easier
@@ -18,16 +20,19 @@ class DirFunc:
 
 	# Creates a new function on the dictionary using the directory of the nth scope
 	def addFunction(self, scope, name, returnT):
+		res = {"int": 0, "float": 0, "char": 0, "bool": 0}
 		self.table[scope] = {}
 		self.table[scope]["name"] = name
 		self.table[scope]["returnType"] = returnT
 		self.table[scope]["params"] = {}
+		self.table[scope]["resources"] = res
+		self.table[scope]["init"] = 0
 		self.table[scope]["vars"] = {}
 	
 
 	# Removes a function directory from the table, this will be used at the end of a function when it will no longer be used
 	def removeFunction(self, scope):
-		return self.table.pop(scope)
+		return self.table[scope].pop("vars")
 	
 
 	# Returns the current scope's function's return type
@@ -45,6 +50,7 @@ class DirFunc:
 			param = {varName: {"type": varType}}
 			self.table[scope]["params"].update(param)
 			self.addVar(scope, newVar)
+			
 			
 
 	# Check if a param has already been declared
@@ -64,6 +70,7 @@ class DirFunc:
 			address = self.memory.create_memory(scope, newVar[varName]["type"])
 			newVar[varName]["address"] = address
 			self.table[scope]["vars"].update(newVar)
+			self.addResource(scope, newVar[varName]["type"])
 	
 
 	# Return type of variables from the table
@@ -116,6 +123,14 @@ class DirFunc:
 				print("Variable has ", self.table[newScope]["vars"][name]["dims"], " dimensions")
 				# TODO: impelemnt a function to deal with lists and matrixes
 
+	def addResource(self, scope, type):
+		self.table[scope]["resources"][type] += 1
+	
+	def add_resources(self, scope, ints, floats, chars, bools):
+		self.table[scope]["resources"]["int"] += ints
+		self.table[scope]["resources"]["float"] += floats
+		self.table[scope]["resources"]["char"] += chars
+		self.table[scope]["resources"]["bool"] += bools
 
 	# Sees if a variable exists or not
 	def findVar(self, scope, name):
@@ -132,6 +147,9 @@ class DirFunc:
 	
 	def generate_memory(self, scope, type):
 		return self.memory.create_memory(scope, type)
+	
+	def update_init(self, scope, value):
+		self.table[scope]["init"] = value
 
 
 	def print(self):

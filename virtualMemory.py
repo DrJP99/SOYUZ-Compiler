@@ -153,6 +153,11 @@ class VirtualMemory:
 	# Gets the value at address
 	def get_value(self, address):
 		if self.check_address(address):
+			if (self.get_type(address) == "bool"):
+				if self.memory[address] == 0:
+					return False
+				else:
+					return True
 			return self.memory[address]
 		else:
 			print(f"Error: Trying to get address {address} but does not exist")
@@ -162,13 +167,26 @@ class VirtualMemory:
 	def set_value(self, address, value):
 		if self.check_address(address):
 			# Fix char 
-			if ((address >= self.global_char_start and address <= self.max_global_char) or (address >= self.local_char_start and address <= self.max_local_char)):
+			if (self.get_type(address) == "char"):
 				if (value[0] == '\'' and value[2] == '\''):
 					value = ord(ascii(value[1]))
 				value %= 128
 			self.memory[address] = value
 		else:
 			print(f"Error: Trying to set address {address} but does not exist")
+			exit()
+	
+	def get_type(self, address):
+		if (address >= self.global_int_start and address < self.global_float_start or address >= self.local_int_start and address < self.local_float_start):
+			return "int"
+		elif (address >= self.global_float_start and address < self.global_char_start or address >= self.local_float_start and address < self.local_char_start):
+			return "float"
+		elif (address >= self.global_char_start and address < self.global_bool_start or address >= self.local_char_start and address < self.local_bool_start):
+			return "char"
+		elif (address >= self.global_bool_start and address <= self.max_global_bool or address >= self.local_bool_start and address <= self.max_local_bool):
+			return "bool"
+		else:
+			print(f"Error: Trying to get type of address {address} but is out of bounds")
 			exit()
 	
 	# Pop variables that are no longer used
@@ -241,3 +259,6 @@ class VirtualMemory:
 			elif type == "bool":
 				for i in range(n):
 					self.pop_local_bool()
+	
+	def print(self):
+		print(self.memory)
