@@ -6,12 +6,14 @@ var char: myChar;
 var bool: myBool;
 
 func void myFunc(int a, int b) {
-	print(a + b);
+	write(a + b);
 }
 
 main() {
 	
 	read(x);
+
+	myFunc(1, 2);
 
 	from a = x to 10 {
 		write(a);

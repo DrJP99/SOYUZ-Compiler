@@ -92,14 +92,14 @@ class VirtualMachine:
 					self.memory.set_value(quad.get_result(), 0)
 
 			### JUMPS ###
-			elif (quad.get_operator() == "goto"):
+			elif (quad.get_operator() == "GOTO"):
 				ip = quad.get_right_operand() - 1
-			elif (quad.get_operator() == "gotoF"):
+			elif (quad.get_operator() == "GOTOF"):
 				if (not self.memory.get_value(quad.get_left_operand())):
 					ip = quad.get_right_operand() - 1
 
 			### READ / WRITE ###
-			elif (quad.get_operator() == "read"):
+			elif (quad.get_operator() == "READ"):
 				print("> ", end=" ")
 				value = input()
 				type = self.memory.get_type(quad.get_result())
@@ -112,11 +112,16 @@ class VirtualMachine:
 				elif (type == "bool"):
 					value = bool(value)
 				self.memory.set_value(quad.get_result(), value)
-			elif (quad.get_operator() == "write"):
+			elif (quad.get_operator() == "WRITE"):
 				print("> ", self.memory.get_value(quad.get_left_operand()))
 			
 			elif (quad.get_operator() == "END"):
 				exit()
+			
+
+
+			else:
+				print(f"Sorry, operator {quad.get_operator()} is not supported yet.")
 
 			ip += 1
 

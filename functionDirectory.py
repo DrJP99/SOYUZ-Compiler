@@ -68,6 +68,8 @@ class DirFunc:
 	def find_param(self, scope, varName):
 		return varName in self.table[scope]["params"]
 
+	def get_params(self, name):
+		return self.table[name]["params"]
 
 	# Adds a variable to the scope's list of variables
 	def add_var(self, scope, newVar):
@@ -145,6 +147,13 @@ class DirFunc:
 		self.table[name]["resources"]["float"] += floats
 		self.table[name]["resources"]["char"] += chars
 		self.table[name]["resources"]["bool"] += bools
+	
+	def get_resources(self, name):
+		i = self.table[name]["resources"]["int"]
+		f = self.table[name]["resources"]["float"]
+		c = self.table[name]["resources"]["char"]
+		b = self.table[name]["resources"]["bool"]
+		return i, f, c, b
 
 	# Sees if a variable exists or not
 	def find_var(self, scope, name):
@@ -168,6 +177,9 @@ class DirFunc:
 	def update_init(self, scope, value):
 		name = self.vars[scope]["function"]
 		self.table[name]["init"] = value
+	
+	def get_init(self, name):
+		return self.table[name]["init"]
 
 
 	def print(self):

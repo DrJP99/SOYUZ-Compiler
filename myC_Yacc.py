@@ -20,13 +20,14 @@ currType = ""
 currScope = 0
 currDims = 0
 currReturnType = ""
+currFunc = ""
 
 quad = QuadrupleTable()
 
 # Start of program
 def p_program_start(p):
 	'''
-	program_start		: PROGRAM ID SEMICOL program_start_1 program_start_2 main
+	program_start		: main_goto PROGRAM ID SEMICOL program_start_1 program_start_2 main
 	'''
 
 # Can have global vars or not
@@ -165,10 +166,10 @@ def p_statement_1(p):
 						| cond
 						| cloop
 						| nloop
-						| callfunc SEMICOL
 						| read
 						| write
 						| loadfile
+						| callfunc SEMICOL
 	'''
 
 def p_cond(p):
@@ -214,11 +215,11 @@ def p_nloop_2(p):
 
 def p_callfunc(p):
 	'''
-	callfunc			: ID see_id LPAR callfunc_1 RPAR
+	callfunc			: ID see_id verify_func LPAR activate_record callfunc_1 verify_p_num RPAR
 	'''
 def p_callfunc_1(p):
 	'''
-	callfunc_1			: expression callfunc_3
+	callfunc_1			: expression verify_params callfunc_3
 						| empty
 	'''
 # def p_callfunc_2(p):
@@ -228,7 +229,7 @@ def p_callfunc_1(p):
 # 	'''
 def p_callfunc_3(p):
 	'''
-	callfunc_3			: COMMA callfunc_1
+	callfunc_3			: COMMA increase_p_count callfunc_1
 						| empty
 	'''
 # def p_callfunc_4(p):
@@ -397,7 +398,7 @@ def p_factor_3(p):
 
 def p_main(p):
 	'''
-	main				: MAIN see_id LPAR RPAR LCURLY see_func_start main_1 statement END SEMICOL RCURLY see_func_end generate_end
+	main				: MAIN see_id LPAR RPAR LCURLY see_func_start main_1 set_func_init fill_main_goto statement END SEMICOL RCURLY see_func_end generate_end
 	'''
 def p_main_1(p):
 	'''
@@ -462,7 +463,7 @@ def p_set_func_init(p):
 	set_func_init		: empty
 	'''
 	global currScope, df, quad
-	df.update_init(currScope, quad.get_curr_counter())
+	df.update_init(currScope, quad.get_curr_counter() - 1)
 
 def p_see_end_param(p):
 	'''
@@ -726,7 +727,74 @@ def p_generate_end(p):
 	global quad
 	quad.generate_end()
 
+def p_verify_func(p):
+	'''
+	verify_func			: empty
+	'''
+	global currId, df, currFunc
+	if (not df.find_function(currId)):
+		print(f'Error: function {currId} not defined')
+		exit()
+	else:
+		currFunc = currId
 
+def p_activate_record(p):
+	'''
+	activate_record		: empty
+	'''
+	global paramCounter, paramList, argumentList, quad, df, currFunc, currScope, init_address
+	i, f, c, b = df.get_resources(currFunc)
+	quad.generate_g_era(i, f, c, b)
+	paramCounter = 0
+	paramList = df.get_params(currFunc)
+	argumentList = []
+	init_address = df.get_init(currFunc)
+
+def p_verify_params(p):
+	'''
+	verify_params		: empty
+	'''
+	global paramCounter, paramList, argumentList, quad, df, currId
+	argument = quad.pop_operands()
+	argumentType = quad.pop_types()
+	if (argumentType == paramList[paramCounter]):
+		quad.generate_g_param(argument, paramCounter)
+	else:
+		print("Error: argument type does not match parameter type")
+		exit()
+
+def p_increase_p_count(p):
+	'''
+	increase_p_count	: empty
+	'''
+	global paramCounter
+	paramCounter += 1
+
+def p_verify_p_num(p):
+	'''
+	verify_p_num		: empty
+	'''
+	global paramCounter, paramList, init_address, currFunc
+	if ((paramCounter + 1) != len(paramList)):
+		print("Error: number of parameters does not match function definition")
+		exit()
+	else:
+		quad.generate_g_gosub(currFunc, init_address)
+
+def p_main_goto(p):
+	'''
+	main_goto			: empty
+	'''
+	global quad
+	quad.generate_main_goto()
+
+def p_fill_main_goto(p):
+	'''
+	fill_main_goto		: empty
+	'''
+	global quad, df
+	main_init = df.get_init("main")
+	quad.fill_jump(0, main_init)
 
 
 # Empty symbol = ε
