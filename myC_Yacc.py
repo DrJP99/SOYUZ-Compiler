@@ -22,6 +22,9 @@ currDims = 0
 currReturnType = ""
 currFunc = ""
 
+writeStr = False
+strLen = 1
+
 quad = QuadrupleTable()
 
 # Start of program
@@ -613,9 +616,49 @@ def p_push_string(p):
 	'''
 	push_string			: empty
 	'''
-	global quad
+	global quad, strLen, writeStr
 	# TODO pushing strings to VM
-	quad.push_id_type(f'{p[-1]}', 'string')
+	value = p[-1]
+	address = df.generate_memory(currScope, "char")
+	df.set_value_at_address(address, value[0])
+	i = 1
+	size = len(value)
+	while i < size:
+		newValue = value[i]
+		
+		if (value[i] == "\\"):
+			if (value[i+1] == "n"):
+				newValue = "\\n"
+			elif (value[i+1] == "t"):
+				newValue = "\\t"
+			elif (value[i+1] == "\\"):
+				newValue = "\\\\"
+			elif (value[i+1] == "\\?"):
+				newValue = "\\?"
+			elif (value[i+1] == "\'"):
+				newValue = "\\\'"
+			elif (value[i+1] == "\""):
+				newValue = "\\\""
+			elif (value[i+1] == "a"):
+				newValue = "\\a"
+			elif (value[i+1] == "b"):
+				newValue = "\\b"
+			elif (value[i+1] == "v"):
+				newValue = "\\v"
+			elif (value[i+1] == "f"):
+				newValue = "\\f"
+			elif (value[i+1] == "r"):
+				newValue = "\\r"
+			elif (value[i+1] == "e"):
+				newValue = "\\e"
+			i += 1
+			size -= 1
+		i += 1
+		newAddress = df.generate_memory(currScope, "char")
+		df.set_value_at_address(newAddress, newValue)
+	quad.push_id_type(address, "char")
+	strLen = size
+	writeStr = True
 
 def p_push_id(p):
 	'''
@@ -676,8 +719,14 @@ def p_generate_g_write(p):
 	'''
 	generate_g_write	: empty
 	'''
-	global quad
-	quad.generate_g_write()
+	global quad, writeStr, strLen
+	if (writeStr):
+		len = strLen
+	else:
+		len = 1
+	quad.generate_g_write(len)
+	writeStr = False
+	strLen = 1
 
 def p_cloop_push_jump(p):
 	'''
@@ -823,6 +872,7 @@ try:
 	data = f.read()
 	f.close()
 	result = parser.parse(data)
+	df.print_memory()
 	# df.print()
 	quad.print()
 

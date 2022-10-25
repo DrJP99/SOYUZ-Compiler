@@ -181,6 +181,8 @@ class DirFunc:
 	def get_init(self, name):
 		return self.table[name]["init"]
 
+	def print_memory(self):
+		self.memory.print()
 
 	def print(self):
 		print(json.dumps(self.table, indent=4, sort_keys=False))

@@ -106,7 +106,6 @@ class VirtualMachine:
 
 			### READ / WRITE ###
 			elif (quad.get_operator() == "READ"):
-				print("\n> ", end=" ")
 				value = input()
 				type = self.memory.get_type(quad.get_result())
 				if (type == "int"):
@@ -120,23 +119,21 @@ class VirtualMachine:
 				self.memory.set_value(quad.get_result(), value)
 
 			elif (quad.get_operator() == "WRITE"):
-				value = self.memory.get_value(quad.get_left_operand())
+				i = 0
+				size = quad.get_right_operand()
+				while(i < size):
 
-				if (self.memory.get_type(quad.get_left_operand()) == "char"):
-					value = chr(value)
+					value = self.memory.get_value(quad.get_left_operand() + i)
 
-				# if (startedWriting):
-				# 	print("> ", end = "")
-				# 	startedWriting = False
+					if (self.memory.get_type(quad.get_left_operand() + i) == "char"):
+						value = chr(value)
 
-				print(value, end="")
-				if (value == "\n"):
-					print("> ", end = "")
-				# if(not self.quads[ip + 1].get_operator() == "WRITE"):
-				# 	print("\n", end="")
-				# 	# finishedWriting = True
-				# 	# finishedWriting = False
-				# 	startedWriting = True
+					if (value == "\n"):
+						print("\n> ", end = "")
+					else:
+						print(value, end="")
+
+					i += 1
 			
 			elif (quad.get_operator() == "END"):
 				exit()

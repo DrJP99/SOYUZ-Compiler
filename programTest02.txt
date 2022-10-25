@@ -12,15 +12,14 @@ func void myFunc(int a, int b) {
 main() {
 	myChar = 'a';
 
-	read(x);
-
 	myFunc(1, 2);
+	x = 0;
 
 	from a = x to 10 {
 		write(a, '\n');
 	}
 
-	write(myChar, '\t', 'h', 'e', 'l', 'l', 'o', '\t', 'b');
+	write("hey!\n");
 
 
 	end;
