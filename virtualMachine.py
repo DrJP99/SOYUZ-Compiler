@@ -10,9 +10,15 @@ class VirtualMachine:
 	def start_machine(self):
 		ip = 0			# instruction pointer
 		checkpoint = []	# checkpoint stack
+		startedWriting = True
+		finishedWriting = False
+		print("> ", end="")
 		while (self.quads[ip].get_operator() != "END"):
+			
 			# print(f'curr ip:\t{ip}')
 			quad = self.quads[ip]
+			# print(f"Doing {ip}: ", end="")
+			# quad.print()
 			### SWITCH ###
 			### ARYTHMETICS ###
 			if (quad.get_operator() == "="):
@@ -100,7 +106,7 @@ class VirtualMachine:
 
 			### READ / WRITE ###
 			elif (quad.get_operator() == "READ"):
-				print("> ", end=" ")
+				print("\n> ", end=" ")
 				value = input()
 				type = self.memory.get_type(quad.get_result())
 				if (type == "int"):
@@ -108,12 +114,29 @@ class VirtualMachine:
 				elif (type == "float"):
 					value = float(value)
 				elif (type == "char"):
-					value = ascii(value)
+					value = value
 				elif (type == "bool"):
 					value = bool(value)
 				self.memory.set_value(quad.get_result(), value)
+
 			elif (quad.get_operator() == "WRITE"):
-				print("> ", self.memory.get_value(quad.get_left_operand()))
+				value = self.memory.get_value(quad.get_left_operand())
+
+				if (self.memory.get_type(quad.get_left_operand()) == "char"):
+					value = chr(value)
+
+				# if (startedWriting):
+				# 	print("> ", end = "")
+				# 	startedWriting = False
+
+				print(value, end="")
+				if (value == "\n"):
+					print("> ", end = "")
+				# if(not self.quads[ip + 1].get_operator() == "WRITE"):
+				# 	print("\n", end="")
+				# 	# finishedWriting = True
+				# 	# finishedWriting = False
+				# 	startedWriting = True
 			
 			elif (quad.get_operator() == "END"):
 				exit()
@@ -121,8 +144,8 @@ class VirtualMachine:
 
 
 			else:
-				print(f"Sorry, operator {quad.get_operator()} is not supported yet.")
-
+				# TODO fix newline bug
+				print(f"\nSorry, operator {quad.get_operator()} is not supported yet.\n")
 			ip += 1
 
 

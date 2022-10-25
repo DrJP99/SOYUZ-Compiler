@@ -823,7 +823,7 @@ try:
 	data = f.read()
 	f.close()
 	result = parser.parse(data)
-	df.print()
+	# df.print()
 	quad.print()
 
 	# Generate OBJECT (.ovj) file

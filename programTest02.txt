@@ -10,14 +10,17 @@ func void myFunc(int a, int b) {
 }
 
 main() {
-	
+	myChar = 'a';
+
 	read(x);
 
 	myFunc(1, 2);
 
 	from a = x to 10 {
-		write(a);
+		write(a, '\n');
 	}
+
+	write(myChar, '\t', 'h', 'e', 'l', 'l', 'o', '\t', 'b');
 
 
 	end;
