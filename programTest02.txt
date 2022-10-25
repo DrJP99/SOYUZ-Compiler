@@ -19,7 +19,7 @@ main() {
 		write(a, '\n');
 	}
 
-	write("hey!\n");
+	write("\"\"\"\"world\"\"\"\"");
 
 
 	end;

@@ -619,20 +619,24 @@ def p_push_string(p):
 	global quad, strLen, writeStr
 	# TODO pushing strings to VM
 	value = p[-1]
-	address = df.generate_memory(currScope, "char")
-	df.set_value_at_address(address, value[0])
-	i = 1
+	# address = df.generate_memory(currScope, "char")
+	# df.set_value_at_address(address, value[0])
+	i = 0
 	size = len(value)
+	first = True
+	newSize = size
+
 	while i < size:
 		newValue = value[i]
 		
 		if (value[i] == "\\"):
-			if (value[i+1] == "n"):
+			print(f'next : {value[i+1]}')
+			if (value[i+1] == "\\"):
+				newValue = "\\\\"
+			elif (value[i+1] == "n"):
 				newValue = "\\n"
 			elif (value[i+1] == "t"):
 				newValue = "\\t"
-			elif (value[i+1] == "\\"):
-				newValue = "\\\\"
 			elif (value[i+1] == "\\?"):
 				newValue = "\\?"
 			elif (value[i+1] == "\'"):
@@ -651,13 +655,20 @@ def p_push_string(p):
 				newValue = "\\r"
 			elif (value[i+1] == "e"):
 				newValue = "\\e"
+			else:
+				newValue = "\\" + value[i+1]
 			i += 1
-			size -= 1
+			newSize -= 1
 		i += 1
 		newAddress = df.generate_memory(currScope, "char")
 		df.set_value_at_address(newAddress, newValue)
+
+		if (first):
+			address = newAddress
+			first = False
+			
 	quad.push_id_type(address, "char")
-	strLen = size
+	strLen = newSize
 	writeStr = True
 
 def p_push_id(p):
