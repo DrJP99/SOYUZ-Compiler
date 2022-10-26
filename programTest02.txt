@@ -13,7 +13,7 @@ main() {
 	
 	read(x);
 
-	myFunc(1, 2);
+	myFunc(myChar, myBool);
 
 	from a = x to 10 {
 		write(a);

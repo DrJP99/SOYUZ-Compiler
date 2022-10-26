@@ -754,14 +754,15 @@ def p_verify_params(p):
 	'''
 	verify_params		: empty
 	'''
-	global paramCounter, paramList, argumentList, quad, df, currId
+	global paramCounter, paramList, argumentList, quad, df, currId, typeError
+	typeError = False
 	argument = quad.pop_operands()
 	argumentType = quad.pop_types()
+	argumentList.append(argumentType)
 	if (argumentType == paramList[paramCounter]):
 		quad.generate_g_param(argument, paramCounter)
 	else:
-		print("Error: argument type does not match parameter type")
-		exit()
+		typeError = True
 
 def p_increase_p_count(p):
 	'''
@@ -774,9 +775,15 @@ def p_verify_p_num(p):
 	'''
 	verify_p_num		: empty
 	'''
-	global paramCounter, paramList, init_address, currFunc
-	if ((paramCounter + 1) != len(paramList)):
-		print("Error: number of parameters does not match function definition")
+	global paramCounter, paramList, argumentList, init_address, currFunc
+	if ((paramCounter + 1) != len(paramList) or typeError):
+		print(f"Error: number or type of parameters does not match function {currFunc} definition\n\t\texpected ( " , end="")
+		for p in paramList:
+			print(f"{p}", end=" ")
+		print(") and recieved ( ", end="")
+		for a in argumentList:
+			print(f"{a}", end=" ")
+		print(")")
 		exit()
 	else:
 		quad.generate_g_gosub(currFunc, init_address)
