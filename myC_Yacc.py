@@ -22,6 +22,9 @@ currDims = 0
 currReturnType = ""
 currFunc = ""
 
+writeStr = False
+strLen = 1
+
 quad = QuadrupleTable()
 
 # Start of program
@@ -613,9 +616,60 @@ def p_push_string(p):
 	'''
 	push_string			: empty
 	'''
-	global quad
+	global quad, strLen, writeStr
 	# TODO pushing strings to VM
-	quad.push_id_type(f'{p[-1]}', 'string')
+	value = p[-1]
+	# address = df.generate_memory(currScope, "char")
+	# df.set_value_at_address(address, value[0])
+	i = 0
+	size = len(value)
+	first = True
+	newSize = size
+
+	while i < size:
+		newValue = value[i]
+		
+		if (value[i] == "\\"):
+			print(f'next : {value[i+1]}')
+			if (value[i+1] == "\\"):
+				newValue = "\\\\"
+			elif (value[i+1] == "n"):
+				newValue = "\\n"
+			elif (value[i+1] == "t"):
+				newValue = "\\t"
+			elif (value[i+1] == "\\?"):
+				newValue = "\\?"
+			elif (value[i+1] == "\'"):
+				newValue = "\\\'"
+			elif (value[i+1] == "\""):
+				newValue = "\\\""
+			elif (value[i+1] == "a"):
+				newValue = "\\a"
+			elif (value[i+1] == "b"):
+				newValue = "\\b"
+			elif (value[i+1] == "v"):
+				newValue = "\\v"
+			elif (value[i+1] == "f"):
+				newValue = "\\f"
+			elif (value[i+1] == "r"):
+				newValue = "\\r"
+			elif (value[i+1] == "e"):
+				newValue = "\\e"
+			else:
+				newValue = "\\" + value[i+1]
+			i += 1
+			newSize -= 1
+		i += 1
+		newAddress = df.generate_memory(currScope, "char")
+		df.set_value_at_address(newAddress, newValue)
+
+		if (first):
+			address = newAddress
+			first = False
+			
+	quad.push_id_type(address, "char")
+	strLen = newSize
+	writeStr = True
 
 def p_push_id(p):
 	'''
@@ -676,8 +730,14 @@ def p_generate_g_write(p):
 	'''
 	generate_g_write	: empty
 	'''
-	global quad
-	quad.generate_g_write()
+	global quad, writeStr, strLen
+	if (writeStr):
+		len = strLen
+	else:
+		len = 1
+	quad.generate_g_write(len)
+	writeStr = False
+	strLen = 1
 
 def p_cloop_push_jump(p):
 	'''
@@ -830,7 +890,8 @@ try:
 	data = f.read()
 	f.close()
 	result = parser.parse(data)
-	df.print()
+	df.print_memory()
+	# df.print()
 	quad.print()
 
 	# Generate OBJECT (.ovj) file

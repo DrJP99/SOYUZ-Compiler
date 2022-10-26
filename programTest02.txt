@@ -10,14 +10,13 @@ func void myFunc(int a, int b) {
 }
 
 main() {
+	myChar = 'a';
 	
-	read(x);
-
-	myFunc(myChar, myBool);
-
 	from a = x to 10 {
-		write(a);
+		write(a, '\n');
 	}
+
+	write("\"\"\"\"world\"\"\"\"");
 
 
 	end;

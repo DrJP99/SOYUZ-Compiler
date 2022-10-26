@@ -167,10 +167,46 @@ class VirtualMemory:
 	def set_value(self, address, value):
 		if self.check_address(address):
 			# Fix char 
+			# print(f"Setting {address} to {value}")
 			if (self.get_type(address) == "char"):
-				if (value[0] == '\'' and value[2] == '\''):
-					value = ord(ascii(value[1]))
-				value %= 128
+				# for i in value:
+				# 	print(ascii(i), end=" ")
+				# print(value)
+				if (type(value) == str):
+					if (len(value) == 1):
+						value = ord(value)
+					elif (len(value) == 2):
+						if (value == "\\a"):
+							value = 7
+						elif (value == "\\b"):
+							value = 8
+						elif (value == "\\t"):
+							value = 9
+						elif (value == "\\n"):
+							value = 10
+						elif (value == "\\v"):
+							value = 11
+						elif (value == "\\f"):
+							value = 12
+						elif (value == "\\r"):
+							value = 13
+						elif (value == "\\e"):
+							value = 27
+						elif (value == "\\\""):
+							value = 34
+						elif (value == "\\\'"):
+							value = 39
+						elif (value == "\\?"):
+							value = 63
+						elif (value == "\\\\"):
+							value = 92
+						else:
+							print("ERROR: Invalid char")
+							exit()
+					else:
+						print("ERROR: Invalid char")
+						exit()
+			value %= 128
 			self.memory[address] = value
 		else:
 			print(f"Error: Trying to set address {address} but does not exist")

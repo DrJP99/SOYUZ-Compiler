@@ -192,9 +192,9 @@ class QuadrupleTable:
 		self.listOfQuadruples.append(newQuad)
 		self.count += 1
 
-	def generate_g_write(self):
+	def generate_g_write(self, size=1):
 		op = self.pop_operands()
-		newQuad = Quadruple('WRITE', op, None, None)
+		newQuad = Quadruple('WRITE', op, size, None)
 		self.listOfQuadruples.append(newQuad)
 		self.count += 1
 

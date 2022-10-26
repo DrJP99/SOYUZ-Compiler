@@ -106,11 +106,14 @@ def t_CTEI(t):
 	return t
 
 def t_CTEC(t):
-	r'\'[a-zA-Z]\''
+	# r'\'[a-zA-Z0-9(\n)(\t)]\''
+	r'\'([^\\\n]|(\\.))\''
+	t.value = t.value[1:-1]
 	return t
 
 def t_CTES(t):
 	r'\"([^\\\n]|(\\.))*?\"'
+	t.value = t.value[1:-1]
 	return t
 
 
