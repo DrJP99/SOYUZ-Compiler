@@ -621,6 +621,7 @@ def p_push_string(p):
 	value = p[-1]
 	# address = df.generate_memory(currScope, "char")
 	# df.set_value_at_address(address, value[0])
+	address = 0
 	i = 0
 	size = len(value)
 	first = True
@@ -630,7 +631,7 @@ def p_push_string(p):
 		newValue = value[i]
 		
 		if (value[i] == "\\"):
-			print(f'next : {value[i+1]}')
+			# print(f'next : {value[i+1]}')
 			if (value[i+1] == "\\"):
 				newValue = "\\\\"
 			elif (value[i+1] == "n"):

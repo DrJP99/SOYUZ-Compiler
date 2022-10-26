@@ -13,6 +13,9 @@ local variables	: (2000 - 5999)		# includes temporary variables
 '''
 # CHAR is stored as INTs, min = 0, max = 127
 
+import json
+
+
 class VirtualMemory:
 	def __init__(self):
 		self.global_int_start = 0
@@ -201,11 +204,16 @@ class VirtualMemory:
 						elif (value == "\\\\"):
 							value = 92
 						else:
-							print("ERROR: Invalid char")
+							print(f"ERROR: Invalid escape character sequence {value}")
 							exit()
 					else:
 						print("ERROR: Invalid char")
 						exit()
+				elif (type(value) == bool):
+					if (value or value != 0):
+						value = 1
+					else:
+						value = 0
 			value %= 128
 			self.memory[address] = value
 		else:
@@ -297,4 +305,5 @@ class VirtualMemory:
 					self.pop_local_bool()
 	
 	def print(self):
-		print(self.memory)
+		print(json.dumps(self.memory, indent=4, sort_keys=False))
+		# print(self.memory)

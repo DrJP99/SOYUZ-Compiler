@@ -11,7 +11,9 @@ func void myFunc(int a, int b) {
 
 main() {
 	myChar = 'a';
-	
+
+	myFunc(1, 2);
+
 	from a = x to 10 {
 		write(a, '\n');
 	}
