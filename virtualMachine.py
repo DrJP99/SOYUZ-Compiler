@@ -99,10 +99,10 @@ class VirtualMachine:
 
 			### JUMPS ###
 			elif (quad.get_operator() == "GOTO"):
-				ip = quad.get_right_operand() - 1
+				ip = int(quad.get_right_operand()) - 1
 			elif (quad.get_operator() == "GOTOF"):
 				if (not self.memory.get_value(quad.get_left_operand())):
-					ip = quad.get_right_operand() - 1
+					ip = int(quad.get_right_operand()) - 1
 
 			### READ / WRITE ###
 			elif (quad.get_operator() == "READ"):

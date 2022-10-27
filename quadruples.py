@@ -93,7 +93,7 @@ class QuadrupleTable:
 	def generate_g_cond_loop_e(self):
 		end = self.pop_jumps()
 		ret = self.pop_jumps()
-		newQuad = Quadruple('GOTO', ret, None, None)	# GOTO brginning of loop
+		newQuad = Quadruple('GOTO', None, ret - 1, None)	# GOTO brginning of loop
 		self.listOfQuadruples.append(newQuad)
 
 		self.fill_jump(end, self.count)					# Fill the jump to the end of the loop

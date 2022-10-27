@@ -5,21 +5,16 @@ var float: myFloat;
 var char: myChar;
 var bool: myBool;
 
-func void myFunc(int a, int b) {
-	write(a + b);
-}
+
 
 main() {
-	myChar = 'a';
-
-	myFunc(1, 2);
-
-	from a = x to 10 {
-		write(a, '\n');
+	
+	a = 0;
+	while (a < 10) {
+		a = a + 1;
+		write(a, "\n");
 	}
-
-	write("\"\"\"\"world\"\"\"\"");
-
+	write("se acabo el programa\n");
 
 	end;
 }
