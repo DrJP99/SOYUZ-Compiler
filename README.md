@@ -11,3 +11,11 @@ Durante la segunda semana, cree el directorio de funciones `functionDirectory.py
 ## Entregable #3
 
 Durante la tercer semana, se creó el archivo `quadruples.py` que contiene las clases `QuadrupleTable` y `Quadruple`. Estas clases tienen diferentes métodos sirven para generar, modificar y sacar datos de los cuádruplos que se generarán durante la compilación. Se agregaron los _puntos neurálgicos_ en la gramática para generar los cuádruplos. Hasta ahora se generan correctamente los cuádruplos para las operaciones simples, incluyendo la asignación, `READ` y `WRITE` y con los condicionales `IF`, `ELSE IF` y `ELSE`. Las variables temporales que se generan no tienen espacio de memoria asignado.
+
+## Entregable #4
+
+Durante la cuarta semana, se creó el código para generar cuádruplos para los cyclos condicionales `WHILE` y no condicionales `FROM-TO` al igual que se agregaron los _puntos neurálgicos_ en la parte de la gramática.
+
+## Entregable #5
+
+Durante la quinta semana, se creó el código para generar los cuádruplos para las funciones (`GOSUB`, `ERA`, `ENDFUNC`) pero estas no son funcionales. Se creó `virtualMachine.py` que sirve para correr todo el código. Los cuádruplos de operaciones aritméticas ahora se ejecutan dentro de la máquina virtual al igual que los cuádruplos de saltos, por lo que también funcionan correctamente los ciclos y condicionales. Se aprovechó esta semana para arreglar algunos errores, principalmente los tipos `CHAR` y la impresión de constantes `STRING`.
