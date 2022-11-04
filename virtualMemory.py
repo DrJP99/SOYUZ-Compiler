@@ -123,6 +123,14 @@ class VirtualMemory:
 			print("Error: no more local bool memory available")
 			exit()
 	
+	def create_many_memory(self, scope, type, size):
+		addressStart = self.create_memory(scope, type)
+
+		for i in range(1, size):
+			self.create_memory(scope, type)
+		
+		return addressStart
+
 	def create_memory(self, scope, type):
 		if (scope == 0):
 			if (type == "int"):

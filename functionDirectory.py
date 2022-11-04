@@ -80,10 +80,35 @@ class DirFunc:
 			exit()
 		else:
 			# If the variable is NOT found in the current scope or is found in the global scope (if the current scope is not the global), the variable is stored
-			address = self.memory.create_memory(scope, newVar[varName]["type"])
+			dims = newVar[varName]["dims"]
+			xDim = newVar[varName]["xDim"]
+			yDim = newVar[varName]["yDim"]
+			varType = newVar[varName]["type"]
+
+			size = 0;
+			if (dims == 0):
+				size = 1
+			elif (dims == 1):
+				size = xDim
+			elif (dims == 2):
+				size = xDim * yDim
+
+			address = self.memory.create_many_memory(scope, varType, size)
 			newVar[varName]["address"] = address
 			self.vars[scope]["vars"].update(newVar)
-			self.add_resource(scope, newVar[varName]["type"])
+
+			ints = floats = bools = chars = 0
+
+			if (varType == 'int'):
+				ints = size
+			elif (varType == 'float'):
+				floats = size
+			elif (varType == 'char'):
+				chars = size
+			elif (varType == 'bool'):
+				bools = size
+			
+			self.add_resources(scope, ints, floats, chars, bools)
 	
 
 	# Return type of variables from the table
@@ -108,6 +133,10 @@ class DirFunc:
 			else:
 				print("Variable has ", self.vars[newScope]["vars"][name]["dims"], " dimensions")
 				# TODO: impelemnt a function to deal with lists and matrixes
+	
+	# Gets value at address
+	def get_value(self, address):
+		return self.memory.get_value(address)
 	
 	# Set the value for variables of 0 dimensions
 	def set_var_value(self, scope, name, value):
@@ -194,8 +223,8 @@ class varAttributes:
 	def __init__(self):
 		self.atts = {}
 	
-	def create_var(self, name, type, dims):
-		self.atts = {name: {"type": type, "dims": dims}}
+	def create_var(self, name, type, dims, xDim = None, yDim = None):
+		self.atts = {name: {"type": type, "dims": dims, "xDim": xDim, "yDim": yDim}}
 		return self.atts
 
 	def set_address(self, name, address):

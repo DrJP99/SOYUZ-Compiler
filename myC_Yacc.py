@@ -422,16 +422,29 @@ def p_see_dims(p):
 	'''
 	see_dims			: empty
 	'''
-	global currDims
+	global currDims, xDim, yDim, df, quad
 	currDims = currDims + 1
+	if (currDims == 1):
+		xDim = df.get_value(quad.pop_operands())
+		print(f'xDim: {xDim}')
+	else:
+		yDim = df.get_value(quad.pop_operands())
+		print(f'yDim: {yDim}')
 
 def p_push_var(p):
 	'''
 	push_var			: empty
 	'''
-	global currId, currType, currDims, currScope, vAtts, df
+	global currId, currType, currDims, currScope, vAtts, df, xDim, yDim
 	# print("Variable added:", currId, "\ttype:", currType, "\tdims:", currDims, "\tscope: ", currScope)
-	df.add_var(currScope, vAtts.create_var(currId, currType, currDims))
+	newVar = {}
+	if (currDims == 0):
+		newVar = vAtts.create_var(currId, currType, currDims)
+	elif (currDims == 1):
+		newVar = vAtts.create_var(currId, currType, currDims, xDim)
+	elif (currDims == 2):
+		newVar = vAtts.create_var(currId, currType, currDims, xDim, yDim)
+	df.add_var(currScope, newVar)
 	currDims = 0
 
 # def p_see_return_type(p):
@@ -480,7 +493,7 @@ def p_reset_dims(p):
 	reset_dims			: empty
 	'''
 	global currDims
-	currDims = 0
+	currDims = 0 
 
 def p_print_value(p):
 	'''
@@ -892,7 +905,7 @@ try:
 	f.close()
 	result = parser.parse(data)
 	df.print_memory()
-	# df.print()
+	df.print()
 	quad.print()
 
 	# Generate OBJECT (.ovj) file

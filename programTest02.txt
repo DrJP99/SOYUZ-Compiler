@@ -1,25 +1,8 @@
 program myProgram;
-
-var int: x, y, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p;
-var float: myFloat;
-var char: myChar;
-var bool: myBool;
-
-func void myFunc(int a, int b) {
-	write(a + b);
-}
+var int: y[5,2], a;
 
 main() {
-	myChar = 'a';
-
-	myFunc(1, 2);
-
-	from a = x to 10 {
-		write(a, '\n');
-	}
-
-	write("\"\"\"\"world\"\"\"\"");
-
+	var int: x[a];
 
 	end;
 }
