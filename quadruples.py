@@ -198,6 +198,38 @@ class QuadrupleTable:
 		self.listOfQuadruples.append(newQuad)
 		self.count += 1
 
+	def generate_g_verify(self, d, size, m, dims, address = 0):
+		top = self.top_operands()
+		newQuad = Quadruple('VERIFY', top, 0, size - 1)
+		self.listOfQuadruples.append(newQuad)
+		self.count += 1
+
+		
+		T = address
+		if (dims != d):
+			aux = self.pop_operands()
+			newQuad = Quadruple('*', aux, m, T)
+			self.listOfQuadruples.append(newQuad)
+			self.count += 1
+			self.stackOperands.append(T)
+
+		if (d > 1):
+			aux2 = self.pop_operands()
+			aux1 = self.pop_operands()
+			newQuad = Quadruple('+', aux1, aux2, T)
+			self.listOfQuadruples.append(newQuad)
+			self.count += 1
+			self.stackOperands.append(T)
+
+	def generate_g_dims_end(self, base):
+		aux = self.pop_operands()
+		T = self.pop_operands()
+		newQuad = Quadruple('BASESUM', aux, base, T)
+		self.listOfQuadruples.append(newQuad)
+		self.count += 1
+		self.stackOperands.append(f'${T}')
+		self.pop_operators()
+
 	## PUSH ##
 	# Since ID and TYPE are always pushed at the same time, they are combined in this function
 	def push_id_type(self, newId, newType):

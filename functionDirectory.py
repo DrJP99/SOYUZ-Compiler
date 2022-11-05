@@ -116,54 +116,96 @@ class DirFunc:
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
 			print("ERROR: ", name, " has not been declared in this scope")
-
+			exit()
 		else:
 			return self.vars[newScope]["vars"][name]["type"]
 	
-
+	# Get offset of address for vars with dims
+	def dim_offset(self, dims, xDim ,yDim, xSize):
+		if (dims == 0):
+			return 0
+		elif (dims == 1):
+			return xDim
+		elif (dims == 2):
+			return (xSize * yDim) + xDim
+	
 	# Returns the value for variables of 0 dimensions
 	def get_var_value(self, scope, name):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print(name, " has not been declared in this scope")
+			print("ERROR: ", name, " has not been declared in this scope")
+			exit()
 		else:
-			if (self.vars[newScope]["vars"][name]["dims"] == 0):
-				address = self.vars[newScope]["vars"][name]["address"]
-				return self.memory.get_value(address)
-			else:
-				print("Variable has ", self.vars[newScope]["vars"][name]["dims"], " dimensions")
-				# TODO: impelemnt a function to deal with lists and matrixes
+			offset = self.dim_offset(self.vars[newScope]["vars"][name]["dims"], self.vars[newScope]["vars"][name]["xDim"], self.vars[newScope]["vars"][name]["yDim"], self.vars[newScope]["vars"][name]["xSize"])
+			address = self.vars[newScope]["vars"][name]["address"]
+			return self.memory.get_value(address + offset)
+				# print("Variable has ", self.vars[newScope]["vars"][name]["dims"], " dimensions")
 	
 	# Gets value at address
 	def get_value(self, address):
 		return self.memory.get_value(address)
 	
 	# Set the value for variables of 0 dimensions
-	def set_var_value(self, scope, name, value):
+	def set_var_value(self, scope, name, value, xDim = 0, yDim = 0):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print(name, " has not been declared in this scope")
+			print("ERROR: ",name, " has not been declared in this scope")
+			exit()
 		else:
-			if (self.vars[newScope]["vars"][name]["dims"] == 0):
-				address = self.vars[newScope]["vars"][name]["address"]
-				self.memory.set_value(address, value)
-			else:
-				print("Variable has ", self.vars[newScope]["vars"][name]["dims"], " dimensions")
-				# TODO: impelemnt a function to deal with lists and matrixes
+			offset = self.dim_offset(self.vars[newScope]["vars"][name]["dims"], xDim, yDim, self.vars[newScope]["vars"][name]["xDim"])
+
+			address = self.vars[newScope]["vars"][name]["address"]
+			self.memory.set_value(address + offset, value)
+			# print("Variable has ", self.vars[newScope]["vars"][name]["dims"], " dimensions")
 
 	def set_value_at_address(self, address, value):
 		self.memory.set_value(address, value)
 
-	def get_var_address(self, scope, name):
+	def get_var_address(self, scope, name, xDim = 0, yDim = 0):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print(name, " has not been declared in this scope")
+			print("ERROR: ", name, " has not been declared in this scope")
+			exit()
 		else:
-			if (self.vars[newScope]["vars"][name]["dims"] == 0):
-				return self.vars[newScope]["vars"][name]["address"]
-			else:
-				print("Variable has ", self.vars[newScope]["vars"][name]["dims"], " dimensions")
-				# TODO: impelemnt a function to deal with lists and matrixes
+			offset = self.dim_offset(self.vars[newScope]["vars"][name]["dims"], xDim, yDim, self.vars[newScope]["vars"][name]["xDim"])
+			return self.vars[newScope]["vars"][name]["address"] + offset
+			# print("Variable has ", self.vars[newScope]["vars"][name]["dims"], " dimensions")
+
+	def get_var_dims(self, scope, name):
+		newScope = self.find_var(scope, name)
+		if (newScope == -1):
+			print("ERROR: ", name, " has not been declared in this scope")
+			exit()
+		else:
+			return self.vars[newScope]["vars"][name]["dims"]
+	
+	def get_var_xDim(self, scope, name):
+		newScope = self.find_var(scope, name)
+		if (newScope == -1):
+			print("ERROR: ", name, " has not been declared in this scope")
+			exit()
+		else:
+			return self.vars[newScope]["vars"][name]["xDim"]
+	
+	def get_var_yDim(self, scope, name):
+		newScope = self.find_var(scope, name)
+		if (newScope == -1):
+			print("ERROR: ", name, " has not been declared in this scope")
+			exit()
+		else:
+			return self.vars[newScope]["vars"][name]["yDim"]
+	
+	def get_var_limits(self, scope, name):
+		newScope = self.find_var(scope, name)
+		if (newScope == -1):
+			print("ERROR: ", name, " has not been declared in this scope")
+			exit()
+		else:
+			limitI = self.vars[newScope]["vars"][name]["address"]
+			xDim = self.vars[newScope]["vars"][name]["xDim"]
+			yDim = self.vars[newScope]["vars"][name]["yDim"]
+			limitS = xDim * yDim
+			return limitI, limitS
 
 	def add_resource(self, scope, type):
 		name = self.vars[scope]["function"]
@@ -183,6 +225,30 @@ class DirFunc:
 		c = self.table[name]["resources"]["char"]
 		b = self.table[name]["resources"]["bool"]
 		return i, f, c, b
+	
+	def set_var_dims(self, scope, name, dims):
+		newScope = self.find_var(scope, name)
+		if (newScope == -1):
+			print("ERROR: ", name, " has not been declared in this scope")
+			exit()
+		else:
+			self.vars[newScope]["vars"][name]["dims"] = dims
+	
+	def set_var_xDim(self, scope, name, xDim):
+		newScope = self.find_var(scope, name)
+		if (newScope == -1):
+			print("ERROR: ", name, " has not been declared in this scope")
+			exit()
+		else:
+			self.vars[newScope]["vars"][name]["xDim"] = xDim
+	
+	def set_var_yDim(self, scope, name, yDim):
+		newScope = self.find_var(scope, name)
+		if (newScope == -1):
+			print("ERROR: ", name, " has not been declared in this scope")
+			exit()
+		else:
+			self.vars[newScope]["vars"][name]["yDim"] = yDim
 
 	# Sees if a variable exists or not
 	def find_var(self, scope, name):

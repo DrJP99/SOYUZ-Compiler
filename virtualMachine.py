@@ -1,4 +1,5 @@
 import pickle
+import string
 import virtualMemory
 
 class VirtualMachine:
@@ -15,99 +16,95 @@ class VirtualMachine:
 		print("> ", end="")
 		while (self.quads[ip].get_operator() != "END"):
 			
-			# print(f'curr ip:\t{ip}')
 			quad = self.quads[ip]
-			# print(f"Doing {ip}: ", end="")
+			# print(f'curr ip:\t{ip}')
 			# quad.print()
+			operator, opLeft, opRight, result = self.parse_quad(quad)
 			### SWITCH ###
 			### ARYTHMETICS ###
-			if (quad.get_operator() == "="):
-				value = self.memory.get_value(quad.get_left_operand())
-				self.memory.set_value(quad.get_result(), value)
-				# self.memory.set_value(quad.get_result(), self.memory.get_value(quad.get_left_operand()))
+			if (operator == "="):
+				value = opLeft
+				self.memory.set_value(result, value)
+				# self.memory.set_value(result, opLeft)
 				
-			elif (quad.get_operator() == "+"):
-				opLeft = self.memory.get_value(quad.get_left_operand())
-				opRight = self.memory.get_value(quad.get_right_operand())
-				result = opLeft + opRight
-				self.memory.set_value(quad.get_result(), result)
-				# self.memory.set_value(quad.get_result(), self.memory.get_value(quad.get_left_operand()) + self.memory.get_value(quad.get_right_operand()))
+			elif (operator == "+"):
+				value = opLeft + opRight
+				self.memory.set_value(result, value)
+				# self.memory.set_value(result, opLeft + opRight)
 				
-			elif (quad.get_operator() == "-"):
-				opLeft = self.memory.get_value(quad.get_left_operand())
-				opRight = self.memory.get_value(quad.get_right_operand())
-				result = opLeft - opRight
-				self.memory.set_value(quad.get_result(), result)
-				# self.memory.set_value(quad.get_result(), self.memory.get_value(quad.get_left_operand()) - self.memory.get_value(quad.get_right_operand()))
+			elif (operator == "-"):
+				value = opLeft - opRight
+				self.memory.set_value(result, value)
+				# self.memory.set_value(result, opLeft - opRight)
 				
-			elif (quad.get_operator() == "*"):
-				opLeft = self.memory.get_value(quad.get_left_operand())
-				opRight = self.memory.get_value(quad.get_right_operand())
-				result = opLeft * opRight
-				self.memory.set_value(quad.get_result(), result)
-				# self.memory.set_value(quad.get_result(), self.memory.get_value(quad.get_left_operand()) * self.memory.get_value(quad.get_right_operand()))
+			elif (operator == "*"):
+				value = opLeft * opRight
+				self.memory.set_value(result, value)
+				# self.memory.set_value(result, opLeft * opRight)
 				
-			elif (quad.get_operator() == "/"):
-				opLeft = self.memory.get_value(quad.get_left_operand())
-				opRight = self.memory.get_value(quad.get_right_operand())
-				result = opLeft / opRight
-				self.memory.set_value(quad.get_result(), result)
-				# self.memory.set_value(quad.get_result(), self.memory.get_value(quad.get_left_operand()) / self.memory.get_value(quad.get_right_operand()))
-				
+			elif (operator == "/"):
+				value = opLeft / opRight
+				self.memory.set_value(result, value)
+				# self.memory.set_value(result, opLeft / opRight)
+			
+			# Used to sum the base value for an array
+			elif (operator == "BASESUM"):
+				value = opLeft + quad.get_right_operand()
+				self.memory.set_value(result, value)
 
 			### RELATIONAL ###
-			elif (quad.get_operator() == "=="):
-				if (self.memory.get_value(quad.get_left_operand()) == self.memory.get_value(quad.get_right_operand())):
-					self.memory.set_value(quad.get_result(), 1)
+			elif (operator == "=="):
+				if (opLeft == opRight):
+					self.memory.set_value(result, 1)
 				else:
-					self.memory.set_value(quad.get_result(), 0)
-			elif (quad.get_operator() == "!="):
-				if (self.memory.get_value(quad.get_left_operand()) != self.memory.get_value(quad.get_right_operand())):
-					self.memory.set_value(quad.get_result(), 1)
+					self.memory.set_value(result, 0)
+			elif (operator == "!="):
+				if (opLeft != opRight):
+					self.memory.set_value(result, 1)
 				else:
-					self.memory.set_value(quad.get_result(), 0)
-			elif (quad.get_operator() == ">"):
-				if (self.memory.get_value(quad.get_left_operand()) > self.memory.get_value(quad.get_right_operand())):
-					self.memory.set_value(quad.get_result(), 1)
+					self.memory.set_value(result, 0)
+			elif (operator == ">"):
+				if (opLeft > opRight):
+					self.memory.set_value(result, 1)
 				else:
-					self.memory.set_value(quad.get_result(), 0)
-			elif (quad.get_operator() == ">="):
-				if (self.memory.get_value(quad.get_left_operand()) >= self.memory.get_value(quad.get_right_operand())):
-					self.memory.set_value(quad.get_result(), 1)
+					self.memory.set_value(result, 0)
+			elif (operator == ">="):
+				if (opLeft >= opRight):
+					self.memory.set_value(result, 1)
 				else:
-					self.memory.set_value(quad.get_result(), 0)
-			elif (quad.get_operator() == "<"):
-				if (self.memory.get_value(quad.get_left_operand()) < self.memory.get_value(quad.get_right_operand())):
-					self.memory.set_value(quad.get_result(), 1)
+					self.memory.set_value(result, 0)
+			elif (operator == "<"):
+				if (opLeft < opRight):
+					self.memory.set_value(result, 1)
 				else:
-					self.memory.set_value(quad.get_result(), 0)
-			elif (quad.get_operator() == "<="):
-				if (self.memory.get_value(quad.get_left_operand()) <= self.memory.get_value(quad.get_right_operand())):
-					self.memory.set_value(quad.get_result(), 1)
+					self.memory.set_value(result, 0)
+			elif (operator == "<="):
+				if (opLeft <= opRight):
+					self.memory.set_value(result, 1)
 				else:
-					self.memory.set_value(quad.get_result(), 0)
-			elif (quad.get_operator() == "&&"):
-				if (self.memory.get_value(quad.get_left_operand()) and self.memory.get_value(quad.get_right_operand())):
-					self.memory.set_value(quad.get_result(), 1)
+					self.memory.set_value(result, 0)
+			elif (operator == "&&"):
+				if (opLeft and opRight):
+					self.memory.set_value(result, 1)
 				else:
-					self.memory.set_value(quad.get_result(), 0)
-			elif (quad.get_operator() == "||"):
-				if (self.memory.get_value(quad.get_left_operand()) or self.memory.get_value(quad.get_right_operand())):
-					self.memory.set_value(quad.get_result(), 1)
+					self.memory.set_value(result, 0)
+			elif (operator == "||"):
+				if (opLeft or opRight):
+					self.memory.set_value(result, 1)
 				else:
-					self.memory.set_value(quad.get_result(), 0)
+					self.memory.set_value(result, 0)
 
 			### JUMPS ###
-			elif (quad.get_operator() == "GOTO"):
+			elif (operator == "GOTO"):
 				ip = int(quad.get_right_operand()) - 1
-			elif (quad.get_operator() == "GOTOF"):
-				if (not self.memory.get_value(quad.get_left_operand())):
+			elif (operator == "GOTOF"):
+				if (not opLeft):
 					ip = int(quad.get_right_operand()) - 1
 
 			### READ / WRITE ###
-			elif (quad.get_operator() == "READ"):
+			elif (operator == "READ"):
 				value = input()
-				type = self.memory.get_type(quad.get_result())
+				type = self.memory.get_type(result)
 				if (type == "int"):
 					value = int(value)
 				elif (type == "float"):
@@ -116,9 +113,9 @@ class VirtualMachine:
 					value = value
 				elif (type == "bool"):
 					value = bool(value)
-				self.memory.set_value(quad.get_result(), value)
+				self.memory.set_value(result, value)
 
-			elif (quad.get_operator() == "WRITE"):
+			elif (operator == "WRITE"):
 				i = 0
 				size = quad.get_right_operand()
 				while(i < size):
@@ -135,15 +132,39 @@ class VirtualMachine:
 
 					i += 1
 			
-			elif (quad.get_operator() == "END"):
+			elif (operator == "END"):
 				exit()
 			
 
 
 			else:
 				# TODO fix newline bug
-				print(f"\nSorry, operator {quad.get_operator()} is not supported yet.\n")
+				print(f"\nSorry, operator {operator} is not supported yet.\n")
 			ip += 1
+
+	def parse_quad(self, quad):
+		operator = quad.get_operator()
+		opLeft  = quad.get_left_operand()
+		opRight = quad.get_right_operand()
+		result  = quad.get_result()
+
+		if (type(opLeft) == str and opLeft[0] == "$"):
+			opLeft = int(opLeft.replace("$", ""))
+			opLeft = self.memory.get_value(opLeft)
+		if (type(opRight) == str and opRight[0] == "$"):
+			opRight = int(opRight.replace("$", ""))
+			opRight = self.memory.get_value(opRight)
+		if (type(result) == str and result[0] == "$"):
+			result = int(result.replace("$", ""))
+			result = self.memory.get_value(result)
+
+		if (opLeft != None):
+			opLeft = self.memory.get_value(opLeft)
+		if (opRight != None):
+			opRight = self.memory.get_value(opRight)
+		if (result != None):
+			result = self.memory.get_value(result)
+		return operator, opLeft, opRight, result
 
 
 
@@ -158,3 +179,4 @@ memory  = objectData['memory']
 
 machine = VirtualMachine(memory, quads, df)
 machine.start_machine()
+memory.print()

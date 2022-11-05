@@ -1,8 +1,8 @@
 program myProgram;
-var int: y[5,2], a;
-
+	var int: i[10], a;
 main() {
-	var int: x[a];
+	i[2] = 4;
+	a = i[2];
 
 	end;
 }

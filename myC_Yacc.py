@@ -21,6 +21,11 @@ currScope = 0
 currDims = 0
 currReturnType = ""
 currFunc = ""
+xDim = 0
+yDim = 0
+
+stackDims = []
+stackDimsId = []
 
 writeStr = False
 strLen = 1
@@ -57,12 +62,22 @@ def p_vars_1(p):
 	'''
 def p_vars_2(p):
 	'''
-	vars_2				: dims
+	vars_2				: dims_assign
 						| empty
 	'''
 def p_vars_3(p):
 	'''
 	vars_3				: COMMA vars_1
+						| empty
+	'''
+
+def p_dims_assign(p):
+	'''
+	dims_assign			: LBRACK see_dims_a CTEI see_dims_num dims_assign_1 RBRACK
+	'''
+def p_dims_assign_1(p):
+	'''
+	dims_assign_1		: COMMA see_dims_a CTEI see_dims_num
 						| empty
 	'''
 
@@ -140,7 +155,7 @@ def p_params_3(p):
 
 def p_assign(p):
 	'''
-	assign				: ID see_id assign_1 push_id EQUAL push_equal expression generate_assign SEMICOL
+	assign				: ID see_id push_id assign_1 EQUAL push_equal expression generate_assign SEMICOL
 	'''
 def p_assign_1(p):
 	'''
@@ -150,11 +165,11 @@ def p_assign_1(p):
 
 def p_dims(p):
 	'''
-	dims				: LBRACK expression see_dims dims_1 RBRACK
+	dims				: LBRACK see_dims expression generate_g_verify_f dims_1 RBRACK dims_end
 	'''
 def p_dims_1(p):
 	'''
-	dims_1				: COMMA expression see_dims
+	dims_1				: COMMA see_dims_s expression generate_g_verify_s
 						| empty
 	'''
 
@@ -422,14 +437,85 @@ def p_see_dims(p):
 	'''
 	see_dims			: empty
 	'''
-	global currDims, xDim, yDim, df, quad
-	currDims = currDims + 1
-	if (currDims == 1):
-		xDim = df.get_value(quad.pop_operands())
-		print(f'xDim: {xDim}')
+	global currDims, xDim, yDim, df, quad, currScope, stackDims, stackDimsId
+	if (df.get_var_dims(currScope, currId) == 0):
+		print(f"Error: Variable {currId} is not an array")
 	else:
-		yDim = df.get_value(quad.pop_operands())
-		print(f'yDim: {yDim}')
+		currDims = 1
+		stackDims.append(currDims)
+		stackDimsId.append(currId)
+		quad.push_ff()
+
+def p_see_dims_s(p):
+	'''
+	see_dims_s			: empty
+	'''
+	global currDims, stackDims, stackDimsId
+	currDims += 1
+	stackDims[-1] = currDims
+
+def p_generate_g_verify_f(p):
+	'''
+	generate_g_verify_f	: empty
+	'''
+	global quad, df, quad, currScope, stackDimsId, stackDims
+	size = df.get_var_xDim(currScope, stackDimsId[-1])
+	print(f"id: {stackDimsId[-1]}")
+	print(f"size: {size}")
+	dims = df.get_var_dims(currScope, stackDimsId[-1])
+	m = df.get_var_xDim(currScope, stackDimsId[-1])
+	tempAddress = 0
+	tempAddress2 = 0
+	d = stackDims[-1]
+	if (dims == 2):
+		tempAddress = df.generate_memory(currScope, 'int')
+		tempAddress2 = df.generate_memory(currScope, 'int')
+	quad.generate_g_verify(d, size, m, dims, tempAddress)  # type: ignore
+
+def p_generate_g_verify_s(p):
+	'''
+	generate_g_verify_s	: empty
+	'''
+	global quad, df, quad, currScope, stackDimsId, stackDims
+	size = df.get_var_yDim(currScope, stackDimsId[-1])
+	dims = df.get_var_dims(currScope, stackDimsId[-1])
+	m = df.get_var_xDim(currScope, stackDimsId[-1])
+	tempAddress = 0
+	tempAddress2 = 0
+	d = stackDims[-1]
+	if (dims == 2):
+		tempAddress = df.generate_memory(currScope, 'int')
+	quad.generate_g_verify(d, size, m, dims, tempAddress)  # type: ignore
+
+def p_dims_end(p):
+	'''
+	dims_end			: empty
+	'''
+	global currDims, stackDims, stackDimsId, quad, df
+	# T = df.generate_memory(currScope, 'int')
+	base = df.get_var_address(currScope, stackDimsId[-1])
+	quad.generate_g_dims_end(base)
+
+	stackDims.pop()
+	stackDimsId.pop()
+
+def p_see_dims_a(p):
+	'''
+	see_dims_a			: empty
+	'''
+	global currDims, currId, df
+	currDims += 1
+
+def p_see_dims_num(p):
+	'''
+	see_dims_num		: empty
+	'''
+	global currDims, currId, df, xDim, yDim
+	last = p[-1]
+	if (currDims == 1):
+		xDim = last
+	else:
+		yDim = last
 
 def p_push_var(p):
 	'''
@@ -689,9 +775,9 @@ def p_push_id(p):
 	'''
 	push_id				: empty
 	'''
-	global df, currId, currDims, currScope, quad
+	global df, currId, currDims, currScope, quad, xDim, yDim
 	# print('trying to push id: ', currId)
-	address = df.get_var_address(currScope, currId)
+	address = df.get_var_address(currScope, currId, xDim, yDim)
 	quad.push_id_type(address, df.get_var_type(currScope, currId))
 
 def p_push_equal(p):
