@@ -207,7 +207,7 @@ class QuadrupleTable:
 
 	def generate_g_verify(self, d, size, m, dims, address = 0, address2 = 0):
 		top = self.top_operands()
-		newQuad = Quadruple('VERIFY', top, 0, size - 1)
+		newQuad = Quadruple('VER', top, 0, size - 1)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 
@@ -232,7 +232,7 @@ class QuadrupleTable:
 	def generate_g_dims_end(self, base, address):
 		T = address
 		aux = self.pop_operands()
-		newQuad = Quadruple('BASESUM', aux, base, T)
+		newQuad = Quadruple('BSUM', aux, base, T)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 		self.stackOperands.append(f'${T}')

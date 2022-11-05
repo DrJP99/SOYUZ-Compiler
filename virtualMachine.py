@@ -48,12 +48,12 @@ class VirtualMachine:
 				# self.memory.set_value(result, opLeft / opRight)
 			
 			# Used to sum the base value for an array
-			elif (operator == "BASESUM"):
+			elif (operator == "BSUM"):
 				value = opLeft + quad.get_right_operand()
-				# print(f'BASESUM: {value}, storing in {result}')
+				# print(f'BSUM: {value}, storing in {result}')
 				self.memory.set_value(result, value)
 			
-			elif (operator == "VERIFY"):
+			elif (operator == "VER"):
 				if (opLeft < 0 or opLeft > quad.get_result()):
 					print(f'Error: Index out of bounds: {opLeft}')
 					exit()
