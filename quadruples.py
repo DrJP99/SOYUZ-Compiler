@@ -100,7 +100,7 @@ class QuadrupleTable:
 	def generate_g_cond_loop_e(self):
 		end = self.pop_jumps()
 		ret = self.pop_jumps()
-		newQuad = Quadruple('GOTO', None, ret - 1, None)	# GOTO brginning of loop
+		newQuad = Quadruple('GOTO', None, f'*{ret - 1}', None)	# GOTO brginning of loop
 		self.listOfQuadruples.append(newQuad)
 
 		self.fill_jump(end, self.count)					# Fill the jump to the end of the loop
@@ -174,7 +174,7 @@ class QuadrupleTable:
 		self.increase_count()
 		self.fill_jump(end, self.count)
 
-		newQuad = Quadruple('GOTO', None, ret, None)
+		newQuad = Quadruple('GOTO', None, f'*{ret}', None)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 
@@ -409,7 +409,7 @@ class Quadruple:
 	
 	# Fills the jump target of a GOTO quadruple
 	def fill_jump(self, target):
-		self.rightOperand = target
+		self.rightOperand = f'*{target}'
 
 	# Prints an individual quadruple
 	def print(self):

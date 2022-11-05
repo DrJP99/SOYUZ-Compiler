@@ -102,10 +102,10 @@ class VirtualMachine:
 
 			### JUMPS ###
 			elif (operator == "GOTO"):
-				ip = int(quad.get_right_operand()) - 1
+				ip = opRight - 1
 			elif (operator == "GOTOF"):
 				if (not opLeft):
-					ip = int(quad.get_right_operand()) - 1
+					ip = opRight - 1
 
 			### READ / WRITE ###
 			elif (operator == "READ"):
@@ -167,17 +167,27 @@ class VirtualMachine:
 		if (type(opLeft) == str and opLeft[0] == "$"):
 			opLeft = int(opLeft.replace("$", ""))
 			opLeft = self.memory.get_value(opLeft)
+			opLeft = self.memory.get_value(opLeft)
+		elif (type(opLeft) == str and opLeft[0] == "*"):
+			opLeft = int(opLeft.replace("*", ""))
+		elif (opLeft != None):
+			opLeft = self.memory.get_value(opLeft)
+		
 		if (type(opRight) == str and opRight[0] == "$"):
 			opRight = int(opRight.replace("$", ""))
 			opRight = self.memory.get_value(opRight)
+			opRight = self.memory.get_value(opRight)
+		elif (type(opRight) == str and opRight[0] == "*"):
+			opRight = int(opRight.replace("*", ""))
+		elif (opRight != None):
+			opRight = self.memory.get_value(opRight)
+		
 		if (type(result) == str and result[0] == "$"):
 			result = int(result.replace("$", ""))
 			result = self.memory.get_value(result)
-
-		if (opLeft != None):
-			opLeft = self.memory.get_value(opLeft)
-		if (opRight != None):
-			opRight = self.memory.get_value(opRight)
+		
+		# $ indicates a pointer
+		# * indicates a quad address
 		
 		# print (f'opLeft: {opLeft}, opRight: {opRight}, result: {result}')
 		return operator, opLeft, opRight, result
@@ -196,4 +206,4 @@ memory  = objectData['memory']
 machine = VirtualMachine(memory, quads, df)
 machine.start_machine()
 print()
-# memory.print()
+memory.print()

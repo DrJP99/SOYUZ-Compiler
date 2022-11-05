@@ -1,10 +1,20 @@
 program myProgram;
 	var int: i[10], y[2, 3], a;
 main() {
-	a = 10;
-	y[1, 0] = 1;
-	y[1, 1] = y[1, 0] + a;
+	
+	from a = 0 to 10 {
+		i[a] = a;
 
-	write(y[1, 1]);
+	}
+	
+	from a = 0 to 10 {
+		write(i[a]);
+		if (a < 9) {
+			write(", ");
+		} else {
+			write("\n");
+		}
+	}
+
 	end;
 }
