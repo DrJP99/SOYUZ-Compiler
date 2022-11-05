@@ -1,8 +1,10 @@
 program myProgram;
-	var int: i[10], a;
+	var int: i[10], y[2, 3], a;
 main() {
-	i[2] = 4;
-	a = i[2];
+	a = 10;
+	y[1, 0] = 1;
+	y[1, 1] = y[1, 0] + a;
 
+	write(y[1, 1]);
 	end;
 }

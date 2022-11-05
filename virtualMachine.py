@@ -17,7 +17,7 @@ class VirtualMachine:
 		while (self.quads[ip].get_operator() != "END"):
 			
 			quad = self.quads[ip]
-			# print(f'curr ip:\t{ip}')
+			# print(f'curr ip: #{ip}', end=" ")
 			# quad.print()
 			operator, opLeft, opRight, result = self.parse_quad(quad)
 			### SWITCH ###
@@ -50,7 +50,13 @@ class VirtualMachine:
 			# Used to sum the base value for an array
 			elif (operator == "BASESUM"):
 				value = opLeft + quad.get_right_operand()
+				# print(f'BASESUM: {value}, storing in {result}')
 				self.memory.set_value(result, value)
+			
+			elif (operator == "VERIFY"):
+				if (opLeft < 0 or opLeft > quad.get_result()):
+					print(f'Error: Index out of bounds: {opLeft}')
+					exit()
 
 			### RELATIONAL ###
 			elif (operator == "=="):
@@ -104,33 +110,43 @@ class VirtualMachine:
 			### READ / WRITE ###
 			elif (operator == "READ"):
 				value = input()
-				type = self.memory.get_type(result)
-				if (type == "int"):
+				myType = self.memory.get_myType(result)
+				if (myType == "int"):
 					value = int(value)
-				elif (type == "float"):
+				elif (myType == "float"):
 					value = float(value)
-				elif (type == "char"):
+				elif (myType == "char"):
 					value = value
-				elif (type == "bool"):
+				elif (myType == "bool"):
 					value = bool(value)
 				self.memory.set_value(result, value)
 
 			elif (operator == "WRITE"):
 				i = 0
 				size = quad.get_right_operand()
+				opLeft = quad.get_left_operand()
+				if (type(opLeft) == str and opLeft[0] == "$"):
+					opLeft = opLeft.replace('$', '')
+					opLeft = int(opLeft)
+					opLeft = self.memory.get_value(opLeft)
+
 				while(i < size):
 
-					value = self.memory.get_value(quad.get_left_operand() + i)
+						
+					value = self.memory.get_value(opLeft + i)
 
-					if (self.memory.get_type(quad.get_left_operand() + i) == "char"):
+					if (self.memory.get_type(opLeft + i) == "char"):
 						value = chr(value)
 
 					if (value == "\n"):
 						print("\n> ", end = "")
 					else:
-						print(value, end="")
+						print(value, end = "")
 
 					i += 1
+			
+			elif (operator == "ENDFUNC"):
+				x = 1
 			
 			elif (operator == "END"):
 				exit()
@@ -162,8 +178,8 @@ class VirtualMachine:
 			opLeft = self.memory.get_value(opLeft)
 		if (opRight != None):
 			opRight = self.memory.get_value(opRight)
-		if (result != None):
-			result = self.memory.get_value(result)
+		
+		# print (f'opLeft: {opLeft}, opRight: {opRight}, result: {result}')
 		return operator, opLeft, opRight, result
 
 
@@ -179,4 +195,5 @@ memory  = objectData['memory']
 
 machine = VirtualMachine(memory, quads, df)
 machine.start_machine()
-memory.print()
+print()
+# memory.print()

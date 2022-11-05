@@ -161,14 +161,13 @@ class DirFunc:
 	def set_value_at_address(self, address, value):
 		self.memory.set_value(address, value)
 
-	def get_var_address(self, scope, name, xDim = 0, yDim = 0):
+	def get_var_address(self, scope, name):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
 			print("ERROR: ", name, " has not been declared in this scope")
 			exit()
 		else:
-			offset = self.dim_offset(self.vars[newScope]["vars"][name]["dims"], xDim, yDim, self.vars[newScope]["vars"][name]["xDim"])
-			return self.vars[newScope]["vars"][name]["address"] + offset
+			return self.vars[newScope]["vars"][name]["address"]
 			# print("Variable has ", self.vars[newScope]["vars"][name]["dims"], " dimensions")
 
 	def get_var_dims(self, scope, name):

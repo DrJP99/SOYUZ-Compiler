@@ -396,7 +396,7 @@ def p_factor(p):
 	'''
 def p_factor_1(p):
 	'''
-	factor_1			: ID see_id factor_3 push_id print_value reset_dims
+	factor_1			: ID see_id push_id factor_3 print_value reset_dims
 						| callfunc
 						| CTEI push_int
 						| CTEF push_float
@@ -443,6 +443,7 @@ def p_see_dims(p):
 	else:
 		currDims = 1
 		stackDims.append(currDims)
+		quad.pop_operands()
 		stackDimsId.append(currId)
 		quad.push_ff()
 
@@ -458,19 +459,21 @@ def p_generate_g_verify_f(p):
 	'''
 	generate_g_verify_f	: empty
 	'''
-	global quad, df, quad, currScope, stackDimsId, stackDims
+	global quad, df, quad, currScope, stackDimsId, stackDims, currDims
 	size = df.get_var_xDim(currScope, stackDimsId[-1])
-	print(f"id: {stackDimsId[-1]}")
-	print(f"size: {size}")
+	# print(f"id: {stackDimsId[-1]}")
+	# print(f"size: {size}")
 	dims = df.get_var_dims(currScope, stackDimsId[-1])
 	m = df.get_var_xDim(currScope, stackDimsId[-1])
 	tempAddress = 0
 	tempAddress2 = 0
 	d = stackDims[-1]
-	if (dims == 2):
+	if (dims != d):
 		tempAddress = df.generate_memory(currScope, 'int')
+	if (d > 1):
 		tempAddress2 = df.generate_memory(currScope, 'int')
-	quad.generate_g_verify(d, size, m, dims, tempAddress)  # type: ignore
+
+	quad.generate_g_verify(d, size, m, dims, tempAddress, tempAddress2)  # type: ignore
 
 def p_generate_g_verify_s(p):
 	'''
@@ -483,9 +486,11 @@ def p_generate_g_verify_s(p):
 	tempAddress = 0
 	tempAddress2 = 0
 	d = stackDims[-1]
-	if (dims == 2):
+	if (dims != d):
 		tempAddress = df.generate_memory(currScope, 'int')
-	quad.generate_g_verify(d, size, m, dims, tempAddress)  # type: ignore
+	if (d > 1):
+		tempAddress2 = df.generate_memory(currScope, 'int')
+	quad.generate_g_verify(d, size, m, dims, tempAddress, tempAddress2)  # type: ignore
 
 def p_dims_end(p):
 	'''
@@ -494,7 +499,8 @@ def p_dims_end(p):
 	global currDims, stackDims, stackDimsId, quad, df
 	# T = df.generate_memory(currScope, 'int')
 	base = df.get_var_address(currScope, stackDimsId[-1])
-	quad.generate_g_dims_end(base)
+	temp = df.generate_memory(currScope, 'int')
+	quad.generate_g_dims_end(base, temp)
 
 	stackDims.pop()
 	stackDimsId.pop()
@@ -503,8 +509,9 @@ def p_see_dims_a(p):
 	'''
 	see_dims_a			: empty
 	'''
-	global currDims, currId, df
+	global currDims, currId, df, stackDims
 	currDims += 1
+
 
 def p_see_dims_num(p):
 	'''
@@ -716,7 +723,6 @@ def p_push_string(p):
 	push_string			: empty
 	'''
 	global quad, strLen, writeStr
-	# TODO pushing strings to VM
 	value = p[-1]
 	# address = df.generate_memory(currScope, "char")
 	# df.set_value_at_address(address, value[0])
@@ -777,7 +783,7 @@ def p_push_id(p):
 	'''
 	global df, currId, currDims, currScope, quad, xDim, yDim
 	# print('trying to push id: ', currId)
-	address = df.get_var_address(currScope, currId, xDim, yDim)
+	address = df.get_var_address(currScope, currId)
 	quad.push_id_type(address, df.get_var_type(currScope, currId))
 
 def p_push_equal(p):

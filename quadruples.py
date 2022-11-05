@@ -19,7 +19,14 @@ class QuadrupleTable:
 
 	# def generate(self, operator, operandL, operandR):
 	# 	self.listOfQuadruples.append(quad)
-	# 	count += 1
+	# 	increase_count()
+
+	def increase_count(self):
+		# print(f"quadruple {self.count} generated: ", end='')
+		# self.listOfQuadruples[-1].print()
+		# print(f"stack of operators: {self.stackOperators}")
+		# print(f"stack of operands: {self.stackOperands}")
+		self.count += 1
 
 	def get_ops_type(self):
 		opRight = self.pop_operands()
@@ -49,7 +56,7 @@ class QuadrupleTable:
 			self.generate_equal(opRight, opLeft)
 
 		# self.temp += 1
-		self.count += 1
+		self.increase_count()
 
 	# Generates a quadruple for the '=' operator
 	def generate_equal(self, assignFrom, assignTo):
@@ -70,12 +77,12 @@ class QuadrupleTable:
 			self.listOfQuadruples.append(newQuad)
 			# newQuad.print()
 			self.stackJumps.append(self.count-1)
-			self.count += 1
+			self.increase_count()
 	
 	def generate_end(self):
 		newQuad = Quadruple('END', None, None, None)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 
 	# Generates a quadruple for the CONDITIONAL LOOP
 	def generate_g_cond_loop_s(self):
@@ -88,7 +95,7 @@ class QuadrupleTable:
 			newQuad = Quadruple('GOTOF', result, None, None)
 			self.listOfQuadruples.append(newQuad)
 			self.stackJumps.append(self.count-1)
-			self.count += 1
+			self.increase_count()
 	
 	def generate_g_cond_loop_e(self):
 		end = self.pop_jumps()
@@ -97,7 +104,7 @@ class QuadrupleTable:
 		self.listOfQuadruples.append(newQuad)
 
 		self.fill_jump(end, self.count)					# Fill the jump to the end of the loop
-		self.count += 1
+		self.increase_count()
 	
 	def generate_g_nloop_s_pre(self):
 		self.stackJumps.append(self.count-1)	# Push the jump to the start
@@ -127,14 +134,14 @@ class QuadrupleTable:
 		# newQuad.print()
 
 		# self.temp += 1
-		self.count += 1
+		self.increase_count()
 
 		res = self.pop_operands()
 		resType = self.pop_types()
 
 		newQuad = Quadruple('GOTOF', res, None, None)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 		# print('jumps : ', self.stackJumps)
 
 	def generate_g_nloop_e_pre(self):
@@ -157,19 +164,19 @@ class QuadrupleTable:
 		self.stackTypes.append(resType)
 		self.push_id_type(address, resType)
 
-		self.count += 1
+		self.increase_count()
 		# self.temp += 1 
 
 		res = self.top_operands()
 		newQuad = Quadruple('=', res, None, my)
 		self.listOfQuadruples.append(newQuad)
 
-		self.count += 1
+		self.increase_count()
 		self.fill_jump(end, self.count)
 
 		newQuad = Quadruple('GOTO', None, ret, None)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 
 	
 	# Fills the GOTO jump from qFrom to qTarget
@@ -183,50 +190,51 @@ class QuadrupleTable:
 		self.listOfQuadruples.append(newQuad)
 		self.stackJumps.append(self.count-1)
 		self.fill_jump(false, self.count)
-		self.count += 1
+		self.increase_count()
 	
 	
 	def generate_g_read(self):
 		op = self.pop_operands()
 		newQuad = Quadruple('READ', None, None, op)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 
 	def generate_g_write(self, size=1):
 		op = self.pop_operands()
 		newQuad = Quadruple('WRITE', op, size, None)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 
-	def generate_g_verify(self, d, size, m, dims, address = 0):
+	def generate_g_verify(self, d, size, m, dims, address = 0, address2 = 0):
 		top = self.top_operands()
 		newQuad = Quadruple('VERIFY', top, 0, size - 1)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 
 		
-		T = address
 		if (dims != d):
+			T = address
 			aux = self.pop_operands()
 			newQuad = Quadruple('*', aux, m, T)
 			self.listOfQuadruples.append(newQuad)
-			self.count += 1
+			self.increase_count()
 			self.stackOperands.append(T)
 
 		if (d > 1):
+			T = address2
 			aux2 = self.pop_operands()
 			aux1 = self.pop_operands()
 			newQuad = Quadruple('+', aux1, aux2, T)
 			self.listOfQuadruples.append(newQuad)
-			self.count += 1
+			self.increase_count()
 			self.stackOperands.append(T)
 
-	def generate_g_dims_end(self, base):
+	def generate_g_dims_end(self, base, address):
+		T = address
 		aux = self.pop_operands()
-		T = self.pop_operands()
 		newQuad = Quadruple('BASESUM', aux, base, T)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 		self.stackOperands.append(f'${T}')
 		self.pop_operators()
 
@@ -317,7 +325,7 @@ class QuadrupleTable:
 	def generate_g_end_func(self):
 		newQuad = Quadruple('ENDFUNC', None, None, None)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 
 	def add_count(self, type):
 		if type == 'int':
@@ -349,34 +357,34 @@ class QuadrupleTable:
 	def generate_g_era(self, i, f, c, b):
 		newQuad = Quadruple('ERAI', i, None, None)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 
 		newQuad = Quadruple('ERAF', f, None, None)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 
 		newQuad = Quadruple('ERAC', c, None, None)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 
 		newQuad = Quadruple('ERAB', b, None, None)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 	
 	def generate_g_param(self, argument, k):
 		newQuad = Quadruple('PARAM', argument, None, k)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 	
 	def generate_g_gosub(self, funcName, init):
 		newQuad = Quadruple('GOSUB', funcName, init, None)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 	
 	def generate_main_goto(self):
 		newQuad = Quadruple('GOTO', None, None, None)
 		self.listOfQuadruples.append(newQuad)
-		self.count += 1
+		self.increase_count()
 
 	# Prints all the quadruples generated
 	def print(self):
