@@ -45,8 +45,14 @@ class DirFunc:
 	
 
 	# Returns the current scope's function's return type
-	def get_return_type(self, name):
+	def get_return_type(self, scope):
+		return self.table[self.vars[scope]["function"]]["returnType"]
+	
+	def get_return_type_name(self, name):
 		return self.table[name]["returnType"]
+	
+	def get_func_name(self, scope):
+		return self.vars[scope]["function"]
 	
 
 	# Adds Param to list of function's parameters and adds those variables to list of variables
@@ -55,8 +61,9 @@ class DirFunc:
 
 		varName = list(newVar.keys())[0]
 		varType = newVar[varName]["type"]
-		if (self.find_var(scope, varName)):
-			print("Error: Param is already declared")
+		if (self.find_var(scope, varName) == scope):
+			print(f"Error: Param {varName} is already declared")
+			exit()
 		else:
 			param = varType
 			self.table[name]["params"].append(param)

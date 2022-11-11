@@ -1,5 +1,13 @@
 program myProgram;
 	var int: i[10], y[2, 3], a;
+
+func int myFunc(int x, int y) {
+	var int: z;
+	
+	z = x + y;
+	return z;
+}
+
 main() {
 	
 	from a = 0 to 10 {
@@ -15,6 +23,16 @@ main() {
 			write("\n");
 		}
 	}
+
+	i[3] = 1;
+	i[4] = 2;
+	i[i[3] + i[4]] = i[4];
+	write(i[3], "\n");
+
+	a = myFunc(1, 2);
+	write(a, "\n");
+
+
 
 	end;
 }

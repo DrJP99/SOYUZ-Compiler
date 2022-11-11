@@ -201,13 +201,13 @@ class QuadrupleTable:
 
 	def generate_g_write(self, size=1):
 		op = self.pop_operands()
-		newQuad = Quadruple('WRITE', op, size, None)
+		newQuad = Quadruple('WRITE', op, f'*{size}', None)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 
 	def generate_g_verify(self, d, size, m, dims, address = 0, address2 = 0):
 		top = self.top_operands()
-		newQuad = Quadruple('VER', top, 0, size - 1)
+		newQuad = Quadruple('VER', top, f'*{0}', f'*{size - 1}')
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 
@@ -232,11 +232,17 @@ class QuadrupleTable:
 	def generate_g_dims_end(self, base, address):
 		T = address
 		aux = self.pop_operands()
-		newQuad = Quadruple('BSUM', aux, base, T)
+		newQuad = Quadruple('+', aux, f'*{base}', T)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 		self.stackOperands.append(f'${T}')
 		self.pop_operators()
+	
+	def generate_g_return(self):
+		op = self.pop_operands()
+		newQuad = Quadruple('RETURN', op, None, None)
+		self.listOfQuadruples.append(newQuad)
+		self.increase_count()
 
 	## PUSH ##
 	# Since ID and TYPE are always pushed at the same time, they are combined in this function
@@ -355,29 +361,29 @@ class QuadrupleTable:
 
 	# Generates quadruple for Activation Record Expansion
 	def generate_g_era(self, i, f, c, b):
-		newQuad = Quadruple('ERAI', i, None, None)
+		newQuad = Quadruple('ERAI', f'*{i}', None, None)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 
-		newQuad = Quadruple('ERAF', f, None, None)
+		newQuad = Quadruple('ERAF', f'*{f}', None, None)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 
-		newQuad = Quadruple('ERAC', c, None, None)
+		newQuad = Quadruple('ERAC', f'*{c}', None, None)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 
-		newQuad = Quadruple('ERAB', b, None, None)
+		newQuad = Quadruple('ERAB', f'*{b}', None, None)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 	
 	def generate_g_param(self, argument, k):
-		newQuad = Quadruple('PARAM', argument, None, k)
+		newQuad = Quadruple('PARAM', argument, None, f'*{k}')
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 	
-	def generate_g_gosub(self, funcName, init):
-		newQuad = Quadruple('GOSUB', funcName, init, None)
+	def generate_g_gosub(self, funcName, init, save):
+		newQuad = Quadruple('GOSUB', funcName, f'*{init}', save)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 	

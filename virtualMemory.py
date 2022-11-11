@@ -124,7 +124,9 @@ class VirtualMemory:
 			exit()
 	
 	def create_many_memory(self, scope, type, size):
-		addressStart = self.create_memory(scope, type)
+		addressStart = -1
+		if (size > 0):
+			addressStart = self.create_memory(scope, type)
 
 		for i in range(1, size):
 			self.create_memory(scope, type)
@@ -241,6 +243,15 @@ class VirtualMemory:
 			print(f"Error: Trying to get type of address {address} but is out of bounds")
 			exit()
 	
+	def get_scope(self, address):
+		if (address >= self.global_int_start and address <= self.max_global_bool):
+			return 0
+		elif (address >= self.local_int_start and address <= self.max_local_bool):
+			return 1
+		else:
+			print(f"Error: Trying to get scope of address {address} but is out of bounds")
+			exit()
+	
 	# Pop variables that are no longer used
 	def pop_global_int(self):
 		if (self.g_i_counter > self.global_int_start):
@@ -313,5 +324,5 @@ class VirtualMemory:
 					self.pop_local_bool()
 	
 	def print(self):
-		print(json.dumps(self.memory, indent=4, sort_keys=False))
+		print(json.dumps(self.memory, indent=4, sort_keys=True))
 		# print(self.memory)

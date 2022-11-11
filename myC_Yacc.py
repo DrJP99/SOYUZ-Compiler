@@ -127,6 +127,12 @@ def p_funcs_2(p):
 	funcs_2				: RETURN expression SEMICOL
 						| empty
 	'''
+	global df, currScope, quad
+	if (df.get_return_type(currScope) == "VOID"):
+		print("ERROR: Function " + df.get_func_name(currScope) + " is VOID, cannot return value")
+	else:
+		quad.generate_g_return()
+
 def p_funcs_3(p):
 	'''
 	funcs_3				: funcs
@@ -416,7 +422,7 @@ def p_factor_3(p):
 
 def p_main(p):
 	'''
-	main				: MAIN see_id LPAR RPAR LCURLY see_func_start main_1 set_func_init fill_main_goto statement END SEMICOL RCURLY see_func_end generate_end
+	main				: MAIN see_id LPAR RPAR LCURLY see_func_start main_1 set_func_init fill_main_goto statement END SEMICOL RCURLY generate_end
 	'''
 def p_main_1(p):
 	'''
@@ -564,6 +570,12 @@ def p_see_func_end(p):
 	quad.generate_g_end_func()
 	ints, floats, bools, chars = quad.reset_counts()
 	df.add_resources(currScope, ints, floats, bools, chars)
+
+	df.memory.pop_memory("local", "int", ints)
+	df.memory.pop_memory("local", "float", floats)
+	df.memory.pop_memory("local", "bool", bools)
+	df.memory.pop_memory("local", "char", chars)
+
 	df.remove_function(currScope)
 	currScope -= 1
 
@@ -952,7 +964,22 @@ def p_verify_p_num(p):
 		print(")")
 		exit()
 	else:
-		quad.generate_g_gosub(currFunc, init_address)
+		myType = df.get_return_type_name(currFunc)
+		saveMem = None
+		if (myType == "int"):
+			saveMem = df.generate_memory(currScope, "int")
+			quad.push_id_type(saveMem, "int")
+		elif (myType == "float"):
+			saveMem = df.generate_memory(currScope, "float")
+			quad.push_id_type(saveMem, "float")
+		elif (myType == "char"):
+			saveMem = df.generate_memory(currScope, "char")
+			quad.push_id_type(saveMem, "char")
+		elif (myType == "bool"):
+			saveMem = df.generate_memory(currScope, "bool")
+			quad.push_id_type(saveMem, "bool")
+		
+		quad.generate_g_gosub(currFunc, init_address, saveMem)
 
 def p_main_goto(p):
 	'''
