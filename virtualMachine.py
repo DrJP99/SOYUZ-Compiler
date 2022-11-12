@@ -146,10 +146,8 @@ class VirtualMachine:
 				size = opRight
 				# print(f"Trying to write {size} values from {opLeft}")
 
-				while(i < size):
-
-						
-					value = opLeft + i
+				while(i < size):						
+					value = memory.get_value(quad.get_left_operand() + i)
 
 					if (self.memory.get_type(quad.get_left_operand() + i) == "char"):
 						value = chr(value)
@@ -218,7 +216,7 @@ class VirtualMachine:
 				ip = opRight - 1
 
 			elif (operator == "RETURN"):
-				print (opLeft)
+				# print (opLeft)
 				res = opLeft
 
 			elif (operator == "ENDFUNC"):
@@ -242,7 +240,7 @@ class VirtualMachine:
 				operator, opLeft, opRight, result = self.parse_quad(gosquad)
 				# print (f"Returning to {operator} {opLeft} {opRight} {result}")
 				if (result != None):
-					print(res)
+					# print(res)
 					self.memory.set_value(result, res)
 
 			

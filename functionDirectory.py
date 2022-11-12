@@ -283,8 +283,8 @@ class DirFunc:
 	def find_function(self, name):
 		return name in self.table
 	
-	def generate_memory(self, scope, type):
-		return self.memory.create_memory(scope, type)
+	def generate_memory(self, scope, type, const=False):
+		return self.memory.create_memory(scope, type, const)
 	
 	def update_init(self, scope, value):
 		name = self.vars[scope]["function"]

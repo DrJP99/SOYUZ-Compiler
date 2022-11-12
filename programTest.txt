@@ -4,16 +4,17 @@ program myProgram;
 
 func int myFunc(int x, int y) {
 	var int: z;
-	z = x + y;
+    write("I am in a function!\n");
+	z = x + y * 2;
 	return z;
 }
 
 main() {
-    
+
 	a = myFunc(10, 2);
-	write(a, "\n");
+    write("a = ", a, "\n");
 
-
+    x[9] = 10;
 
 	end;
 }

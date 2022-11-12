@@ -716,7 +716,8 @@ def p_push_int(p):
 	push_int			: empty
 	'''
 	global quad, currScope, df
-	address = df.generate_memory(currScope, 'int')
+	address = df.generate_memory(currScope, 'int', True)
+	print(f'pushing int {p[-1]} to {address}')
 	quad.add_count('int')
 	df.set_value_at_address(address, p[-1])
 	quad.push_id_type(address, 'int')
@@ -726,7 +727,7 @@ def p_push_float(p):
 	push_float			: empty
 	'''
 	global quad, currScope, df
-	address = df.generate_memory(currScope, 'float')
+	address = df.generate_memory(currScope, 'float', True)
 	quad.add_count('float')
 	df.set_value_at_address(address, p[-1])
 	quad.push_id_type(address, 'float')
@@ -736,7 +737,7 @@ def p_push_bool(p):
 	push_bool			: empty
 	'''
 	global quad, currScope, df
-	address = df.generate_memory(currScope, 'bool')
+	address = df.generate_memory(currScope, 'bool', True)
 	quad.add_count('bool')
 	df.set_value_at_address(address, p[-1])
 	quad.push_id_type(address, 'bool')
@@ -746,7 +747,7 @@ def p_push_char(p):
 	push_char			: empty
 	'''
 	global quad
-	address = df.generate_memory(currScope, 'char')
+	address = df.generate_memory(currScope, 'char', True)
 	quad.add_count('char')
 	df.set_value_at_address(address, p[-1])
 	quad.push_id_type(address, 'char')
@@ -799,7 +800,7 @@ def p_push_string(p):
 			i += 1
 			newSize -= 1
 		i += 1
-		newAddress = df.generate_memory(currScope, "char")
+		newAddress = df.generate_memory(currScope, "char", True)
 		quad.add_count("char")
 		df.set_value_at_address(newAddress, newValue)
 

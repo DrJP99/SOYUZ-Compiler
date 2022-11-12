@@ -157,33 +157,37 @@ class VirtualMemory:
 			print("Error: no more local bool memory available")
 			exit()
 	
-	def create_constant_int(self, value):
+	def create_constant_int(self, value=0):
 		if (self.c_i_counter <= self.max_constant_int):
 			self.memory[self.c_i_counter] = value
+			self.c_i_counter += 1
 			return self.c_i_counter - 1
 		else:
 			print("Error: no more constant int memory available")
 			exit()
 	
-	def create_constant_float(self, value):
+	def create_constant_float(self, value=0.0):
 		if (self.c_f_counter <= self.max_constant_float):
 			self.memory[self.c_f_counter] = value
+			self.c_f_counter += 1
 			return self.c_f_counter - 1
 		else:
 			print("Error: no more constant float memory available")
 			exit()
 	
-	def create_constant_char(self, value):
+	def create_constant_char(self, value=0):
 		if (self.c_c_counter <= self.max_constant_char):
 			self.memory[self.c_c_counter] = value
+			self.c_c_counter += 1
 			return self.c_c_counter - 1
 		else:
 			print("Error: no more constant char memory available")
 			exit()
 	
-	def create_constant_bool(self, value):
+	def create_constant_bool(self, value=False):
 		if (self.c_b_counter <= self.max_constant_bool):
 			self.memory[self.c_b_counter] = value
+			self.c_b_counter += 1
 			return self.c_b_counter - 1
 		else:
 			print("Error: no more constant bool memory available")
