@@ -44,7 +44,7 @@ class QuadrupleTable:
 	def generate(self, operator, opLeft, opRight, typeRes, address):
 		
 		temp = address
-		self.add_count(typeRes)
+		# self.add_count(typeRes)
 
 		# Normal operators have two operands but '=' has only one so we need to make a different function
 		if (not operator == '='):
@@ -124,7 +124,7 @@ class QuadrupleTable:
 		return operator, opLeft, typeLeft, opRight, typeRes
 
 	def generate_g_nloop_s(self, operator, opLeft, typeLeft, opRight, typeRes, address):
-		self.add_count(typeRes)
+		# self.add_count(typeRes)
 
 		newQuad = Quadruple(operator, opLeft, opRight, address)
 		self.listOfQuadruples.append(newQuad)
@@ -157,7 +157,7 @@ class QuadrupleTable:
 
 
 	def generate_g_nloop_e(self, end, ret, my, resType, address, address_1):
-		self.add_count(resType)
+		# self.add_count(resType)
 
 		newQuad = Quadruple('+', my, address_1, address)
 		self.listOfQuadruples.append(newQuad)

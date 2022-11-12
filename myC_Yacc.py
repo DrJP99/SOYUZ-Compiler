@@ -35,7 +35,7 @@ quad = QuadrupleTable()
 # Start of program
 def p_program_start(p):
 	'''
-	program_start		: main_goto PROGRAM ID SEMICOL program_start_1 program_start_2 main
+	program_start		: main_goto PROGRAM ID SEMICOL program_start_1 global_resources program_start_2 main
 	'''
 
 # Can have global vars or not
@@ -476,8 +476,10 @@ def p_generate_g_verify_f(p):
 	d = stackDims[-1]
 	if (dims != d):
 		tempAddress = df.generate_memory(currScope, 'int')
+		quad.add_count('int')
 	if (d > 1):
 		tempAddress2 = df.generate_memory(currScope, 'int')
+		quad.add_count('int')
 
 	quad.generate_g_verify(d, size, m, dims, tempAddress, tempAddress2)  # type: ignore
 
@@ -494,8 +496,10 @@ def p_generate_g_verify_s(p):
 	d = stackDims[-1]
 	if (dims != d):
 		tempAddress = df.generate_memory(currScope, 'int')
+		quad.add_count('int')
 	if (d > 1):
 		tempAddress2 = df.generate_memory(currScope, 'int')
+		quad.add_count('int')
 	quad.generate_g_verify(d, size, m, dims, tempAddress, tempAddress2)  # type: ignore
 
 def p_dims_end(p):
@@ -506,6 +510,7 @@ def p_dims_end(p):
 	# T = df.generate_memory(currScope, 'int')
 	base = df.get_var_address(currScope, stackDimsId[-1])
 	temp = df.generate_memory(currScope, 'int')
+	quad.add_count('int')
 	quad.generate_g_dims_end(base, temp)
 
 	stackDims.pop()
@@ -561,6 +566,13 @@ def p_see_func_start(p):
 	currScope += 1
 	df.addFunction(currScope, currId, currReturnType)
 
+def p_global_resources(p):
+	'''
+	global_resources	: empty
+	'''
+	global currScope, df, quad
+	df.fill_resources(currScope, False)
+
 def p_see_func_end(p):
 	'''
 	see_func_end		: empty
@@ -568,13 +580,14 @@ def p_see_func_end(p):
 	global currScope, df, quad
 	# df.printFunc()
 	quad.generate_g_end_func()
-	ints, floats, bools, chars = quad.reset_counts()
-	df.add_resources(currScope, ints, floats, bools, chars)
+	df.fill_resources(currScope)
+	# ints, floats, bools, chars = quad.reset_counts()
+	# df.add_resources(currScope, ints, floats, bools, chars)
 
-	df.memory.pop_memory("local", "int", ints)
-	df.memory.pop_memory("local", "float", floats)
-	df.memory.pop_memory("local", "bool", bools)
-	df.memory.pop_memory("local", "char", chars)
+	# df.memory.pop_memory("local", "int", ints)
+	# df.memory.pop_memory("local", "float", floats)
+	# df.memory.pop_memory("local", "bool", bools)
+	# df.memory.pop_memory("local", "char", chars)
 
 	df.remove_function(currScope)
 	currScope -= 1
@@ -615,6 +628,7 @@ def p_check_and_or(p):
 	if (quad.top_operators() == '&&' or quad.top_operators() == '||'):
 		operator, opLeft, opRight, typeRes = quad.get_ops_type()
 		address = df.generate_memory(currScope, typeRes)
+		quad.add_count(typeRes)
 		quad.generate(operator, opLeft, opRight, typeRes, address)
 
 def p_push_and_or(p):
@@ -635,6 +649,7 @@ def p_check_relational(p):
 		# print('generating relational...')
 		operator, opLeft, opRight, typeRes = quad.get_ops_type()
 		address = df.generate_memory(currScope, typeRes)
+		quad.add_count(typeRes)
 		quad.generate(operator, opLeft, opRight, typeRes, address)
 
 def p_push_relational(p):
@@ -653,6 +668,7 @@ def p_check_sum(p):
 	if (quad.top_operators() == '+' or quad.top_operators() == '-'):
 		operator, opLeft, opRight, typeRes = quad.get_ops_type()
 		address = df.generate_memory(currScope, typeRes)
+		quad.add_count(typeRes)
 		quad.generate(operator, opLeft, opRight, typeRes, address)
 
 def p_push_sum(p):
@@ -671,6 +687,7 @@ def p_check_mul_div(p):
 	if (quad.top_operators() == '*' or quad.top_operators() == '/'):
 		operator, opLeft, opRight, typeRes = quad.get_ops_type()
 		address = df.generate_memory(currScope, typeRes)
+		quad.add_count(typeRes)
 		quad.generate(operator, opLeft, opRight, typeRes, address)
 
 def p_push_mul_div(p):
@@ -700,6 +717,7 @@ def p_push_int(p):
 	'''
 	global quad, currScope, df
 	address = df.generate_memory(currScope, 'int')
+	quad.add_count('int')
 	df.set_value_at_address(address, p[-1])
 	quad.push_id_type(address, 'int')
 
@@ -709,6 +727,7 @@ def p_push_float(p):
 	'''
 	global quad, currScope, df
 	address = df.generate_memory(currScope, 'float')
+	quad.add_count('float')
 	df.set_value_at_address(address, p[-1])
 	quad.push_id_type(address, 'float')
 
@@ -718,6 +737,7 @@ def p_push_bool(p):
 	'''
 	global quad, currScope, df
 	address = df.generate_memory(currScope, 'bool')
+	quad.add_count('bool')
 	df.set_value_at_address(address, p[-1])
 	quad.push_id_type(address, 'bool')
 
@@ -727,6 +747,7 @@ def p_push_char(p):
 	'''
 	global quad
 	address = df.generate_memory(currScope, 'char')
+	quad.add_count('char')
 	df.set_value_at_address(address, p[-1])
 	quad.push_id_type(address, 'char')
 
@@ -779,6 +800,7 @@ def p_push_string(p):
 			newSize -= 1
 		i += 1
 		newAddress = df.generate_memory(currScope, "char")
+		quad.add_count("char")
 		df.set_value_at_address(newAddress, newValue)
 
 		if (first):
@@ -814,6 +836,7 @@ def p_generate_assign(p):
 	# print('trying to assign')
 	operator, opLeft, opRight, typeRes = quad.get_ops_type()
 	address = df.generate_memory(currScope, typeRes)
+	quad.add_count(typeRes)
 	quad.generate(operator, opLeft, opRight, typeRes, address)
 
 def p_generate_g_if(p):
@@ -885,6 +908,7 @@ def p_generate_g_nloop_s(p):
 	global quad, df, currScope
 	operator, opLeft, typeLeft, opRight, typeRes = quad.generate_g_nloop_s_pre()
 	address = df.generate_memory(currScope, typeRes)
+	quad.add_count(typeRes)
 	quad.generate_g_nloop_s(operator, opLeft, typeLeft, opRight, typeRes, address)
 
 def p_generate_g_nloop_e(p):
@@ -894,7 +918,9 @@ def p_generate_g_nloop_e(p):
 	global quad, df, currScope
 	end, ret, my, resType = quad.generate_g_nloop_e_pre()
 	address_1 = df.generate_memory(currScope, "int")
+	quad.add_count("int")
 	address = df.generate_memory(currScope, resType)
+	quad.add_count(resType)
 	df.set_value_at_address(address_1, 1)
 	quad.generate_g_nloop_e(end, ret, my, resType, address, address_1)
 
@@ -902,8 +928,16 @@ def p_generate_end(p):
 	'''
 	generate_end		: empty
 	'''
-	global quad
+	global quad, df, currScope
 	quad.generate_end()
+	df.fill_resources(currScope)
+	# df.add_resources(currScope, ints, floats, bools, chars)
+
+	# df.memory.pop_memory("local", "int", ints)
+	# df.memory.pop_memory("local", "float", floats)
+	# df.memory.pop_memory("local", "bool", bools)
+	# df.memory.pop_memory("local", "char", chars)
+
 
 def p_verify_func(p):
 	'''
@@ -968,15 +1002,19 @@ def p_verify_p_num(p):
 		saveMem = None
 		if (myType == "int"):
 			saveMem = df.generate_memory(currScope, "int")
+			quad.add_count("int")
 			quad.push_id_type(saveMem, "int")
 		elif (myType == "float"):
 			saveMem = df.generate_memory(currScope, "float")
+			quad.add_count("float")
 			quad.push_id_type(saveMem, "float")
 		elif (myType == "char"):
 			saveMem = df.generate_memory(currScope, "char")
+			quad.add_count("char")
 			quad.push_id_type(saveMem, "char")
 		elif (myType == "bool"):
 			saveMem = df.generate_memory(currScope, "bool")
+			quad.add_count("bool")
 			quad.push_id_type(saveMem, "bool")
 		
 		quad.generate_g_gosub(currFunc, init_address, saveMem)

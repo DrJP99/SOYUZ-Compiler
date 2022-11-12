@@ -1,5 +1,5 @@
 program myProgram;
-	var int: a;
+	var int: a, x[10];
 
 
 func int myFunc(int x, int y) {
@@ -9,7 +9,7 @@ func int myFunc(int x, int y) {
 }
 
 main() {
-
+    
 	a = myFunc(10, 2);
 	write(a, "\n");
 

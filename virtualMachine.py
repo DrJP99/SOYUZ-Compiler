@@ -218,6 +218,7 @@ class VirtualMachine:
 				ip = opRight - 1
 
 			elif (operator == "RETURN"):
+				print (opLeft)
 				res = opLeft
 
 			elif (operator == "ENDFUNC"):
@@ -232,9 +233,16 @@ class VirtualMachine:
 				memory.pop_memory("local", "char", ec)
 				memory.pop_memory("local", "bool", eb)
 
+				self.offsetint -= ERAi[-1]
+				self.offsetfloat -= ERAf[-1]
+				self.offsetchar -= ERAc[-1]
+				self.offsetbool -= ERAb[-1]
+
 				gosquad = self.quads[ip]
 				operator, opLeft, opRight, result = self.parse_quad(gosquad)
+				# print (f"Returning to {operator} {opLeft} {opRight} {result}")
 				if (result != None):
+					print(res)
 					self.memory.set_value(result, res)
 
 			

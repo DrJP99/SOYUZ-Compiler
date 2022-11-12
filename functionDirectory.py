@@ -115,7 +115,7 @@ class DirFunc:
 			elif (varType == 'bool'):
 				bools = size
 			
-			self.add_resources(scope, ints, floats, chars, bools)
+			# self.add_resources(scope, ints, floats, chars, bools)
 	
 
 	# Return type of variables from the table
@@ -268,6 +268,17 @@ class DirFunc:
 			else:
 				# Return -1 if it's NOT found in the current scope or the global scope
 				return -1
+		
+	def fill_resources(self, scope, wipe=False):
+		i, f, c, b= self.memory.reset_resources()
+		self.add_resources(scope, i, f, c, b)
+
+		if (wipe):
+			self.memory.pop_memory("local", "int", i)
+			self.memory.pop_memory("local", "float", f)
+			self.memory.pop_memory("local", "char", c)
+			self.memory.pop_memory("local", "bool", b)
+
 	
 	def find_function(self, name):
 		return name in self.table
