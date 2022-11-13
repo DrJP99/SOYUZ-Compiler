@@ -34,7 +34,7 @@ class VirtualMachine:
 		countbool = 0
 
 		print("> ", end="")
-		while (self.quads[ip].get_operator() != "END"):
+		while (True):
 			
 			quad = self.quads[ip]
 			# print(f'curr ip: #{ip}', end=" ")
@@ -261,6 +261,7 @@ class VirtualMachine:
 
 			
 			elif (operator == "END"):
+				memory.pop_all()
 				exit()
 			
 
@@ -348,5 +349,3 @@ memory  = objectData['memory']
 
 machine = VirtualMachine(memory, quads, df)
 machine.start_machine()
-print()
-memory.print()

@@ -462,8 +462,22 @@ class VirtualMemory:
 	
 	# Deletes the whole memory
 	def pop_all(self):
-		for e in self.memory:
-			self.memory.pop(e)
+		self.memory.clear()
+		
+		self.g_i_counter = self.global_int_start
+		self.g_f_counter = self.global_float_start
+		self.g_c_counter = self.global_char_start
+		self.g_b_counter = self.global_bool_start
+
+		self.l_i_counter = self.local_int_start
+		self.l_f_counter = self.local_float_start
+		self.l_c_counter = self.local_char_start
+		self.l_b_counter = self.local_bool_start
+
+		self.c_i_counter = self.constant_int_start
+		self.c_f_counter = self.constant_float_start
+		self.c_c_counter = self.constant_char_start
+		self.c_b_counter = self.constant_bool_start
 	
 	def print(self):
 		print(json.dumps(self.memory, indent=4, sort_keys=True))
