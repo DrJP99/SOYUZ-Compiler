@@ -580,7 +580,7 @@ def p_see_func_end(p):
 	global currScope, df, quad
 	# df.printFunc()
 	quad.generate_g_end_func()
-	df.fill_resources(currScope)
+	df.fill_resources(currScope, True)
 	# ints, floats, bools, chars = quad.reset_counts()
 	# df.add_resources(currScope, ints, floats, bools, chars)
 

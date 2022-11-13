@@ -460,6 +460,11 @@ class VirtualMemory:
 		# 	print(f"Error: Trying to pop {scope} {type} {self.} but there are none")
 		# 	exit()
 	
+	# Deletes the whole memory
+	def pop_all(self):
+		for e in self.memory:
+			self.memory.pop(e)
+	
 	def print(self):
 		print(json.dumps(self.memory, indent=4, sort_keys=True))
 		# print(self.memory)

@@ -378,7 +378,7 @@ class QuadrupleTable:
 		self.increase_count()
 	
 	def generate_g_param(self, argument, k):
-		newQuad = Quadruple('PARAM', argument, None, f'*{k}')
+		newQuad = Quadruple('PARAM', f'*{argument}', None, f'*{k}')
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 	

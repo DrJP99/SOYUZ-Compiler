@@ -73,6 +73,7 @@ class VirtualMachine:
 				# print(f'BSUM: {value}, storing in {result}')
 				self.memory.set_value(result, value)
 			
+			# Verifies if the index is within the array bounds
 			elif (operator == "VER"):
 				if (opLeft < 0 or opLeft > result):
 					print(f'Error: Index out of bounds: {opLeft}')
@@ -130,7 +131,7 @@ class VirtualMachine:
 			### READ / WRITE ###
 			elif (operator == "READ"):
 				value = input()
-				myType = self.memory.get_myType(result)
+				myType = self.memory.get_type(result)
 				if (myType == "int"):
 					value = int(value)
 				elif (myType == "float"):
@@ -139,17 +140,20 @@ class VirtualMachine:
 					value = value
 				elif (myType == "bool"):
 					value = bool(value)
+				
 				self.memory.set_value(result, value)
+				print("> ", end="")
 
 			elif (operator == "WRITE"):
 				i = 0
 				size = opRight
 				# print(f"Trying to write {size} values from {opLeft}")
 
-				while(i < size):						
-					value = memory.get_value(quad.get_left_operand() + i)
+				while(i < size):
+					offset = i + self.get_offset(quad.get_left_operand())
+					value = memory.get_value(quad.get_left_operand() + offset)
 
-					if (self.memory.get_type(quad.get_left_operand() + i) == "char"):
+					if (self.memory.get_type(quad.get_left_operand() + offset) == "char"):
 						value = chr(value)
 
 					if (value == "\n"):
@@ -183,7 +187,7 @@ class VirtualMachine:
 				ERAb.append(opLeft)
 			
 			elif (operator == "PARAM"):
-				paramType = self.memory.get_type(quad.get_left_operand())
+				paramType = self.memory.get_type(opLeft)
 				newoff = 0
 				oldoff = 0
 				start = 0
@@ -192,6 +196,7 @@ class VirtualMachine:
 					newoff = self.offsetint + countint
 					oldoff = self.offsetint - ERAi[-2]
 					start = memory.local_int_start
+					# print(f"PARAM int {opLeft} {newoff} {oldoff} {start}")
 					countint += 1
 				elif (paramType == "float"):
 					newoff = self.offsetfloat + countfloat
@@ -209,11 +214,22 @@ class VirtualMachine:
 					start = memory.local_bool_start
 					countbool += 1
 				
-				memory.set_value(newoff + start, opLeft + oldoff)
+				# print (f"VALUE: {opLeft} @ {quad.get_left_operand()}; TYPE: {paramType};  {newoff} {oldoff} {start}")
+				# print(f"Trying to get value at {opLeft + oldoff}...")
+				value = self.memory.get_value(opLeft + oldoff)
+				# print(f"Got value {value} at {opLeft + oldoff}")
+				# print(f"Trying to set value {value} at {start + newoff}...")
+				memory.set_value(newoff + start, value)
+				# print(f"Set value {value} at {start + newoff}...")
 
 			elif (operator == "GOSUB"):
 				checkpoint.append(ip)
 				ip = opRight - 1
+
+				countint = 0
+				countfloat = 0
+				countchar = 0
+				countbool = 0
 
 			elif (operator == "RETURN"):
 				# print (opLeft)
@@ -259,9 +275,6 @@ class VirtualMachine:
 		opLeft  = quad.get_left_operand()
 		opRight = quad.get_right_operand()
 		result  = quad.get_result()
-		
-
-			
 
 		if (opLeft != None):
 
@@ -302,7 +315,7 @@ class VirtualMachine:
 				result = result + offset
 		
 		# $ indicates a pointer
-		# * indicates a quad address
+		# * indicates a literal value
 		
 		# print (f'opLeft: {opLeft}, opRight: {opRight}, result: {result}')
 		return operator, opLeft, opRight, result

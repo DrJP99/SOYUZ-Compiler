@@ -1,20 +1,31 @@
 program myProgram;
-	var int: a, x[10];
+	var int: a, b, c;
 
+func int mul(int a, int b) {
+    return a * b;
+}
 
 func int myFunc(int x, int y) {
 	var int: z;
-    write("I am in a function!\n");
-	z = x + y * 2;
+    write("x = ", x, ", y = ",  y, "\n");
+	z = x + y;
+    write("z = ", z, "\n");
 	return z;
 }
 
 main() {
+    var int: h, g, i, j, k;
 
-	a = myFunc(10, 2);
-    write("a = ", a, "\n");
+    read(h);
+    read(g);
 
-    x[9] = 10;
+	a = myFunc(h, g);
+    write(h, " + ", g, " = ", a, "\n");
+    
+    read(i);
+    read(j);
+    k = mul(i, j);
+    write(i, " * ", j, " = ", k, "\n");
 
 	end;
 }
