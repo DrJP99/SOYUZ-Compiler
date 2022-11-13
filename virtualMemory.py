@@ -321,7 +321,7 @@ class VirtualMemory:
 						value = 1
 					else:
 						value = 0
-			value %= 128
+				# value %= 128
 			self.memory[address] = value
 		else:
 			print(f"Error: Trying to set address {address} but does not exist")
@@ -414,47 +414,51 @@ class VirtualMemory:
 	
 	# To speed up deleting unused memory
 	def pop_memory(self, scope, type, n=1):
+		res = 0
 		if scope == "global":
 			if type == "int":
 				for i in range(n):
-					self.pop_global_int()
+					res = self.pop_global_int()
 			elif type == "float":
 				for i in range(n):
-					self.pop_global_float()
+					res = self.pop_global_float()
 			elif type == "char":
 				for i in range(n):
-					self.pop_global_char()
+					res = self.pop_global_char()
 			elif type == "bool":
 				for i in range(n):
-					self.pop_global_bool()
+					res = self.pop_global_bool()
 
 		elif scope == "local":
 			if type == "int":
 				for i in range(n):
-					self.pop_local_int()
+					res = self.pop_local_int()
 			elif type == "float":
 				for i in range(n):
-					self.pop_local_float()
+					res = self.pop_local_float()
 			elif type == "char":
 				for i in range(n):
-					self.pop_local_char()
+					res = self.pop_local_char()
 			elif type == "bool":
 				for i in range(n):
-					self.pop_local_bool()
+					res = self.pop_local_bool()
 		
 		elif scope == "constant":
 			if type == "int":
 				for i in range(n):
-					self.pop_constant_int()
+					res = self.pop_constant_int()
 			elif type == "float":
 				for i in range(n):
-					self.pop_constant_float()
+					res = self.pop_constant_float()
 			elif type == "char":
 				for i in range(n):
-					self.pop_constant_char()
+					res = self.pop_constant_char()
 			elif type == "bool":
 				for i in range(n):
-					self.pop_constant_bool()
+					res = self.pop_constant_bool()
+		# if (res == -1):
+		# 	print(f"Error: Trying to pop {scope} {type} {self.} but there are none")
+		# 	exit()
 	
 	def print(self):
 		print(json.dumps(self.memory, indent=4, sort_keys=True))
