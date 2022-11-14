@@ -192,9 +192,25 @@ def p_statement_1(p):
 						| nloop
 						| read
 						| write
-						| loadfile
 						| callfunc SEMICOL
+						| histogram
+						| scale SEMICOL
 	'''
+
+def p_histogram(p):
+	'''
+	histogram			: HIST LPAR ID COMMA expression RPAR SEMICOL
+	'''
+	global quad, currScope, df
+	xDim, yDim = df.get_var_dims(currScope, p[3])
+	baseDir = df.get_var_address(currScope, p[3])
+	if (yDim != None):
+		print("ERROR: Histogram does not support 2D arrays")
+		exit()
+	else:
+		quad.generate_g_histogram(baseDir, xDim)
+
+
 
 def p_cond(p):
 	'''
@@ -304,24 +320,6 @@ def p_write_3(p):
 						| empty
 	'''
 
-# READFILE
-def p_loadfile(p):
-	'''
-	loadfile			: LOADFILE LPAR ID COMMA CTES COMMA loadfile_1 COMMA loadfile_2 RPAR SEMICOL
-	'''
-
-def p_loadfile_1(p):
-	'''
-	loadfile_1			: CTEI
-						| ID
-	'''
-
-def p_loadfile_2(p):
-	'''
-	loadfile_2			: CTEI
-						| ID
-	'''
-
 def p_expression(p):
 	'''
 	expression			: sexp check_and_or expression_1
@@ -409,6 +407,13 @@ def p_factor_1(p):
 						| CTEB push_bool
 						| CTEC push_char
 						| MINUS factor_1
+
+						| mean
+						| median
+						| mode
+						| variance
+						| standard_deviation
+						| average
 	'''
 def p_factor_2(p):
 	'''
@@ -430,6 +435,113 @@ def p_main_1(p):
 	'''
 
 # Neuralgic points
+
+def p_mean(p):
+	'''
+	mean				: MEAN LPAR ID RPAR
+	'''
+	global quad, df, currScope
+	baseAddress = df.get_var_address(currScope, p[3])
+	dims = df.get_var_dims_count(currScope, p[3])
+	newAddress = df.generate_memory(currScope, 'float')
+	dimsX, dimsY = df.get_var_dims(currScope, p[3])
+	if (dims != 1):
+		print(f'Error: {p[3]} is not a vector')
+		exit()
+	quad.generate_g_mean(baseAddress, dimsX, newAddress)
+
+def p_median(p):
+	'''
+	median				: MEDIAN LPAR ID RPAR
+	'''
+	global quad, df, currScope
+	baseAddress = df.get_var_address(currScope, p[3])
+	dims = df.get_var_dims_count(currScope, p[3])
+	newAddress = df.generate_memory(currScope, 'float')
+	dimsX, dimsY = df.get_var_dims(currScope, p[3])
+	if (dims != 1):
+		print(f'Error: {p[3]} is not a vector')
+		exit()
+	quad.generate_g_median(baseAddress, dimsX, newAddress)
+
+def p_mode(p):
+	'''
+	mode				: MODE LPAR ID RPAR
+	'''
+	global quad, df, currScope
+	baseAddress = df.get_var_address(currScope, p[3])
+	dims = df.get_var_dims_count(currScope, p[3])
+	newAddress = df.generate_memory(currScope, 'float')
+	dimsX, dimsY = df.get_var_dims(currScope, p[3])
+	if (dims != 1):
+		print(f'Error: {p[3]} is not a vector')
+		exit()
+	quad.generate_g_mode(baseAddress, dimsX, newAddress)
+
+def p_variance(p):
+	'''
+	variance			: VARIANCE LPAR ID RPAR
+	'''
+	global quad, df, currScope
+	baseAddress = df.get_var_address(currScope, p[3])
+	dims = df.get_var_dims_count(currScope, p[3])
+	newAddress = df.generate_memory(currScope, 'float')
+	dimsX, dimsY = df.get_var_dims(currScope, p[3])
+	if (dims != 1):
+		print(f'Error: {p[3]} is not a vector')
+		exit()
+	quad.generate_g_variance(baseAddress, dimsX, newAddress)
+
+def p_standard_deviation(p):
+	'''
+	standard_deviation	: SD LPAR ID RPAR
+	'''
+	global quad, df, currScope
+	baseAddress = df.get_var_address(currScope, p[3])
+	dims = df.get_var_dims_count(currScope, p[3])
+	newAddress = df.generate_memory(currScope, 'float')
+	dimsX, dimsY = df.get_var_dims(currScope, p[3])
+	if (dims != 1):
+		print(f'Error: {p[3]} is not a vector')
+		exit()
+	quad.generate_g_standard_deviation(baseAddress, dimsX, newAddress)
+
+def p_scale(p):
+	'''
+	scale				: SCALE LPAR ID COMMA ID RPAR
+	'''
+	global quad, df, currScope
+	baseAddress = df.get_var_address(currScope, p[3])
+	dims = df.get_var_dims_count(currScope, p[3])
+	dims2 = df.get_var_dims_count(currScope, p[5])
+	baseAddress2 = df.get_var_address(currScope, p[5])
+	dimsX, dimsY = df.get_var_dims(currScope, p[3])
+	dimsX2, dimsY2 = df.get_var_dims(currScope, p[5])
+	if (dims != 1):
+		print(f'Error: {p[3]} is not a vector')
+		exit()
+	if (dims2 != 1):
+		print(f'Error: {p[5]} is not a vector')
+		exit()
+	if (dimsX != dimsX2):
+		print(f'Error: {p[3]} and {p[5]} must be of the same size')
+		exit()
+	quad.generate_g_scale(baseAddress, dimsX, baseAddress2)
+
+def p_average(p):
+	'''
+	average				: AVG LPAR ID RPAR
+	'''
+	global quad, df, currScope
+	baseAddress = df.get_var_address(currScope, p[3])
+	dims = df.get_var_dims_count(currScope, p[3])
+	newAddress = df.generate_memory(currScope, 'float')
+	dimsX, dimsY = df.get_var_dims(currScope, p[3])
+	if (dims != 1):
+		print(f'Error: {p[3]} is not a vector')
+		exit()
+	quad.generate_g_average(baseAddress, dimsX, newAddress)
+
 
 def p_see_id(p):
 	'''
@@ -469,7 +581,7 @@ def p_generate_g_verify_f(p):
 	size = df.get_var_xDim(currScope, stackDimsId[-1])
 	# print(f"id: {stackDimsId[-1]}")
 	# print(f"size: {size}")
-	dims = df.get_var_dims(currScope, stackDimsId[-1])
+	dims = df.get_var_dims_count(currScope, stackDimsId[-1])
 	m = df.get_var_xDim(currScope, stackDimsId[-1])
 	tempAddress = 0
 	tempAddress2 = 0
@@ -489,11 +601,11 @@ def p_generate_g_verify_s(p):
 	'''
 	global quad, df, quad, currScope, stackDimsId, stackDims
 	size = df.get_var_yDim(currScope, stackDimsId[-1])
-	dims = df.get_var_dims(currScope, stackDimsId[-1])
+	dims = df.get_var_dims_count(currScope, stackDimsId[-1])
 	m = df.get_var_xDim(currScope, stackDimsId[-1])
 	tempAddress = 0
 	tempAddress2 = 0
-	d = stackDims[-1]
+	d = stackDims[-1] # curr dim
 	if (dims != d):
 		tempAddress = df.generate_memory(currScope, 'int')
 		quad.add_count('int')
@@ -717,7 +829,7 @@ def p_push_int(p):
 	'''
 	global quad, currScope, df
 	address = df.generate_memory(currScope, 'int', True)
-	print(f'pushing int {p[-1]} to {address}')
+	# print(f'pushing int {p[-1]} to {address}')
 	quad.add_count('int')
 	df.set_value_at_address(address, p[-1])
 	quad.push_id_type(address, 'int')

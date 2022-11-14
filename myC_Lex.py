@@ -21,7 +21,16 @@ reserved = {
 	'end'		: 'END',
 	'read' 		: 'READ',
 	'write' 	: 'WRITE',
-	'loadFile'	: 'LOADFILE'
+	'loadFile'	: 'LOADFILE',
+
+	'hist'		: 'HIST',	# v
+	'mean'		: 'MEAN',	
+	'median'	: 'MEDIAN',
+	'mode'		: 'MODE',
+	'variance'	: 'VARIANCE',
+	'sd'		: 'SD',
+	'scale'		: 'SCALE',
+	'avg'		: 'AVG',
 }
 
 #List of tokens

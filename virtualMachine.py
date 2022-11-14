@@ -1,6 +1,12 @@
 import pickle
+from pstats import Stats
 import string
 import virtualMemory
+
+import statistics
+from matplotlib import pyplot as plt
+import numpy as np
+from scipy import stats
 
 class VirtualMachine:
 	def __init__(self, memory, quads, df):
@@ -37,8 +43,10 @@ class VirtualMachine:
 		while (True):
 			
 			quad = self.quads[ip]
+
 			# print(f'curr ip: #{ip}', end=" ")
 			# quad.print()
+
 			operator, opLeft, opRight, result = self.parse_quad(quad)
 			### SWITCH ###
 			### ARYTHMETICS ###
@@ -139,7 +147,13 @@ class VirtualMachine:
 				elif (myType == "char"):
 					value = value
 				elif (myType == "bool"):
-					value = bool(value)
+					if (int(value) > 0 or value == "True"):
+						value = 1
+					elif (int(value) == 0 or value == "False"):
+						value = 0
+					else:
+						print(f'Error: Invalid value for type bool')
+						exit()
 				
 				self.memory.set_value(result, value)
 				print("> ", end="")
@@ -148,13 +162,23 @@ class VirtualMachine:
 				i = 0
 				size = opRight
 				# print(f"Trying to write {size} values from {opLeft}")
+				if (type(quad.get_left_operand()) == str):
+					if (quad.get_left_operand()[0] == "$"):
+						opLeft = int(quad.get_left_operand().replace("$", ""))
+						opLeft = self.memory.get_value(opLeft)
+					elif (quad.get_left_operand()[0] == "*"):
+						opLeft = int(quad.get_left_operand().replace("*", ""))
+				else:
+					opLeft = quad.get_left_operand()
 
 				while(i < size):
-					offset = i + self.get_offset(quad.get_left_operand())
-					value = memory.get_value(quad.get_left_operand() + offset)
+					offset = i + self.get_offset(opLeft)
+					value = memory.get_value(opLeft + offset)
 
-					if (self.memory.get_type(quad.get_left_operand() + offset) == "char"):
+					if (self.memory.get_type(opLeft + offset) == "char"):
 						value = chr(value)
+					elif (self.memory.get_type(opLeft + offset) == "float"):
+						value = round(float(value), 4)
 
 					if (value == "\n"):
 						print("\n> ", end = "")
@@ -258,9 +282,94 @@ class VirtualMachine:
 				if (result != None):
 					# print(res)
 					self.memory.set_value(result, res)
-
 			
+			### STATISTIC STUFFS ###
+
+			elif (operator == "HIST"):
+
+				if (memory.get_type(result) == "int"):
+					bins = memory.get_value(result)
+					values = [opRight]
+					
+					for i in range(opRight):
+						values.append(self.memory.get_value(opLeft + i))
+					plt.hist(np.array(values), bins=bins, align='mid',
+					         color='yellow', edgecolor='black', linewidth=2)
+					plt.show()
+				else:
+					print("ERROR: HISTOGRAM BINS MUST BE AN INTEGER")
+					exit()
+
+			elif (operator == "MEAN"):
+				values = [opRight]
+
+				for i in range(opRight):
+					values.append(float(self.memory.get_value(opLeft + i)))
+
+				mean = np.mean(np.array(values))
+				self.memory.set_value(result, mean)
+			
+			elif (operator == "MEDIAN"):
+				values = [opRight]
+
+				for i in range(opRight):
+					values.append(float(self.memory.get_value(opLeft + i)))
+				
+				median = np.median(np.array(values))
+				self.memory.set_value(result, median)
+			
+			elif (operator == "MODE"):
+				values = [opRight]
+
+				for i in range(opRight):
+					values.append(float(self.memory.get_value(opLeft + i)))
+				
+				mode = statistics.mode(np.array(values))
+				self.memory.set_value(result, mode)
+
+			elif (operator == "VAR"):
+				values = [opRight]
+
+				for i in range(opRight):
+					values.append(float(self.memory.get_value(opLeft + i)))
+				
+				variance = statistics.variance(values)
+				self.memory.set_value(result, variance)
+
+			elif (operator == "SD"):
+				values = [opRight]
+
+				for i in range(opRight):
+					values.append(float(self.memory.get_value(opLeft + i)))
+
+				sd = np.std(np.array(values))
+				self.memory.set_value(result, sd)
+
+			elif (operator == "SCALE"):
+				values = [opRight]
+
+				for i in range(opRight):
+					values.append(float(self.memory.get_value(opLeft + i)))
+				
+				newArray = stats.zscore(values)
+
+				for i in range(opRight):
+					self.memory.set_value(result + i, newArray[i])
+
+
+			elif (operator == "AVG"):
+				values = [opRight]
+
+				for i in range(opRight):
+					values.append(float(self.memory.get_value(opLeft + i)))
+				
+				avg = np.average(np.array(values))
+				self.memory.set_value(result, avg)
+
+			### END ###
 			elif (operator == "END"):
+				# print()
+				# memory.print()
 				memory.pop_all()
 				exit()
 			

@@ -177,13 +177,6 @@ class DirFunc:
 			return self.vars[newScope]["vars"][name]["address"]
 			# print("Variable has ", self.vars[newScope]["vars"][name]["dims"], " dimensions")
 
-	def get_var_dims(self, scope, name):
-		newScope = self.find_var(scope, name)
-		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
-			exit()
-		else:
-			return self.vars[newScope]["vars"][name]["dims"]
 	
 	def get_var_xDim(self, scope, name):
 		newScope = self.find_var(scope, name)
@@ -212,6 +205,30 @@ class DirFunc:
 			yDim = self.vars[newScope]["vars"][name]["yDim"]
 			limitS = xDim * yDim
 			return limitI, limitS
+
+	def get_var_dims_count(self, scope, name):
+		newScope = self.find_var(scope, name)
+		if (newScope == -1):
+			print("ERROR: ", name, " has not been declared in this scope")
+			exit()
+		else:
+			if (self.vars[newScope]["vars"][name]["xDim"] != None):
+				if (self.vars[newScope]["vars"][name]["yDim"] != None):
+					return 2
+				else:
+					return 1
+			else:
+				return 0
+	
+	def get_var_dims(self, scope, name):
+		newScope = self.find_var(scope, name)
+		if (newScope == -1):
+			print("ERROR: ", name, " has not been declared in this scope")
+			exit()
+		else:
+			xDim = self.vars[newScope]["vars"][name]["xDim"]
+			yDim = self.vars[newScope]["vars"][name]["yDim"]
+			return xDim, yDim
 
 	def add_resource(self, scope, type):
 		name = self.vars[scope]["function"]

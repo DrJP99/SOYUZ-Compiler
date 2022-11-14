@@ -1,37 +1,30 @@
 program myProgram;
-	var int: i[10], y[2, 3], a;
-
-func int myFunc(int x, int y) {
-	var int: z;
-	
-	z = x + y;
-	return z;
-}
+	var int: i[10], bins;
 
 main() {
 	
-	from a = 0 to 10 {
-		i[a] = a;
+	i[0] = 98;
+	i[1] = 89;
+	i[2] = 45;
+	i[3] = 56;
+	i[4] = 78;
+	i[5] = 25;
+	i[6] = 78;
+	i[7] = 25;
+	i[8] = 43;
+	i[9] = 33;
 
-	}
-	
-	from a = 0 to 10 {
-		write(i[a]);
-		if (a < 9) {
-			write(", ");
-		} else {
-			write("\n");
-		}
-	}
+	bins = 6;
 
-	i[3] = 1;
-	i[4] = 2;
-	i[i[3] + i[4]] = i[4];
-	write(i[3], "\n");
+	write("Average : ", avg(i), "\n");
+	write("Mean : ", mean(i), "\n");
+	write("Median : ", median(i), "\n");
+	write("Mode : ", mode(i), "\n");
+	write("Variance : ", variance(i), "\n");
+	write("Standard Deviation : ", sd(i), "\n");
 
-	a = myFunc(1, 2);
-	write(a, "\n");
 
+	hist(i, bins);
 
 
 	end;

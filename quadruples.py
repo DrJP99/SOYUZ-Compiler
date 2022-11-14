@@ -211,11 +211,14 @@ class QuadrupleTable:
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 
+		print('dims : ', dims)
+		print('current dim : ', d)
+
 		
 		if (dims != d):
 			T = address
 			aux = self.pop_operands()
-			newQuad = Quadruple('*', aux, m, T)
+			newQuad = Quadruple('*', aux, f'*{m}', T)
 			self.listOfQuadruples.append(newQuad)
 			self.increase_count()
 			self.stackOperands.append(T)
@@ -243,6 +246,61 @@ class QuadrupleTable:
 		newQuad = Quadruple('RETURN', op, None, None)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
+	
+	def generate_g_histogram(self, address, xDim):
+		op = self.pop_operands()
+		newQuad = Quadruple('HIST', f'*{address}', f'*{xDim}', op)
+		self.listOfQuadruples.append(newQuad)
+		self.increase_count()
+	
+	def generate_g_mean(self, address, xDim, newAddress):
+		newQuad = Quadruple('MEAN', f'*{address}', f'*{xDim}', newAddress)
+		self.listOfQuadruples.append(newQuad)
+		self.increase_count()
+		self.stackOperands.append(newAddress)
+		self.stackTypes.append('float')
+	
+	def generate_g_mode(self, address, xDim, newAddress):
+		newQuad = Quadruple('MODE', f'*{address}', f'*{xDim}', newAddress)
+		self.listOfQuadruples.append(newQuad)
+		self.increase_count()
+		self.stackOperands.append(newAddress)
+		self.stackTypes.append('int')
+	
+	def generate_g_variance(self, address, xDim, newAddress):
+		newQuad = Quadruple('VAR', f'*{address}', f'*{xDim}', newAddress)
+		self.listOfQuadruples.append(newQuad)
+		self.increase_count()
+		self.stackOperands.append(newAddress)
+		self.stackTypes.append('float')
+	
+	def generate_g_standard_deviation(self, address, xDim, newAddress):
+		newQuad = Quadruple('SD', f'*{address}', f'*{xDim}', newAddress)
+		self.listOfQuadruples.append(newQuad)
+		self.increase_count()
+		self.stackOperands.append(newAddress)
+		self.stackTypes.append('float')
+
+	def generate_g_scale(self, address, xDim, newAddress):
+		newQuad = Quadruple('SCALE', f'*{address}', f'*{xDim}', newAddress)
+		self.listOfQuadruples.append(newQuad)
+		self.increase_count()
+		self.stackOperands.append(newAddress)
+		self.stackTypes.append('float')
+
+	def generate_g_average(self, address, xDim, newAddress):
+		newQuad = Quadruple('AVG', f'*{address}', f'*{xDim}', newAddress)
+		self.listOfQuadruples.append(newQuad)
+		self.increase_count()
+		self.stackOperands.append(newAddress)
+		self.stackTypes.append('float')
+	
+	def generate_g_median(self, address, xDim, newAddress):
+		newQuad = Quadruple('MEDIAN', f'*{address}', f'*{xDim}', newAddress)
+		self.listOfQuadruples.append(newQuad)
+		self.increase_count()
+		self.stackOperands.append(newAddress)
+		self.stackTypes.append('float')
 
 	## PUSH ##
 	# Since ID and TYPE are always pushed at the same time, they are combined in this function
