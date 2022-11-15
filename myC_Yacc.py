@@ -1174,8 +1174,9 @@ try:
 	data = f.read()
 	f.close()
 	result = parser.parse(data)
-	df.print_memory()
-	df.print()
+	print('File compiled successfully!')
+	# df.print_memory()
+	# df.print()
 	quad.print()
 
 	# Generate OBJECT (.ovj) file
@@ -1188,10 +1189,9 @@ try:
 			}, handle
 		)
 
-	print("\n=============================================")
+	print("\n============ E >< e c u t i o n =============\n")
 	subprocess.call(['python', 'VirtualMachine.py'])
 	print("=============================================\n\n")
 
-	print('File compiled successfully!')
 except EOFError:
 	print(EOFError)

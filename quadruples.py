@@ -210,10 +210,6 @@ class QuadrupleTable:
 		newQuad = Quadruple('VER', top, f'*{0}', f'*{size - 1}')
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
-
-		print('dims : ', dims)
-		print('current dim : ', d)
-
 		
 		if (dims != d):
 			T = address

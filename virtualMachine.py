@@ -52,6 +52,17 @@ class VirtualMachine:
 			### ARYTHMETICS ###
 			if (operator == "="):
 				value = opLeft
+				if (memory.get_type(opLeft) == "int" and memory.get_type(result) == "float"):
+					value = float(value)
+				elif (memory.get_type(opLeft) == "float" and memory.get_type(result) == "int"):
+					value = int(value)
+				
+				if (memory.get_type(result) == "bool"):
+					if (value > 0):
+						value = 1
+					else:
+						value = 0
+					
 				self.memory.set_value(result, value)
 				# self.memory.set_value(result, opLeft)
 				
@@ -71,7 +82,7 @@ class VirtualMachine:
 				# self.memory.set_value(result, opLeft * opRight)
 				
 			elif (operator == "/"):
-				value = opLeft / opRight
+				value = float(opLeft) / float(opRight)
 				self.memory.set_value(result, value)
 				# self.memory.set_value(result, opLeft / opRight)
 			
@@ -368,7 +379,7 @@ class VirtualMachine:
 
 			### END ###
 			elif (operator == "END"):
-				# print()
+				print()
 				# memory.print()
 				memory.pop_all()
 				exit()
