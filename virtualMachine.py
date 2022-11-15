@@ -424,8 +424,8 @@ class VirtualMachine:
 				offset = self.get_offset(result)
 				result = result + offset
 		
-		# $ indicates a pointer
-		# * indicates a literal value
+		### "$" indicates a pointer
+		### "*" indicates a literal value
 		
 		# print (f'opLeft: {opLeft}, opRight: {opRight}, result: {result}')
 		return operator, opLeft, opRight, result
