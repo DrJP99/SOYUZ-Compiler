@@ -1,21 +1,24 @@
 program myProgram;
-    var int: i;
+    var int: i, j, k;
 	var float: a[5], b[5];
+
+func int sum(int x, int y) {
+    return x + y;
+}
+
+func int mult(int x, int y) {
+    return x * y;
+}
 
 
 
 main() {
-    a[0] = 0.7972;
-    a[1] = 0.0767;
-    a[2] = 0.4383;
-    a[3] = 0.7866;
-    a[4] = 0.8091;
+    i = 10;
+    j = 15;
 
-    scale(a, b);
+    k = sum(mult(i, j), j);
 
-    from i = 0 to 5 {
-        write("i = ", b[i], "\n");
-    }
+    write("k = ", k, "\n");
 
 	end;
 }
