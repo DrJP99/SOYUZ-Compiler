@@ -17,8 +17,6 @@ class DirFunc:
 		# Use Virtual Memory inside the function directory to make things easier
 		self.memory = VirtualMemory()
 
-	# TODO see if function exists
-
 	# Creates a new function on the dictionary using the directory of the nth scope
 	def addFunction(self, scope, name, returnT):
 		if (self.find_function(name)):
@@ -82,7 +80,7 @@ class DirFunc:
 	def add_var(self, scope, newVar):
 		varName = list(newVar.keys())[0]	# Get the head of newVar, as that is the name of that variable
 		if (self.find_var(scope, varName) == scope):
-			# If the variable is found in the current scope, an error is thrown as it is already declared
+			# If the variable is found in the current scope, an Error is thrown as it is already declared
 			print("Error: variable ", varName, " is already declared in current scope ", scope)
 			exit()
 		else:
@@ -122,7 +120,7 @@ class DirFunc:
 	def get_var_type(self, scope, name):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
+			print("Error: ", name, " has not been declared in this scope")
 			exit()
 		else:
 			return self.vars[newScope]["vars"][name]["type"]
@@ -140,7 +138,7 @@ class DirFunc:
 	def get_var_value(self, scope, name):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
+			print("Error: ", name, " has not been declared in this scope")
 			exit()
 		else:
 			offset = self.dim_offset(self.vars[newScope]["vars"][name]["dims"], self.vars[newScope]["vars"][name]["xDim"], self.vars[newScope]["vars"][name]["yDim"], self.vars[newScope]["vars"][name]["xSize"])
@@ -156,7 +154,7 @@ class DirFunc:
 	def set_var_value(self, scope, name, value, xDim = 0, yDim = 0):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ",name, " has not been declared in this scope")
+			print("Error: ",name, " has not been declared in this scope")
 			exit()
 		else:
 			offset = self.dim_offset(self.vars[newScope]["vars"][name]["dims"], xDim, yDim, self.vars[newScope]["vars"][name]["xDim"])
@@ -171,7 +169,7 @@ class DirFunc:
 	def get_var_address(self, scope, name):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
+			print("Error: ", name, " has not been declared in this scope")
 			exit()
 		else:
 			return self.vars[newScope]["vars"][name]["address"]
@@ -181,7 +179,7 @@ class DirFunc:
 	def get_var_xDim(self, scope, name):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
+			print("Error: ", name, " has not been declared in this scope")
 			exit()
 		else:
 			return self.vars[newScope]["vars"][name]["xDim"]
@@ -189,7 +187,7 @@ class DirFunc:
 	def get_var_yDim(self, scope, name):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
+			print("Error: ", name, " has not been declared in this scope")
 			exit()
 		else:
 			return self.vars[newScope]["vars"][name]["yDim"]
@@ -197,7 +195,7 @@ class DirFunc:
 	def get_var_limits(self, scope, name):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
+			print("Error: ", name, " has not been declared in this scope")
 			exit()
 		else:
 			limitI = self.vars[newScope]["vars"][name]["address"]
@@ -209,7 +207,7 @@ class DirFunc:
 	def get_var_dims_count(self, scope, name):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
+			print("Error: ", name, " has not been declared in this scope")
 			exit()
 		else:
 			if (self.vars[newScope]["vars"][name]["xDim"] != None):
@@ -223,7 +221,7 @@ class DirFunc:
 	def get_var_dims(self, scope, name):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
+			print("Error: ", name, " has not been declared in this scope")
 			exit()
 		else:
 			xDim = self.vars[newScope]["vars"][name]["xDim"]
@@ -252,7 +250,7 @@ class DirFunc:
 	def set_var_dims(self, scope, name, dims):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
+			print("Error: ", name, " has not been declared in this scope")
 			exit()
 		else:
 			self.vars[newScope]["vars"][name]["dims"] = dims
@@ -260,7 +258,7 @@ class DirFunc:
 	def set_var_xDim(self, scope, name, xDim):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
+			print("Error: ", name, " has not been declared in this scope")
 			exit()
 		else:
 			self.vars[newScope]["vars"][name]["xDim"] = xDim
@@ -268,7 +266,7 @@ class DirFunc:
 	def set_var_yDim(self, scope, name, yDim):
 		newScope = self.find_var(scope, name)
 		if (newScope == -1):
-			print("ERROR: ", name, " has not been declared in this scope")
+			print("Error: ", name, " has not been declared in this scope")
 			exit()
 		else:
 			self.vars[newScope]["vars"][name]["yDim"] = yDim

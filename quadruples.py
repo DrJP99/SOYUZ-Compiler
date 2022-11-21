@@ -1,7 +1,5 @@
 from oracle import TIRESIAS
 
-# TODO generate QUADS for WHILE and FOR loops
-
 # Quadruple Table class deals with storing all the Quadruples plus the auxiliary stacks
 class QuadrupleTable:
 	def __init__(self):
@@ -9,6 +7,7 @@ class QuadrupleTable:
 		self.stackOperands = []		# stack of IDs of operands
 		self.stackTypes = []		# stack of types
 		self.stackJumps = []		# stack of JUMPS for IFs and LOOPs
+		self.stackEra = []			# stack of ERA for functions
 		self.listOfQuadruples = []	# list of generated Quadruples
 		self.count = 1				# Points to the next Quadruple
 		# self.temp = 1				# Used to assign temporary variables
@@ -70,7 +69,7 @@ class QuadrupleTable:
 		typeCond = self.pop_types()
 
 		if (not typeCond == 'bool'):
-			print("ERROR, conditional must be of type BOOL")
+			print("Error, conditional must be of type BOOL")
 			exit()
 		else:
 			newQuad = Quadruple('GOTOF', cond, None, None)
@@ -88,7 +87,7 @@ class QuadrupleTable:
 	def generate_g_cond_loop_s(self):
 		typeExp = self.pop_types()
 		if (not typeExp == 'bool'):
-			print("ERROR, conditional must be of type BOOL")
+			print("Error, conditional must be of type BOOL")
 			exit()
 		else:
 			result = self.pop_operands()
@@ -156,10 +155,10 @@ class QuadrupleTable:
 		return end, ret, my, resType
 
 
-	def generate_g_nloop_e(self, end, ret, my, resType, address, address_1):
+	def generate_g_nloop_e(self, end, ret, my, resType, address):
 		# self.add_count(resType)
 
-		newQuad = Quadruple('+', my, address_1, address)
+		newQuad = Quadruple('+', my, '*1', my)
 		self.listOfQuadruples.append(newQuad)
 		self.stackTypes.append(resType)
 		self.push_id_type(address, resType)
@@ -167,11 +166,11 @@ class QuadrupleTable:
 		self.increase_count()
 		# self.temp += 1 
 
-		res = self.top_operands()
-		newQuad = Quadruple('=', res, None, my)
-		self.listOfQuadruples.append(newQuad)
+		# res = self.top_operands()
+		# newQuad = Quadruple('=', res, None, my)
+		# self.listOfQuadruples.append(newQuad)
 
-		self.increase_count()
+		# self.increase_count()
 		self.fill_jump(end, self.count)
 
 		newQuad = Quadruple('GOTO', None, f'*{ret}', None)
@@ -211,7 +210,7 @@ class QuadrupleTable:
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
 		
-		if (dims != d):
+		if (dims != d): # If we are not in the last dimension
 			T = address
 			aux = self.pop_operands()
 			newQuad = Quadruple('*', aux, f'*{m}', T)
@@ -219,7 +218,7 @@ class QuadrupleTable:
 			self.increase_count()
 			self.stackOperands.append(T)
 
-		if (d > 1):
+		if (d > 1): # If we are not in the first dimension
 			T = address2
 			aux2 = self.pop_operands()
 			aux1 = self.pop_operands()
@@ -318,6 +317,9 @@ class QuadrupleTable:
 	def push_jump(self, jump):
 		self.stackJumps.append(self.count + jump)
 
+	def push_era(self):
+		self.stackEra.append(self.count - 1)
+
 	## POP ##
 
 	# Removes last element and returns it #
@@ -335,6 +337,9 @@ class QuadrupleTable:
 	
 	def pop_ff(self):
 		self.pop_operators()
+	
+	def pop_era(self):
+		return self.stackEra.pop()
 
 	
 	#### GETTERS ####
@@ -368,7 +373,7 @@ class QuadrupleTable:
 	def get_curr_counter(self):
 		return self.count
 	
-	# Checks with the ORACLE if the types are allowed together and returns the result type, otherwise returns a type MISMATCH ERROR
+	# Checks with the ORACLE if the types are allowed together and returns the result type, otherwise returns a type MISMATCH Error
 	def check_for_mismatch(self, typeL, typeR, op):
 		# print('trying to check types:', typeL, typeR, op)
 		try:
@@ -376,7 +381,7 @@ class QuadrupleTable:
 			# print ('results in: ', resType)
 			return resType
 		except:
-			print(f'Type mismatch! Impossible to {typeL} {op} {typeR}')
+			print(f'Error: type mismatch, impossible to {typeL} {op} {typeR}')
 			exit()
 	
 	def get_list_of_quadruples(self):
@@ -397,7 +402,7 @@ class QuadrupleTable:
 		elif type == 'bool':
 			self.resourceBool += 1
 		else:
-			print('ERROR: Type not found')
+			print('Error: Type not found')
 			exit()
 	
 	def reset_counts(self):
@@ -445,6 +450,14 @@ class QuadrupleTable:
 		newQuad = Quadruple('GOTO', None, None, None)
 		self.listOfQuadruples.append(newQuad)
 		self.increase_count()
+	
+	def fill_resources(self, ints, floats, chars, bools):
+		while(len(self.stackEra) != 0):
+			era = self.pop_era()
+			self.listOfQuadruples[era].fill_era(ints)
+			self.listOfQuadruples[era + 1].fill_era(floats)
+			self.listOfQuadruples[era + 2].fill_era(chars)
+			self.listOfQuadruples[era + 3].fill_era(bools)
 
 	# Prints all the quadruples generated
 	def print(self):
@@ -470,6 +483,9 @@ class Quadruple:
 	# Fills the jump target of a GOTO quadruple
 	def fill_jump(self, target):
 		self.rightOperand = f'*{target}'
+
+	def fill_era(self, target):
+		self.leftOperand = f'*{target}'
 
 	# Prints an individual quadruple
 	def print(self):

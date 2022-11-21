@@ -1,0 +1,46 @@
+program factorial;
+
+func int fact_rec(int n) {
+    var int: ret, x;
+
+
+    if (n == 0) {
+        ret = 1;
+    } else {
+        x = fact_rec(n - 1);
+        ret = n * x;
+    }
+
+
+    return ret;
+}
+
+func int fact_it(int n) {
+    var int: ret, i, x;
+    x = n + 1;
+    ret = 1;
+    
+    from i = 1 to (n + 1) {
+        ret = ret * i;
+    }
+
+
+    return ret;
+}
+
+main() {
+    var int: in, a;
+
+    write("Enter a number: ");
+    read(in);
+
+    a = fact_rec(in);
+
+    write("Using recursive method: ", a, "\n");
+
+    a = fact_it(in);
+
+    write("Using iterative method: ", a, "\n");
+
+    end;
+}

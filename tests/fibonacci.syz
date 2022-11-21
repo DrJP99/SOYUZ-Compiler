@@ -1,0 +1,47 @@
+program fibonacci;
+var int: a, b, c;
+
+func int fib_rec(int n) {
+    var int: ret, res1, res2;
+
+    if (n <= 1) {
+        ret = n;
+    } else {
+        res1 = fib_rec(n - 1);
+        res2 = fib_rec(n - 2);
+        ret = res1 + res2;
+    }
+
+    return ret;
+}
+
+func int fib_it(int n) {
+    var int: i, prevprev, prev, ret;
+
+    prev = 0;
+    ret = 1;
+    
+    from i = 1 to n {
+        prevprev = prev;
+        prev = ret;
+        ret = prevprev + prev;
+    }
+
+    return ret;
+}
+
+main() {
+    var int: i, res;
+
+    write("Enter a number: ");
+    read(i);
+
+    res = fib_rec(i);
+    write("Fibonacci recursive: ", res, "\n");
+
+    res = fib_it(i);
+    write("Fibonacci iterative: ", res, "\n");
+
+
+    end;
+}

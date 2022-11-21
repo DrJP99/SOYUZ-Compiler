@@ -21,9 +21,8 @@ reserved = {
 	'end'		: 'END',
 	'read' 		: 'READ',
 	'write' 	: 'WRITE',
-	'loadFile'	: 'LOADFILE',
 
-	'hist'		: 'HIST',	# v
+	'hist'		: 'HIST',
 	'mean'		: 'MEAN',	
 	'median'	: 'MEDIAN',
 	'mode'		: 'MODE',
@@ -91,7 +90,6 @@ t_TIMES				= r'\*'
 t_DIV				= r'\/'
 t_AND				= r'\&\&'
 t_OR				= r'\|\|'
-t_ignore_COMMENT	= r'\#.*'
 
 def t_CTEB(t):
 	r'([Tt][Rr][Uu][Ee])|([Ff][Aa][Ll][Ss][Ee])'
@@ -125,6 +123,9 @@ def t_CTES(t):
 	t.value = t.value[1:-1]
 	return t
 
+def t_COMMENT(t):
+	r'\#.*'
+	pass
 
 def t_newline(t):
 	r'\n+'

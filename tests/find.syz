@@ -1,0 +1,45 @@
+program binary_search;
+var int: arr[5];
+
+func int search(int l, int r, int x) {
+    var int: mid, ret;
+
+    if (r >= 1) {
+        mid = l + (r - l) / 2;
+
+        if (arr[mid] == x) {
+            ret = mid;
+        } else if (arr[mid] > x) {
+            ret = search(l, mid - 1, x);
+        } else {
+            ret = search(mid + 1, r, x);
+        }
+
+    } else {
+        ret = -1;
+    }
+
+    return ret;
+}
+
+main() {
+    var int: i, x, res;
+
+    arr[0] = 15;
+    arr[1] = 20;
+    arr[2] = 29;
+    arr[3] = 30;
+    arr[4] = 59;
+
+    write("\nType the number you want to look for: ");
+    read(x);
+
+    res = search(0, 5, x);
+    if (res == -1) {
+        write("\nThe element was not in the array");
+    } else {
+        write("\nThe element was found in the position ", res, "\n");
+    }
+
+    end;
+}

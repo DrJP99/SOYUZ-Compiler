@@ -1,0 +1,30 @@
+program test;
+
+func int fib(int n) {
+    var int: ret, res1, res2;
+
+    if (n <= 1) {
+        ret = n;
+    } else {
+        res1 = fib(n - 1);
+        res2 = fib(n - 2);
+        ret = res1 + res2;
+    }
+
+    return ret;
+}
+
+main() {
+    var int: n, res;
+
+
+    write("Enter a number: ");
+    read(n);
+    res = fib(n);
+
+    write("The result of fib(", n, ") is: ", res, "\n");
+
+    end;
+}
+
+

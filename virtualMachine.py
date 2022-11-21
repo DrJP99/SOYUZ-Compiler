@@ -29,6 +29,11 @@ class VirtualMachine:
 		self.offsetchar = 0
 		self.offsetbool = 0
 
+		self.newint = 0;
+		self.newfloat = 0;
+		self.newchar = 0;
+		self.newbool = 0;
+
 		ERAi.append(df["main"]["resources"]["int"])
 		ERAf.append(df["main"]["resources"]["float"])
 		ERAc.append(df["main"]["resources"]["char"])
@@ -43,21 +48,22 @@ class VirtualMachine:
 		while (True):
 			
 			quad = self.quads[ip]
-
-			# print(f'curr ip: #{ip}', end=" ")
-			# quad.print()
-
 			operator, opLeft, opRight, result = self.parse_quad(quad)
+			
+			# if (not (operator == "WRITE" or operator == "READ")):
+			# 	print(f'\ncurr ip: #{ip}', end=" ")
+			# 	quad.print()
+
+
 			### SWITCH ###
 			### ARYTHMETICS ###
 			if (operator == "="):
 				value = opLeft
-				if (memory.get_type(opLeft) == "int" and memory.get_type(result) == "float"):
+				if (memory.get_type(result) == "float"):
 					value = float(value)
-				elif (memory.get_type(opLeft) == "float" and memory.get_type(result) == "int"):
+				elif (memory.get_type(result) == "int"):
 					value = int(value)
-				
-				if (memory.get_type(result) == "bool"):
+				elif (memory.get_type(result) == "bool"):
 					if (value > 0):
 						value = 1
 					else:
@@ -152,9 +158,17 @@ class VirtualMachine:
 				value = input()
 				myType = self.memory.get_type(result)
 				if (myType == "int"):
-					value = int(value)
+					try:
+						value = int(value)
+					except:
+						print(f'Error: Invalid input for int {value}')
+						exit()
 				elif (myType == "float"):
-					value = float(value)
+					try:
+						value = float(value)
+					except:
+						print(f'Error: Invalid input for float {value}')
+						exit()
 				elif (myType == "char"):
 					value = value
 				elif (myType == "bool"):
@@ -163,7 +177,7 @@ class VirtualMachine:
 					elif (int(value) == 0 or value == "False"):
 						value = 0
 					else:
-						print(f'Error: Invalid value for type bool')
+						print(f'Error: Invalid value for bool {value}')
 						exit()
 				
 				self.memory.set_value(result, value)
@@ -175,14 +189,20 @@ class VirtualMachine:
 				# print(f"Trying to write {size} values from {opLeft}")
 				if (type(quad.get_left_operand()) == str):
 					if (quad.get_left_operand()[0] == "$"):
+						# If is pointer
 						opLeft = int(quad.get_left_operand().replace("$", ""))
+						# print(f"trying to get value at {opLeft}")
 						opLeft = self.memory.get_value(opLeft)
+						# print(f'opLeft = {opLeft}', end="")
 					elif (quad.get_left_operand()[0] == "*"):
 						opLeft = int(quad.get_left_operand().replace("*", ""))
 				else:
 					opLeft = quad.get_left_operand()
 
+				# print(f'opLeft = {opLeft}', end="")
+
 				while(i < size):
+					# print(f'i: {i}, size: {size}')
 					offset = i + self.get_offset(opLeft)
 					value = memory.get_value(opLeft + offset)
 
@@ -203,22 +223,22 @@ class VirtualMachine:
 
 			elif (operator == "ERAI"):
 				memory.create_many_memory(1, "int", opLeft)
-				self.offsetint += ERAi[-1]
+				self.newint += ERAi[-1]
 				ERAi.append(opLeft)
 			
 			elif (operator == "ERAF"):
 				memory.create_many_memory(1, "float", opLeft)
-				self.offsetfloat += ERAf[-1]
+				self.newfloat += ERAf[-1]
 				ERAf.append(opLeft)
 
 			elif (operator == "ERAC"):
 				memory.create_many_memory(1, "char", opLeft)
-				self.offsetchar += ERAc[-1]
+				self.newchar += ERAc[-1]
 				ERAc.append(opLeft)
 			
 			elif (operator == "ERAB"):
 				memory.create_many_memory(1, "bool", opLeft)
-				self.offsetbool += ERAb[-1]
+				self.newbool += ERAb[-1]
 				ERAb.append(opLeft)
 			
 			elif (operator == "PARAM"):
@@ -228,28 +248,29 @@ class VirtualMachine:
 				start = 0
 
 				if (paramType == "int"):
-					newoff = self.offsetint + countint
-					oldoff = self.offsetint - ERAi[-2]
+					newoff = self.newint + countint
+					oldoff = self.newint - ERAi[-2]
 					start = memory.local_int_start
 					# print(f"PARAM int {opLeft} {newoff} {oldoff} {start}")
 					countint += 1
 				elif (paramType == "float"):
-					newoff = self.offsetfloat + countfloat
-					oldoff = self.offsetfloat - ERAf[-2]
+					newoff = self.newfloat + countfloat
+					oldoff = self.newfloat - ERAf[-2]
 					start = memory.local_float_start
 					countfloat += 1
 				elif (paramType == "char"):
-					newoff = self.offsetchar - ERAc[-2] + countchar
-					oldoff = self.offsetchar - ERAc[-2]
+					newoff = self.newchar - ERAc[-2] + countchar
+					oldoff = self.newchar - ERAc[-2]
 					start = memory.local_char_start
 					countchar += 1
 				elif (paramType == "bool"):
-					newoff = self.offsetbool - ERAb[-2] + countbool
-					oldoff = self.offsetbool - ERAb[-2]
+					newoff = self.newbool - ERAb[-2] + countbool
+					oldoff = self.newbool - ERAb[-2]
 					start = memory.local_bool_start
 					countbool += 1
 				
-				# print (f"VALUE: {opLeft} @ {quad.get_left_operand()}; TYPE: {paramType};  {newoff} {oldoff} {start}")
+				# print (f"newoff: {newoff}, oldoff: {oldoff}, start: {start}")
+				# print(f"ERAi = {ERAi}")
 				# print(f"Trying to get value at {opLeft + oldoff}...")
 				value = self.memory.get_value(opLeft + oldoff)
 				# print(f"Got value {value} at {opLeft + oldoff}")
@@ -260,6 +281,11 @@ class VirtualMachine:
 			elif (operator == "GOSUB"):
 				checkpoint.append(ip)
 				ip = opRight - 1
+
+				self.offsetint = self.newint
+				self.offsetfloat = self.newfloat
+				self.offsetchar = self.newchar
+				self.offsetbool = self.newbool
 
 				countint = 0
 				countfloat = 0
@@ -287,6 +313,11 @@ class VirtualMachine:
 				self.offsetchar -= ERAc[-1]
 				self.offsetbool -= ERAb[-1]
 
+				self.newint -= ERAi[-1]
+				self.newfloat -= ERAf[-1]
+				self.newchar -= ERAc[-1]
+				self.newbool -= ERAb[-1]
+
 				gosquad = self.quads[ip]
 				operator, opLeft, opRight, result = self.parse_quad(gosquad)
 				# print (f"Returning to {operator} {opLeft} {opRight} {result}")
@@ -300,7 +331,7 @@ class VirtualMachine:
 
 				if (memory.get_type(result) == "int"):
 					bins = memory.get_value(result)
-					values = [opRight]
+					values = []
 					
 					for i in range(opRight):
 						values.append(self.memory.get_value(opLeft + i))
@@ -308,11 +339,11 @@ class VirtualMachine:
 					         color='yellow', edgecolor='black', linewidth=2)
 					plt.show()
 				else:
-					print("ERROR: HISTOGRAM BINS MUST BE AN INTEGER")
+					print("Error: Histogram bins must be integer")
 					exit()
 
 			elif (operator == "MEAN"):
-				values = [opRight]
+				values = []
 
 				for i in range(opRight):
 					values.append(float(self.memory.get_value(opLeft + i)))
@@ -321,7 +352,7 @@ class VirtualMachine:
 				self.memory.set_value(result, mean)
 			
 			elif (operator == "MEDIAN"):
-				values = [opRight]
+				values = []
 
 				for i in range(opRight):
 					values.append(float(self.memory.get_value(opLeft + i)))
@@ -330,7 +361,7 @@ class VirtualMachine:
 				self.memory.set_value(result, median)
 			
 			elif (operator == "MODE"):
-				values = [opRight]
+				values = []
 
 				for i in range(opRight):
 					values.append(float(self.memory.get_value(opLeft + i)))
@@ -339,7 +370,7 @@ class VirtualMachine:
 				self.memory.set_value(result, mode)
 
 			elif (operator == "VAR"):
-				values = [opRight]
+				values = []
 
 				for i in range(opRight):
 					values.append(float(self.memory.get_value(opLeft + i)))
@@ -348,7 +379,7 @@ class VirtualMachine:
 				self.memory.set_value(result, variance)
 
 			elif (operator == "SD"):
-				values = [opRight]
+				values = []
 
 				for i in range(opRight):
 					values.append(float(self.memory.get_value(opLeft + i)))
@@ -357,7 +388,7 @@ class VirtualMachine:
 				self.memory.set_value(result, sd)
 
 			elif (operator == "SCALE"):
-				values = [opRight]
+				values = []
 
 				for i in range(opRight):
 					values.append(float(self.memory.get_value(opLeft + i)))
@@ -369,7 +400,7 @@ class VirtualMachine:
 
 
 			elif (operator == "AVG"):
-				values = [opRight]
+				values = []
 
 				for i in range(opRight):
 					values.append(float(self.memory.get_value(opLeft + i)))
@@ -389,6 +420,8 @@ class VirtualMachine:
 			else:
 				# TODO fix newline bug
 				print(f"\nSorry, operator {operator} is not supported yet.\n")
+			
+			# memory.print()
 			ip += 1
 
 	def parse_quad(self, quad):
@@ -397,20 +430,23 @@ class VirtualMachine:
 		opRight = quad.get_right_operand()
 		result  = quad.get_result()
 
-		if (opLeft != None):
 
-			if (type(opLeft) == str and opLeft[0] == "$"):
-				opLeft = int(opLeft.replace("$", ""))
-				offset = self.get_offset(opLeft)
-				opLeft = self.memory.get_value(opLeft + offset)
-				opLeft = self.memory.get_value(opLeft + offset)
-			elif (type(opLeft) == str and opLeft[0] == "*"):
-				opLeft = int(opLeft.replace("*", ""))
-			elif (type(opLeft) == str):
-				opLeft = opLeft
-			elif (opLeft != None):
-				offset = self.get_offset(opLeft)
-				opLeft = self.memory.get_value(opLeft + offset)
+		if (opLeft != None):
+			if (operator != "WRITE"):
+
+				if (type(opLeft) == str and opLeft[0] == "$"):
+					opLeft = int(opLeft.replace("$", ""))
+					offset = self.get_offset(opLeft)
+					opLeft = self.memory.get_value(opLeft + offset)
+					offset = self.get_offset(opLeft)
+					opLeft = self.memory.get_value(opLeft + offset)
+				elif (type(opLeft) == str and opLeft[0] == "*"):
+					opLeft = int(opLeft.replace("*", ""))
+				elif (type(opLeft) == str):
+					opLeft = opLeft
+				elif (opLeft != None):
+					offset = self.get_offset(opLeft)
+					opLeft = self.memory.get_value(opLeft + offset)
 
 		if (opRight != None):
 			if (type(opRight) == str and opRight[0] == "$"):
@@ -453,6 +489,8 @@ class VirtualMachine:
 				offset = self.offsetchar
 			elif (memory.get_type(var) == "bool"):
 				offset = self.offsetbool
+		
+		# print(f'var {var} offset: {offset}')
 			
 		return offset
 

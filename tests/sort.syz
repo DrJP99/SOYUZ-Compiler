@@ -1,0 +1,83 @@
+program sort;
+var int: a[10];
+
+func int partition(int low, int high) {
+    var int: pivot, i, aux, aux2, j, z;
+
+    pivot = a[high];
+    i = low - 1;
+
+    j = low;
+
+    while (j < high) {
+        if (a[j] < pivot) {
+            i = i + 1;
+
+            aux = a[i];
+            aux2 = a[j];
+
+            a[i] = aux2;
+            a[j] = aux;
+        }
+
+        j = j + 1;
+    }
+
+    aux = a[i + 1];
+    aux2 = a[high];
+
+    a[i + 1] = aux2;
+    a[high] = aux;
+
+    return i + 1;
+}
+
+func void sort(int low, int high) {
+    var int: pi;
+
+    if (low < high) {
+        pi = partition(low, high);
+
+        sort(low, pi - 1);
+        sort(pi + 1, high);
+    }
+}
+
+
+main() {
+    var int: i;
+
+    a[0] = 14;
+    a[1] = 33;
+    a[2] = 27;
+    a[3] = 10;
+    a[4] = 35;
+    a[5] = 19;
+    a[6] = 42;
+    a[7] = 44;
+    a[8] = 26;
+    a[9] = 31;
+
+    write("Before sort\na = [");
+
+    from i = 0 to 10 {
+        write(a[i]);
+        if (i < 9) {
+            write(", ");
+        }
+    }
+    write("]\n");
+
+    sort(0, 9);
+
+    write("\nAfter sort\na = [");
+    from i = 0 to 10 {
+        write(a[i]);
+        if (i < 9) {
+            write(", ");
+        }
+    }
+    write("]\n");
+
+    end;
+}

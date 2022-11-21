@@ -194,12 +194,12 @@ class VirtualMemory:
 			exit()
 			
 	
-	def create_many_memory(self, scope, type, size):
+	def create_many_memory(self, scope, type, mySize=1):
 		addressStart = -1
-		if (size > 0):
+		if (mySize > 0):
 			addressStart = self.create_memory(scope, type)
 
-		for i in range(1, size):
+		for i in range(1, mySize):
 			self.create_memory(scope, type)
 		
 		return addressStart
@@ -311,10 +311,10 @@ class VirtualMemory:
 						elif (value == "\\\\"):
 							value = 92
 						else:
-							print(f"ERROR: Invalid escape character sequence {value}")
+							print(f"Error: Invalid escape character sequence {value}")
 							exit()
 					else:
-						print("ERROR: Invalid char")
+						print("Error: Invalid char")
 						exit()
 				elif (type(value) == bool):
 					if (value or value != 0):

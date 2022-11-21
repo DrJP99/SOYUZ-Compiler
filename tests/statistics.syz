@@ -1,0 +1,23 @@
+program classroom;
+var int: a[10];
+
+main() {
+    var int: i, x;
+
+    write("Enter the grades for the 10 students\n");
+    from i = 0 to 10 {
+        write("Student ", i + 1, ": ");
+        read(x);
+        a[i] = x;
+    }
+
+    write("The average of the class was: ", avg(a), "\n");
+    write("The mode of the class was: ", mode(a), "\n");
+    write("The median of the class was: ", median(a), "\n");
+    write("The variance of the class was: ", variance(a), "\n");
+    write("The standard deviation was: ", sd(a), "\n");
+
+    hist(a, 5);
+
+    end;
+}

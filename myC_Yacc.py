@@ -30,6 +30,8 @@ stackDimsId = []
 writeStr = False
 strLen = 1
 
+inFunction = False
+
 quad = QuadrupleTable()
 
 # Start of program
@@ -128,9 +130,11 @@ def p_funcs_2(p):
 						| empty
 	'''
 	global df, currScope, quad
-	if (df.get_return_type(currScope) == "VOID"):
-		print("ERROR: Function " + df.get_func_name(currScope) + " is VOID, cannot return value")
-	else:
+	if (df.get_return_type(currScope) == "void" and p[1] == "return"):
+		print("Error: Function " + df.get_func_name(currScope) + " is VOID, cannot return value")
+	elif (df.get_return_type(currScope) != "void" and p[1] != "return"):
+		print("Error: Function " + df.get_func_name(currScope) + " is not VOID, must return value")
+	elif (df.get_return_type(currScope) != "void"):
 		quad.generate_g_return()
 
 def p_funcs_3(p):
@@ -145,7 +149,7 @@ def p_params(p):
 	'''
 def p_params_1(p):
 	'''
-	params_1			: type ID see_id params_2 see_end_param reset_dims params_3
+	params_1			: type ID see_id params_2 see_end_param params_3
 						| empty
 	'''
 def p_params_2(p):
@@ -205,7 +209,10 @@ def p_histogram(p):
 	xDim, yDim = df.get_var_dims(currScope, p[3])
 	baseDir = df.get_var_address(currScope, p[3])
 	if (yDim != None):
-		print("ERROR: Histogram does not support 2D arrays")
+		print("Error: Histogram does not support 2D arrays")
+		exit()
+	elif (xDim == None):
+		print("Error: Histogram does not support non-array variables")
 		exit()
 	else:
 		quad.generate_g_histogram(baseDir, xDim)
@@ -219,6 +226,7 @@ def p_cond(p):
 def p_cond_1(p):
 	'''
 	cond_1				: ELSE generate_g_else cond_2
+						| empty
 	'''
 def p_cond_2(p):
 	'''
@@ -228,7 +236,6 @@ def p_cond_2(p):
 def p_cond_3(p):
 	'''
 	cond_3				: cond
-						| empty
 	'''
 
 # Conditional loop
@@ -292,7 +299,7 @@ def p_read_1(p):
 	'''
 def p_read_2(p):
 	'''
-	read_2				: dims reset_dims
+	read_2				: dims read_clear_dims
 						| empty
 	'''
 def p_read_3(p):
@@ -400,7 +407,7 @@ def p_factor(p):
 	'''
 def p_factor_1(p):
 	'''
-	factor_1			: ID see_id push_id factor_3 print_value reset_dims
+	factor_1			: ID see_id push_id factor_3 print_value
 						| callfunc
 						| CTEI push_int
 						| CTEF push_float
@@ -433,8 +440,6 @@ def p_main_1(p):
 	'''
 	main_1				: vars
 	'''
-
-# Neuralgic points
 
 def p_mean(p):
 	'''
@@ -542,6 +547,7 @@ def p_average(p):
 		exit()
 	quad.generate_g_average(baseAddress, dimsX, newAddress)
 
+# Neuralgic points
 
 def p_see_id(p):
 	'''
@@ -674,8 +680,9 @@ def p_see_func_start(p):
 	'''
 	see_func_start		: empty
 	'''
-	global currId, currReturnType, currScope, df
+	global currId, currReturnType, currScope, df, inFunc
 	currScope += 1
+	inFunc = currId
 	df.addFunction(currScope, currId, currReturnType)
 
 def p_global_resources(p):
@@ -689,10 +696,12 @@ def p_see_func_end(p):
 	'''
 	see_func_end		: empty
 	'''
-	global currScope, df, quad
+	global currScope, df, quad, inFunc
 	# df.printFunc()
 	quad.generate_g_end_func()
 	df.fill_resources(currScope, True)
+	i, j, c, b = df.get_resources(inFunc)
+	quad.fill_resources(i, j, c, b)
 	# ints, floats, bools, chars = quad.reset_counts()
 	# df.add_resources(currScope, ints, floats, bools, chars)
 
@@ -716,14 +725,14 @@ def p_see_end_param(p):
 	see_end_param		: empty
 	'''
 	global currScope, currId, currDims, df, vAtts
-	df.add_param(currScope, vAtts.create_var(currId, currType, currDims))
+	df.add_param(currScope, vAtts.create_var(currId, currType, 0))
 
-def p_reset_dims(p):
-	'''
-	reset_dims			: empty
-	'''
-	global currDims
-	currDims = 0 
+# def p_reset_dims(p):
+# 	'''
+# 	reset_dims			: empty
+# 	'''
+# 	global currDims
+# 	currDims = 0 
 
 def p_print_value(p):
 	'''
@@ -980,6 +989,12 @@ def p_generate_g_read(p):
 	global quad
 	quad.generate_g_read()
 
+def p_read_clear_dims(p):
+	'''
+	read_clear_dims		: empty
+	'''
+	global quad
+
 def p_generate_g_write(p):
 	'''
 	generate_g_write	: empty
@@ -1030,12 +1045,11 @@ def p_generate_g_nloop_e(p):
 	'''
 	global quad, df, currScope
 	end, ret, my, resType = quad.generate_g_nloop_e_pre()
-	address_1 = df.generate_memory(currScope, "int")
-	quad.add_count("int")
+	# address_1 = df.generate_memory(currScope, "int")
+	# quad.add_count("int")
 	address = df.generate_memory(currScope, resType)
-	quad.add_count(resType)
-	df.set_value_at_address(address_1, 1)
-	quad.generate_g_nloop_e(end, ret, my, resType, address, address_1)
+
+	quad.generate_g_nloop_e(end, ret, my, resType, address)
 
 def p_generate_end(p):
 	'''
@@ -1056,18 +1070,25 @@ def p_verify_func(p):
 	'''
 	verify_func			: empty
 	'''
-	global currId, df, currFunc
+	global currId, df, currFunc, inFunction
 	if (not df.find_function(currId)):
 		print(f'Error: function {currId} not defined')
 		exit()
 	else:
 		currFunc = currId
+		if (inFunction):
+			print(f'Error: function {currId} cannot be called as parameter inside another function')
+			exit()
+		inFunction = True
 
 def p_activate_record(p):
 	'''
 	activate_record		: empty
 	'''
-	global paramCounter, paramList, argumentList, quad, df, currFunc, currScope, init_address
+	global paramCounter, paramList, argumentList, quad, df, currFunc, currScope, init_address, inFunc
+	# print(f'currFunc: {currFunc}')
+	if (currFunc == inFunc):
+		quad.push_era()
 	i, f, c, b = df.get_resources(currFunc)
 	quad.generate_g_era(i, f, c, b)
 	paramCounter = 0
@@ -1100,8 +1121,8 @@ def p_verify_p_num(p):
 	'''
 	verify_p_num		: empty
 	'''
-	global paramCounter, paramList, argumentList, init_address, currFunc
-	if ((paramCounter + 1) != len(paramList) or typeError):
+	global paramCounter, paramList, argumentList, init_address, currFunc, inFunction
+	if (((paramCounter + 1) != len(paramList) or typeError) and not ((len(paramList) == 0) and (paramCounter == 0))):
 		print(f"Error: number or type of parameters does not match function {currFunc} definition\n\t\texpected ( " , end="")
 		for p in paramList:
 			print(f"{p}", end=" ")
@@ -1131,6 +1152,7 @@ def p_verify_p_num(p):
 			quad.push_id_type(saveMem, "bool")
 		
 		quad.generate_g_gosub(currFunc, init_address, saveMem)
+		inFunction = False
 
 def p_main_goto(p):
 	'''
@@ -1165,7 +1187,7 @@ def p_error(p):
 
 
 
-parser = yacc.yacc(debug=True)
+parser = yacc.yacc()
 
 filename = input("file name: ")
 

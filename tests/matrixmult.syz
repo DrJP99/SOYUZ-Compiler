@@ -1,0 +1,67 @@
+program matrixMult;
+var int: a[3, 3], b[3, 3], res[3, 3];
+var int: i, j, r, c, k, z;
+
+main() {
+    r = 3;
+    c = 3;
+
+    write("Llena la primer matriz\n");
+
+    i = 0;
+    while (i < r) {
+        j = 0;
+        while (j < c) {
+            write("Ingresa el valor de a[", i, "][", j, "]: ");
+            read(z);
+            a[i, j] = z;
+
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+
+    write("\nLlena la segunda matriz\n");
+
+    i = 0;
+    while (i < r) {
+        j = 0;
+        while (j < c) {
+            write("Ingresa el valor de b[", i, "][", j, "]: ");
+            read(z);
+            b[i, j] = z;
+
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+
+    i = 0;
+    while (i < r) {
+        j = 0;
+        while (j < c) {
+            res[i, j] = 0;
+            k = 0;
+            while (k < c) {
+                res[i, j] = res[i, j] + a[i, k] * b[k, j];
+                k = k + 1;
+            }
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+
+    write("\nLa matriz resultante es: \n");
+    i = 0;
+    while (i < r) {
+        j = 0;
+        while (j < c) {
+            write(res[i, j], " ");
+            j = j + 1;
+        }
+        write("\n");
+        i = i + 1;
+    }
+    
+    end;
+}

@@ -3,7 +3,6 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     COMMENT
-    LOADFILE
 
 Grammar
 
@@ -40,7 +39,7 @@ Rule 29    funcs_2 -> empty
 Rule 30    funcs_3 -> funcs
 Rule 31    funcs_3 -> empty
 Rule 32    params -> LPAR params_1 RPAR
-Rule 33    params_1 -> type ID see_id params_2 see_end_param reset_dims params_3
+Rule 33    params_1 -> type ID see_id params_2 see_end_param params_3
 Rule 34    params_1 -> empty
 Rule 35    params_2 -> dims
 Rule 36    params_2 -> empty
@@ -66,10 +65,10 @@ Rule 55    statement_1 -> scale SEMICOL
 Rule 56    histogram -> HIST LPAR ID COMMA expression RPAR SEMICOL
 Rule 57    cond -> IF LPAR expression RPAR generate_g_if block cond_1 finish_if
 Rule 58    cond_1 -> ELSE generate_g_else cond_2
-Rule 59    cond_2 -> cond_3
-Rule 60    cond_2 -> block
-Rule 61    cond_3 -> cond
-Rule 62    cond_3 -> empty
+Rule 59    cond_1 -> empty
+Rule 60    cond_2 -> cond_3
+Rule 61    cond_2 -> block
+Rule 62    cond_3 -> cond
 Rule 63    cloop -> WHILE cloop_push_jump LPAR expression generate_g_cloop_start RPAR block generate_g_cloop_end
 Rule 64    nloop -> FROM ID see_id nloop_1 push_id nloop_2 TO expression generate_g_nloop_s block generate_g_nloop_e
 Rule 65    nloop_1 -> dims
@@ -83,7 +82,7 @@ Rule 72    callfunc_3 -> COMMA increase_p_count callfunc_1
 Rule 73    callfunc_3 -> empty
 Rule 74    read -> READ LPAR read_1 RPAR SEMICOL
 Rule 75    read_1 -> ID see_id read_2 push_id generate_g_read read_3
-Rule 76    read_2 -> dims reset_dims
+Rule 76    read_2 -> dims read_clear_dims
 Rule 77    read_2 -> empty
 Rule 78    read_3 -> COMMA read_1
 Rule 79    read_3 -> empty
@@ -120,7 +119,7 @@ Rule 109   term_2 -> TIMES
 Rule 110   term_2 -> DIV
 Rule 111   factor -> factor_1
 Rule 112   factor -> factor_2
-Rule 113   factor_1 -> ID see_id push_id factor_3 print_value reset_dims
+Rule 113   factor_1 -> ID see_id push_id factor_3 print_value
 Rule 114   factor_1 -> callfunc
 Rule 115   factor_1 -> CTEI push_int
 Rule 116   factor_1 -> CTEF push_float
@@ -159,30 +158,30 @@ Rule 148   global_resources -> empty
 Rule 149   see_func_end -> empty
 Rule 150   set_func_init -> empty
 Rule 151   see_end_param -> empty
-Rule 152   reset_dims -> empty
-Rule 153   print_value -> empty
-Rule 154   check_and_or -> empty
-Rule 155   push_and_or -> empty
-Rule 156   check_relational -> empty
-Rule 157   push_relational -> empty
-Rule 158   check_sum -> empty
-Rule 159   push_sum -> empty
-Rule 160   check_mul_div -> empty
-Rule 161   push_mul_div -> empty
-Rule 162   add_ff -> empty
-Rule 163   pop_ff -> empty
-Rule 164   push_int -> empty
-Rule 165   push_float -> empty
-Rule 166   push_bool -> empty
-Rule 167   push_char -> empty
-Rule 168   push_string -> empty
-Rule 169   push_id -> empty
-Rule 170   push_equal -> empty
-Rule 171   generate_assign -> empty
-Rule 172   generate_g_if -> empty
-Rule 173   finish_if -> empty
-Rule 174   generate_g_else -> empty
-Rule 175   generate_g_read -> empty
+Rule 152   print_value -> empty
+Rule 153   check_and_or -> empty
+Rule 154   push_and_or -> empty
+Rule 155   check_relational -> empty
+Rule 156   push_relational -> empty
+Rule 157   check_sum -> empty
+Rule 158   push_sum -> empty
+Rule 159   check_mul_div -> empty
+Rule 160   push_mul_div -> empty
+Rule 161   add_ff -> empty
+Rule 162   pop_ff -> empty
+Rule 163   push_int -> empty
+Rule 164   push_float -> empty
+Rule 165   push_bool -> empty
+Rule 166   push_char -> empty
+Rule 167   push_string -> empty
+Rule 168   push_id -> empty
+Rule 169   push_equal -> empty
+Rule 170   generate_assign -> empty
+Rule 171   generate_g_if -> empty
+Rule 172   finish_if -> empty
+Rule 173   generate_g_else -> empty
+Rule 174   generate_g_read -> empty
+Rule 175   read_clear_dims -> empty
 Rule 176   generate_g_write -> empty
 Rule 177   cloop_push_jump -> empty
 Rule 178   generate_g_cloop_start -> empty
@@ -231,7 +230,6 @@ LBRACK               : 12 42
 LCURLY               : 24 26 129
 LESSOREQUAL          : 100
 LESSTHAN             : 99
-LOADFILE             : 
 LPAR                 : 32 56 57 63 69 74 80 126 129 131 132 133 134 135 136 137
 MAIN                 : 129
 MEAN                 : 131
@@ -266,7 +264,7 @@ add_ff               : 126
 assign               : 47
 assign_1             : 39
 average              : 125
-block                : 57 60 63 64
+block                : 57 61 63 64
 block_1              : 24
 callfunc             : 53 114
 callfunc_1           : 69 72
@@ -277,16 +275,16 @@ check_relational     : 91
 check_sum            : 101
 cloop                : 49
 cloop_push_jump      : 63
-cond                 : 48 61
+cond                 : 48 62
 cond_1               : 57
 cond_2               : 58
-cond_3               : 59
+cond_3               : 60
 dims                 : 35 40 65 76 127
 dims_1               : 42
 dims_assign          : 8
 dims_assign_1        : 12
 dims_end             : 42
-empty                : 4 6 9 11 14 29 31 34 36 38 41 44 46 62 66 68 71 73 77 79 85 88 93 103 108 128 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189
+empty                : 4 6 9 11 14 29 31 34 36 38 41 44 46 59 66 68 71 73 77 79 85 88 93 103 108 128 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189
 exp                  : 91 102
 exp_1                : 101
 exp_2                : 102
@@ -352,7 +350,7 @@ read                 : 51
 read_1               : 74 78
 read_2               : 75
 read_3               : 75
-reset_dims           : 33 76 113
+read_clear_dims      : 76
 rtype                : 26
 scale                : 55
 see_dims             : 42
@@ -957,7 +955,7 @@ state 53
 state 54
 
     (32) params -> LPAR . params_1 RPAR
-    (33) params_1 -> . type ID see_id params_2 see_end_param reset_dims params_3
+    (33) params_1 -> . type ID see_id params_2 see_end_param params_3
     (34) params_1 -> . empty
     (15) type -> . INT
     (16) type -> . FLOAT
@@ -1066,7 +1064,7 @@ state 61
 
 state 62
 
-    (33) params_1 -> type . ID see_id params_2 see_end_param reset_dims params_3
+    (33) params_1 -> type . ID see_id params_2 see_end_param params_3
 
     ID              shift and go to state 72
 
@@ -1185,7 +1183,7 @@ state 71
 
 state 72
 
-    (33) params_1 -> type ID . see_id params_2 see_end_param reset_dims params_3
+    (33) params_1 -> type ID . see_id params_2 see_end_param params_3
     (138) see_id -> . empty
     (190) empty -> .
 
@@ -1308,7 +1306,7 @@ state 78
 
 state 79
 
-    (33) params_1 -> type ID see_id . params_2 see_end_param reset_dims params_3
+    (33) params_1 -> type ID see_id . params_2 see_end_param params_3
     (35) params_2 -> . dims
     (36) params_2 -> . empty
     (42) dims -> . LBRACK see_dims expression generate_g_verify_f dims_1 RBRACK dims_end
@@ -1674,7 +1672,7 @@ state 103
 
 state 104
 
-    (33) params_1 -> type ID see_id params_2 . see_end_param reset_dims params_3
+    (33) params_1 -> type ID see_id params_2 . see_end_param params_3
     (151) see_end_param -> . empty
     (190) empty -> .
 
@@ -1745,7 +1743,7 @@ state 110
 
     (39) assign -> ID see_id . push_id assign_1 EQUAL push_equal expression generate_assign SEMICOL
     (69) callfunc -> ID see_id . verify_func LPAR activate_record callfunc_1 verify_p_num RPAR
-    (169) push_id -> . empty
+    (168) push_id -> . empty
     (183) verify_func -> . empty
     (190) empty -> .
 
@@ -1777,7 +1775,7 @@ state 112
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -1887,7 +1885,7 @@ state 117
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -1986,7 +1984,7 @@ state 122
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -2056,15 +2054,16 @@ state 124
 
 state 125
 
-    (33) params_1 -> type ID see_id params_2 see_end_param . reset_dims params_3
-    (152) reset_dims -> . empty
+    (33) params_1 -> type ID see_id params_2 see_end_param . params_3
+    (37) params_3 -> . COMMA params_1
+    (38) params_3 -> . empty
     (190) empty -> .
 
-    COMMA           reduce using rule 190 (empty -> .)
+    COMMA           shift and go to state 175
     RPAR            reduce using rule 190 (empty -> .)
 
-    reset_dims                     shift and go to state 174
-    empty                          shift and go to state 175
+    params_3                       shift and go to state 174
+    empty                          shift and go to state 176
 
 state 126
 
@@ -2083,7 +2082,7 @@ state 127
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -2119,7 +2118,7 @@ state 127
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    expression                     shift and go to state 176
+    expression                     shift and go to state 177
     sexp                           shift and go to state 137
     exp                            shift and go to state 138
     term                           shift and go to state 139
@@ -2164,7 +2163,7 @@ state 130
 
     (129) main -> MAIN see_id LPAR RPAR LCURLY see_func_start main_1 set_func_init fill_main_goto statement END . SEMICOL RCURLY generate_end
 
-    SEMICOL         shift and go to state 177
+    SEMICOL         shift and go to state 178
 
 
 state 131
@@ -2178,42 +2177,42 @@ state 131
     LBRACK          shift and go to state 107
     EQUAL           reduce using rule 190 (empty -> .)
 
-    assign_1                       shift and go to state 178
-    dims                           shift and go to state 179
-    empty                          shift and go to state 180
+    assign_1                       shift and go to state 179
+    dims                           shift and go to state 180
+    empty                          shift and go to state 181
 
 state 132
 
     (69) callfunc -> ID see_id verify_func . LPAR activate_record callfunc_1 verify_p_num RPAR
 
-    LPAR            shift and go to state 181
+    LPAR            shift and go to state 182
 
 
 state 133
 
-    (169) push_id -> empty .
+    (168) push_id -> empty .
     (183) verify_func -> empty .
 
-    LBRACK          reduce using rule 169 (push_id -> empty .)
-    EQUAL           reduce using rule 169 (push_id -> empty .)
-    TIMES           reduce using rule 169 (push_id -> empty .)
-    DIV             reduce using rule 169 (push_id -> empty .)
-    PLUS            reduce using rule 169 (push_id -> empty .)
-    MINUS           reduce using rule 169 (push_id -> empty .)
-    ISEQUAL         reduce using rule 169 (push_id -> empty .)
-    NOTEQUAL        reduce using rule 169 (push_id -> empty .)
-    GREATERTHAN     reduce using rule 169 (push_id -> empty .)
-    GREATERORQUAL   reduce using rule 169 (push_id -> empty .)
-    LESSTHAN        reduce using rule 169 (push_id -> empty .)
-    LESSOREQUAL     reduce using rule 169 (push_id -> empty .)
-    OR              reduce using rule 169 (push_id -> empty .)
-    AND             reduce using rule 169 (push_id -> empty .)
-    SEMICOL         reduce using rule 169 (push_id -> empty .)
-    RPAR            reduce using rule 169 (push_id -> empty .)
-    COMMA           reduce using rule 169 (push_id -> empty .)
-    RBRACK          reduce using rule 169 (push_id -> empty .)
-    LCURLY          reduce using rule 169 (push_id -> empty .)
-    TO              reduce using rule 169 (push_id -> empty .)
+    LBRACK          reduce using rule 168 (push_id -> empty .)
+    EQUAL           reduce using rule 168 (push_id -> empty .)
+    TIMES           reduce using rule 168 (push_id -> empty .)
+    DIV             reduce using rule 168 (push_id -> empty .)
+    PLUS            reduce using rule 168 (push_id -> empty .)
+    MINUS           reduce using rule 168 (push_id -> empty .)
+    ISEQUAL         reduce using rule 168 (push_id -> empty .)
+    NOTEQUAL        reduce using rule 168 (push_id -> empty .)
+    GREATERTHAN     reduce using rule 168 (push_id -> empty .)
+    GREATERORQUAL   reduce using rule 168 (push_id -> empty .)
+    LESSTHAN        reduce using rule 168 (push_id -> empty .)
+    LESSOREQUAL     reduce using rule 168 (push_id -> empty .)
+    OR              reduce using rule 168 (push_id -> empty .)
+    AND             reduce using rule 168 (push_id -> empty .)
+    SEMICOL         reduce using rule 168 (push_id -> empty .)
+    RPAR            reduce using rule 168 (push_id -> empty .)
+    COMMA           reduce using rule 168 (push_id -> empty .)
+    RBRACK          reduce using rule 168 (push_id -> empty .)
+    LCURLY          reduce using rule 168 (push_id -> empty .)
+    TO              reduce using rule 168 (push_id -> empty .)
     LPAR            reduce using rule 183 (verify_func -> empty .)
 
 
@@ -2221,7 +2220,7 @@ state 134
 
     (26) funcs -> FUNC rtype ID see_id see_func_start params LCURLY funcs_1 set_func_init statement funcs_2 see_func_end . RCURLY funcs_3
 
-    RCURLY          shift and go to state 182
+    RCURLY          shift and go to state 183
 
 
 state 135
@@ -2235,13 +2234,13 @@ state 136
 
     (28) funcs_2 -> RETURN expression . SEMICOL
 
-    SEMICOL         shift and go to state 183
+    SEMICOL         shift and go to state 184
 
 
 state 137
 
     (86) expression -> sexp . check_and_or expression_1
-    (154) check_and_or -> . empty
+    (153) check_and_or -> . empty
     (190) empty -> .
 
     OR              reduce using rule 190 (empty -> .)
@@ -2253,13 +2252,13 @@ state 137
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    check_and_or                   shift and go to state 184
-    empty                          shift and go to state 185
+    check_and_or                   shift and go to state 185
+    empty                          shift and go to state 186
 
 state 138
 
     (91) sexp -> exp . check_relational sexp_1
-    (156) check_relational -> . empty
+    (155) check_relational -> . empty
     (190) empty -> .
 
     ISEQUAL         reduce using rule 190 (empty -> .)
@@ -2278,13 +2277,13 @@ state 138
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    check_relational               shift and go to state 186
-    empty                          shift and go to state 187
+    check_relational               shift and go to state 187
+    empty                          shift and go to state 188
 
 state 139
 
     (101) exp -> term . check_sum exp_1
-    (158) check_sum -> . empty
+    (157) check_sum -> . empty
     (190) empty -> .
 
     PLUS            reduce using rule 190 (empty -> .)
@@ -2305,13 +2304,13 @@ state 139
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    check_sum                      shift and go to state 188
-    empty                          shift and go to state 189
+    check_sum                      shift and go to state 189
+    empty                          shift and go to state 190
 
 state 140
 
     (106) term -> factor . check_mul_div term_1
-    (160) check_mul_div -> . empty
+    (159) check_mul_div -> . empty
     (190) empty -> .
 
     TIMES           reduce using rule 190 (empty -> .)
@@ -2334,8 +2333,8 @@ state 140
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    check_mul_div                  shift and go to state 190
-    empty                          shift and go to state 191
+    check_mul_div                  shift and go to state 191
+    empty                          shift and go to state 192
 
 state 141
 
@@ -2389,7 +2388,7 @@ state 142
 
 state 143
 
-    (113) factor_1 -> ID . see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> ID . see_id push_id factor_3 print_value
     (69) callfunc -> ID . see_id verify_func LPAR activate_record callfunc_1 verify_p_num RPAR
     (138) see_id -> . empty
     (190) empty -> .
@@ -2416,7 +2415,7 @@ state 143
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    see_id                         shift and go to state 192
+    see_id                         shift and go to state 193
     empty                          shift and go to state 34
 
 state 144
@@ -2447,7 +2446,7 @@ state 144
 state 145
 
     (115) factor_1 -> CTEI . push_int
-    (164) push_int -> . empty
+    (163) push_int -> . empty
     (190) empty -> .
 
     TIMES           reduce using rule 190 (empty -> .)
@@ -2470,13 +2469,13 @@ state 145
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    push_int                       shift and go to state 193
-    empty                          shift and go to state 194
+    push_int                       shift and go to state 194
+    empty                          shift and go to state 195
 
 state 146
 
     (116) factor_1 -> CTEF . push_float
-    (165) push_float -> . empty
+    (164) push_float -> . empty
     (190) empty -> .
 
     TIMES           reduce using rule 190 (empty -> .)
@@ -2499,13 +2498,13 @@ state 146
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    push_float                     shift and go to state 195
-    empty                          shift and go to state 196
+    push_float                     shift and go to state 196
+    empty                          shift and go to state 197
 
 state 147
 
     (117) factor_1 -> CTEB . push_bool
-    (166) push_bool -> . empty
+    (165) push_bool -> . empty
     (190) empty -> .
 
     TIMES           reduce using rule 190 (empty -> .)
@@ -2528,13 +2527,13 @@ state 147
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    push_bool                      shift and go to state 197
-    empty                          shift and go to state 198
+    push_bool                      shift and go to state 198
+    empty                          shift and go to state 199
 
 state 148
 
     (118) factor_1 -> CTEC . push_char
-    (167) push_char -> . empty
+    (166) push_char -> . empty
     (190) empty -> .
 
     TIMES           reduce using rule 190 (empty -> .)
@@ -2557,13 +2556,13 @@ state 148
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    push_char                      shift and go to state 199
-    empty                          shift and go to state 200
+    push_char                      shift and go to state 200
+    empty                          shift and go to state 201
 
 state 149
 
     (119) factor_1 -> MINUS . factor_1
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -2597,7 +2596,7 @@ state 149
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    factor_1                       shift and go to state 201
+    factor_1                       shift and go to state 202
     callfunc                       shift and go to state 144
     mean                           shift and go to state 150
     median                         shift and go to state 151
@@ -2759,7 +2758,7 @@ state 155
 state 156
 
     (126) factor_2 -> LPAR . add_ff expression RPAR pop_ff
-    (162) add_ff -> . empty
+    (161) add_ff -> . empty
     (190) empty -> .
 
     ID              reduce using rule 190 (empty -> .)
@@ -2776,56 +2775,56 @@ state 156
     SD              reduce using rule 190 (empty -> .)
     AVG             reduce using rule 190 (empty -> .)
 
-    add_ff                         shift and go to state 202
-    empty                          shift and go to state 203
+    add_ff                         shift and go to state 203
+    empty                          shift and go to state 204
 
 state 157
 
     (131) mean -> MEAN . LPAR ID RPAR
 
-    LPAR            shift and go to state 204
+    LPAR            shift and go to state 205
 
 
 state 158
 
     (132) median -> MEDIAN . LPAR ID RPAR
 
-    LPAR            shift and go to state 205
+    LPAR            shift and go to state 206
 
 
 state 159
 
     (133) mode -> MODE . LPAR ID RPAR
 
-    LPAR            shift and go to state 206
+    LPAR            shift and go to state 207
 
 
 state 160
 
     (134) variance -> VARIANCE . LPAR ID RPAR
 
-    LPAR            shift and go to state 207
+    LPAR            shift and go to state 208
 
 
 state 161
 
     (135) standard_deviation -> SD . LPAR ID RPAR
 
-    LPAR            shift and go to state 208
+    LPAR            shift and go to state 209
 
 
 state 162
 
     (137) average -> AVG . LPAR ID RPAR
 
-    LPAR            shift and go to state 209
+    LPAR            shift and go to state 210
 
 
 state 163
 
     (57) cond -> IF LPAR expression . RPAR generate_g_if block cond_1 finish_if
 
-    RPAR            shift and go to state 210
+    RPAR            shift and go to state 211
 
 
 state 164
@@ -2837,7 +2836,7 @@ state 164
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -2873,7 +2872,7 @@ state 164
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    expression                     shift and go to state 211
+    expression                     shift and go to state 212
     sexp                           shift and go to state 137
     exp                            shift and go to state 138
     term                           shift and go to state 139
@@ -2900,15 +2899,15 @@ state 165
     TO              reduce using rule 190 (empty -> .)
     EQUAL           reduce using rule 190 (empty -> .)
 
-    nloop_1                        shift and go to state 212
-    dims                           shift and go to state 213
-    empty                          shift and go to state 214
+    nloop_1                        shift and go to state 213
+    dims                           shift and go to state 214
+    empty                          shift and go to state 215
 
 state 166
 
     (74) read -> READ LPAR read_1 . RPAR SEMICOL
 
-    RPAR            shift and go to state 215
+    RPAR            shift and go to state 216
 
 
 state 167
@@ -2921,14 +2920,14 @@ state 167
     COMMA           reduce using rule 190 (empty -> .)
     RPAR            reduce using rule 190 (empty -> .)
 
-    see_id                         shift and go to state 216
+    see_id                         shift and go to state 217
     empty                          shift and go to state 34
 
 state 168
 
     (80) write -> WRITE LPAR write_1 . RPAR SEMICOL
 
-    RPAR            shift and go to state 217
+    RPAR            shift and go to state 218
 
 
 state 169
@@ -2940,8 +2939,8 @@ state 169
     COMMA           reduce using rule 190 (empty -> .)
     RPAR            reduce using rule 190 (empty -> .)
 
-    generate_g_write               shift and go to state 218
-    empty                          shift and go to state 219
+    generate_g_write               shift and go to state 219
+    empty                          shift and go to state 220
 
 state 170
 
@@ -2954,68 +2953,65 @@ state 170
 state 171
 
     (83) write_2 -> CTES . push_string
-    (168) push_string -> . empty
+    (167) push_string -> . empty
     (190) empty -> .
 
     COMMA           reduce using rule 190 (empty -> .)
     RPAR            reduce using rule 190 (empty -> .)
 
-    push_string                    shift and go to state 220
-    empty                          shift and go to state 221
+    push_string                    shift and go to state 221
+    empty                          shift and go to state 222
 
 state 172
 
     (56) histogram -> HIST LPAR ID . COMMA expression RPAR SEMICOL
 
-    COMMA           shift and go to state 222
+    COMMA           shift and go to state 223
 
 
 state 173
 
     (136) scale -> SCALE LPAR ID . COMMA ID RPAR
 
-    COMMA           shift and go to state 223
+    COMMA           shift and go to state 224
 
 
 state 174
 
-    (33) params_1 -> type ID see_id params_2 see_end_param reset_dims . params_3
-    (37) params_3 -> . COMMA params_1
-    (38) params_3 -> . empty
-    (190) empty -> .
+    (33) params_1 -> type ID see_id params_2 see_end_param params_3 .
 
-    COMMA           shift and go to state 225
-    RPAR            reduce using rule 190 (empty -> .)
+    RPAR            reduce using rule 33 (params_1 -> type ID see_id params_2 see_end_param params_3 .)
 
-    params_3                       shift and go to state 224
-    empty                          shift and go to state 226
 
 state 175
 
-    (152) reset_dims -> empty .
+    (37) params_3 -> COMMA . params_1
+    (33) params_1 -> . type ID see_id params_2 see_end_param params_3
+    (34) params_1 -> . empty
+    (15) type -> . INT
+    (16) type -> . FLOAT
+    (17) type -> . CHAR
+    (18) type -> . BOOL
+    (190) empty -> .
 
-    COMMA           reduce using rule 152 (reset_dims -> empty .)
-    RPAR            reduce using rule 152 (reset_dims -> empty .)
-    TIMES           reduce using rule 152 (reset_dims -> empty .)
-    DIV             reduce using rule 152 (reset_dims -> empty .)
-    PLUS            reduce using rule 152 (reset_dims -> empty .)
-    MINUS           reduce using rule 152 (reset_dims -> empty .)
-    ISEQUAL         reduce using rule 152 (reset_dims -> empty .)
-    EQUAL           reduce using rule 152 (reset_dims -> empty .)
-    NOTEQUAL        reduce using rule 152 (reset_dims -> empty .)
-    GREATERTHAN     reduce using rule 152 (reset_dims -> empty .)
-    GREATERORQUAL   reduce using rule 152 (reset_dims -> empty .)
-    LESSTHAN        reduce using rule 152 (reset_dims -> empty .)
-    LESSOREQUAL     reduce using rule 152 (reset_dims -> empty .)
-    OR              reduce using rule 152 (reset_dims -> empty .)
-    AND             reduce using rule 152 (reset_dims -> empty .)
-    SEMICOL         reduce using rule 152 (reset_dims -> empty .)
-    RBRACK          reduce using rule 152 (reset_dims -> empty .)
-    LCURLY          reduce using rule 152 (reset_dims -> empty .)
-    TO              reduce using rule 152 (reset_dims -> empty .)
+    INT             shift and go to state 14
+    FLOAT           shift and go to state 15
+    CHAR            shift and go to state 16
+    BOOL            shift and go to state 17
+    RPAR            reduce using rule 190 (empty -> .)
 
+    params_1                       shift and go to state 225
+    type                           shift and go to state 62
+    empty                          shift and go to state 63
 
 state 176
+
+    (38) params_3 -> empty .
+
+    RPAR            reduce using rule 38 (params_3 -> empty .)
+
+
+state 177
 
     (42) dims -> LBRACK see_dims expression . generate_g_verify_f dims_1 RBRACK dims_end
     (141) generate_g_verify_f -> . empty
@@ -3024,38 +3020,38 @@ state 176
     COMMA           reduce using rule 190 (empty -> .)
     RBRACK          reduce using rule 190 (empty -> .)
 
-    generate_g_verify_f            shift and go to state 227
-    empty                          shift and go to state 228
-
-state 177
-
-    (129) main -> MAIN see_id LPAR RPAR LCURLY see_func_start main_1 set_func_init fill_main_goto statement END SEMICOL . RCURLY generate_end
-
-    RCURLY          shift and go to state 229
-
+    generate_g_verify_f            shift and go to state 226
+    empty                          shift and go to state 227
 
 state 178
 
-    (39) assign -> ID see_id push_id assign_1 . EQUAL push_equal expression generate_assign SEMICOL
+    (129) main -> MAIN see_id LPAR RPAR LCURLY see_func_start main_1 set_func_init fill_main_goto statement END SEMICOL . RCURLY generate_end
 
-    EQUAL           shift and go to state 230
+    RCURLY          shift and go to state 228
 
 
 state 179
+
+    (39) assign -> ID see_id push_id assign_1 . EQUAL push_equal expression generate_assign SEMICOL
+
+    EQUAL           shift and go to state 229
+
+
+state 180
 
     (40) assign_1 -> dims .
 
     EQUAL           reduce using rule 40 (assign_1 -> dims .)
 
 
-state 180
+state 181
 
     (41) assign_1 -> empty .
 
     EQUAL           reduce using rule 41 (assign_1 -> empty .)
 
 
-state 181
+state 182
 
     (69) callfunc -> ID see_id verify_func LPAR . activate_record callfunc_1 verify_p_num RPAR
     (184) activate_record -> . empty
@@ -3076,10 +3072,10 @@ state 181
     AVG             reduce using rule 190 (empty -> .)
     RPAR            reduce using rule 190 (empty -> .)
 
-    activate_record                shift and go to state 231
-    empty                          shift and go to state 232
+    activate_record                shift and go to state 230
+    empty                          shift and go to state 231
 
-state 182
+state 183
 
     (26) funcs -> FUNC rtype ID see_id see_func_start params LCURLY funcs_1 set_func_init statement funcs_2 see_func_end RCURLY . funcs_3
     (30) funcs_3 -> . funcs
@@ -3090,18 +3086,18 @@ state 182
     FUNC            shift and go to state 21
     MAIN            reduce using rule 190 (empty -> .)
 
-    funcs_3                        shift and go to state 233
-    funcs                          shift and go to state 234
-    empty                          shift and go to state 235
+    funcs_3                        shift and go to state 232
+    funcs                          shift and go to state 233
+    empty                          shift and go to state 234
 
-state 183
+state 184
 
     (28) funcs_2 -> RETURN expression SEMICOL .
 
     RCURLY          reduce using rule 28 (funcs_2 -> RETURN expression SEMICOL .)
 
 
-state 184
+state 185
 
     (86) expression -> sexp check_and_or . expression_1
     (87) expression_1 -> . expression_2 push_and_or expression
@@ -3110,8 +3106,8 @@ state 184
     (90) expression_2 -> . AND
     (190) empty -> .
 
-    OR              shift and go to state 239
-    AND             shift and go to state 240
+    OR              shift and go to state 238
+    AND             shift and go to state 239
     SEMICOL         reduce using rule 190 (empty -> .)
     RPAR            reduce using rule 190 (empty -> .)
     COMMA           reduce using rule 190 (empty -> .)
@@ -3119,25 +3115,25 @@ state 184
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    expression_1                   shift and go to state 236
-    expression_2                   shift and go to state 237
-    empty                          shift and go to state 238
-
-state 185
-
-    (154) check_and_or -> empty .
-
-    OR              reduce using rule 154 (check_and_or -> empty .)
-    AND             reduce using rule 154 (check_and_or -> empty .)
-    SEMICOL         reduce using rule 154 (check_and_or -> empty .)
-    RPAR            reduce using rule 154 (check_and_or -> empty .)
-    COMMA           reduce using rule 154 (check_and_or -> empty .)
-    RBRACK          reduce using rule 154 (check_and_or -> empty .)
-    LCURLY          reduce using rule 154 (check_and_or -> empty .)
-    TO              reduce using rule 154 (check_and_or -> empty .)
-
+    expression_1                   shift and go to state 235
+    expression_2                   shift and go to state 236
+    empty                          shift and go to state 237
 
 state 186
+
+    (153) check_and_or -> empty .
+
+    OR              reduce using rule 153 (check_and_or -> empty .)
+    AND             reduce using rule 153 (check_and_or -> empty .)
+    SEMICOL         reduce using rule 153 (check_and_or -> empty .)
+    RPAR            reduce using rule 153 (check_and_or -> empty .)
+    COMMA           reduce using rule 153 (check_and_or -> empty .)
+    RBRACK          reduce using rule 153 (check_and_or -> empty .)
+    LCURLY          reduce using rule 153 (check_and_or -> empty .)
+    TO              reduce using rule 153 (check_and_or -> empty .)
+
+
+state 187
 
     (91) sexp -> exp check_relational . sexp_1
     (92) sexp_1 -> . sexp_2 push_relational sexp
@@ -3151,13 +3147,13 @@ state 186
     (100) sexp_2 -> . LESSOREQUAL
     (190) empty -> .
 
-    ISEQUAL         shift and go to state 244
-    EQUAL           shift and go to state 245
-    NOTEQUAL        shift and go to state 246
-    GREATERTHAN     shift and go to state 247
-    GREATERORQUAL   shift and go to state 248
-    LESSTHAN        shift and go to state 249
-    LESSOREQUAL     shift and go to state 250
+    ISEQUAL         shift and go to state 243
+    EQUAL           shift and go to state 244
+    NOTEQUAL        shift and go to state 245
+    GREATERTHAN     shift and go to state 246
+    GREATERORQUAL   shift and go to state 247
+    LESSTHAN        shift and go to state 248
+    LESSOREQUAL     shift and go to state 249
     OR              reduce using rule 190 (empty -> .)
     AND             reduce using rule 190 (empty -> .)
     SEMICOL         reduce using rule 190 (empty -> .)
@@ -3167,32 +3163,32 @@ state 186
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    sexp_1                         shift and go to state 241
-    sexp_2                         shift and go to state 242
-    empty                          shift and go to state 243
-
-state 187
-
-    (156) check_relational -> empty .
-
-    ISEQUAL         reduce using rule 156 (check_relational -> empty .)
-    EQUAL           reduce using rule 156 (check_relational -> empty .)
-    NOTEQUAL        reduce using rule 156 (check_relational -> empty .)
-    GREATERTHAN     reduce using rule 156 (check_relational -> empty .)
-    GREATERORQUAL   reduce using rule 156 (check_relational -> empty .)
-    LESSTHAN        reduce using rule 156 (check_relational -> empty .)
-    LESSOREQUAL     reduce using rule 156 (check_relational -> empty .)
-    OR              reduce using rule 156 (check_relational -> empty .)
-    AND             reduce using rule 156 (check_relational -> empty .)
-    SEMICOL         reduce using rule 156 (check_relational -> empty .)
-    RPAR            reduce using rule 156 (check_relational -> empty .)
-    COMMA           reduce using rule 156 (check_relational -> empty .)
-    RBRACK          reduce using rule 156 (check_relational -> empty .)
-    LCURLY          reduce using rule 156 (check_relational -> empty .)
-    TO              reduce using rule 156 (check_relational -> empty .)
-
+    sexp_1                         shift and go to state 240
+    sexp_2                         shift and go to state 241
+    empty                          shift and go to state 242
 
 state 188
+
+    (155) check_relational -> empty .
+
+    ISEQUAL         reduce using rule 155 (check_relational -> empty .)
+    EQUAL           reduce using rule 155 (check_relational -> empty .)
+    NOTEQUAL        reduce using rule 155 (check_relational -> empty .)
+    GREATERTHAN     reduce using rule 155 (check_relational -> empty .)
+    GREATERORQUAL   reduce using rule 155 (check_relational -> empty .)
+    LESSTHAN        reduce using rule 155 (check_relational -> empty .)
+    LESSOREQUAL     reduce using rule 155 (check_relational -> empty .)
+    OR              reduce using rule 155 (check_relational -> empty .)
+    AND             reduce using rule 155 (check_relational -> empty .)
+    SEMICOL         reduce using rule 155 (check_relational -> empty .)
+    RPAR            reduce using rule 155 (check_relational -> empty .)
+    COMMA           reduce using rule 155 (check_relational -> empty .)
+    RBRACK          reduce using rule 155 (check_relational -> empty .)
+    LCURLY          reduce using rule 155 (check_relational -> empty .)
+    TO              reduce using rule 155 (check_relational -> empty .)
+
+
+state 189
 
     (101) exp -> term check_sum . exp_1
     (102) exp_1 -> . exp_2 push_sum exp
@@ -3201,8 +3197,8 @@ state 188
     (105) exp_2 -> . MINUS
     (190) empty -> .
 
-    PLUS            shift and go to state 254
-    MINUS           shift and go to state 255
+    PLUS            shift and go to state 253
+    MINUS           shift and go to state 254
     ISEQUAL         reduce using rule 190 (empty -> .)
     EQUAL           reduce using rule 190 (empty -> .)
     NOTEQUAL        reduce using rule 190 (empty -> .)
@@ -3219,34 +3215,34 @@ state 188
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    exp_1                          shift and go to state 251
-    exp_2                          shift and go to state 252
-    empty                          shift and go to state 253
-
-state 189
-
-    (158) check_sum -> empty .
-
-    PLUS            reduce using rule 158 (check_sum -> empty .)
-    MINUS           reduce using rule 158 (check_sum -> empty .)
-    ISEQUAL         reduce using rule 158 (check_sum -> empty .)
-    EQUAL           reduce using rule 158 (check_sum -> empty .)
-    NOTEQUAL        reduce using rule 158 (check_sum -> empty .)
-    GREATERTHAN     reduce using rule 158 (check_sum -> empty .)
-    GREATERORQUAL   reduce using rule 158 (check_sum -> empty .)
-    LESSTHAN        reduce using rule 158 (check_sum -> empty .)
-    LESSOREQUAL     reduce using rule 158 (check_sum -> empty .)
-    OR              reduce using rule 158 (check_sum -> empty .)
-    AND             reduce using rule 158 (check_sum -> empty .)
-    SEMICOL         reduce using rule 158 (check_sum -> empty .)
-    RPAR            reduce using rule 158 (check_sum -> empty .)
-    COMMA           reduce using rule 158 (check_sum -> empty .)
-    RBRACK          reduce using rule 158 (check_sum -> empty .)
-    LCURLY          reduce using rule 158 (check_sum -> empty .)
-    TO              reduce using rule 158 (check_sum -> empty .)
-
+    exp_1                          shift and go to state 250
+    exp_2                          shift and go to state 251
+    empty                          shift and go to state 252
 
 state 190
+
+    (157) check_sum -> empty .
+
+    PLUS            reduce using rule 157 (check_sum -> empty .)
+    MINUS           reduce using rule 157 (check_sum -> empty .)
+    ISEQUAL         reduce using rule 157 (check_sum -> empty .)
+    EQUAL           reduce using rule 157 (check_sum -> empty .)
+    NOTEQUAL        reduce using rule 157 (check_sum -> empty .)
+    GREATERTHAN     reduce using rule 157 (check_sum -> empty .)
+    GREATERORQUAL   reduce using rule 157 (check_sum -> empty .)
+    LESSTHAN        reduce using rule 157 (check_sum -> empty .)
+    LESSOREQUAL     reduce using rule 157 (check_sum -> empty .)
+    OR              reduce using rule 157 (check_sum -> empty .)
+    AND             reduce using rule 157 (check_sum -> empty .)
+    SEMICOL         reduce using rule 157 (check_sum -> empty .)
+    RPAR            reduce using rule 157 (check_sum -> empty .)
+    COMMA           reduce using rule 157 (check_sum -> empty .)
+    RBRACK          reduce using rule 157 (check_sum -> empty .)
+    LCURLY          reduce using rule 157 (check_sum -> empty .)
+    TO              reduce using rule 157 (check_sum -> empty .)
+
+
+state 191
 
     (106) term -> factor check_mul_div . term_1
     (107) term_1 -> . term_2 push_mul_div term
@@ -3255,8 +3251,8 @@ state 190
     (110) term_2 -> . DIV
     (190) empty -> .
 
-    TIMES           shift and go to state 259
-    DIV             shift and go to state 260
+    TIMES           shift and go to state 258
+    DIV             shift and go to state 259
     PLUS            reduce using rule 190 (empty -> .)
     MINUS           reduce using rule 190 (empty -> .)
     ISEQUAL         reduce using rule 190 (empty -> .)
@@ -3275,40 +3271,40 @@ state 190
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    term_1                         shift and go to state 256
-    term_2                         shift and go to state 257
-    empty                          shift and go to state 258
-
-state 191
-
-    (160) check_mul_div -> empty .
-
-    TIMES           reduce using rule 160 (check_mul_div -> empty .)
-    DIV             reduce using rule 160 (check_mul_div -> empty .)
-    PLUS            reduce using rule 160 (check_mul_div -> empty .)
-    MINUS           reduce using rule 160 (check_mul_div -> empty .)
-    ISEQUAL         reduce using rule 160 (check_mul_div -> empty .)
-    EQUAL           reduce using rule 160 (check_mul_div -> empty .)
-    NOTEQUAL        reduce using rule 160 (check_mul_div -> empty .)
-    GREATERTHAN     reduce using rule 160 (check_mul_div -> empty .)
-    GREATERORQUAL   reduce using rule 160 (check_mul_div -> empty .)
-    LESSTHAN        reduce using rule 160 (check_mul_div -> empty .)
-    LESSOREQUAL     reduce using rule 160 (check_mul_div -> empty .)
-    OR              reduce using rule 160 (check_mul_div -> empty .)
-    AND             reduce using rule 160 (check_mul_div -> empty .)
-    SEMICOL         reduce using rule 160 (check_mul_div -> empty .)
-    RPAR            reduce using rule 160 (check_mul_div -> empty .)
-    COMMA           reduce using rule 160 (check_mul_div -> empty .)
-    RBRACK          reduce using rule 160 (check_mul_div -> empty .)
-    LCURLY          reduce using rule 160 (check_mul_div -> empty .)
-    TO              reduce using rule 160 (check_mul_div -> empty .)
-
+    term_1                         shift and go to state 255
+    term_2                         shift and go to state 256
+    empty                          shift and go to state 257
 
 state 192
 
-    (113) factor_1 -> ID see_id . push_id factor_3 print_value reset_dims
+    (159) check_mul_div -> empty .
+
+    TIMES           reduce using rule 159 (check_mul_div -> empty .)
+    DIV             reduce using rule 159 (check_mul_div -> empty .)
+    PLUS            reduce using rule 159 (check_mul_div -> empty .)
+    MINUS           reduce using rule 159 (check_mul_div -> empty .)
+    ISEQUAL         reduce using rule 159 (check_mul_div -> empty .)
+    EQUAL           reduce using rule 159 (check_mul_div -> empty .)
+    NOTEQUAL        reduce using rule 159 (check_mul_div -> empty .)
+    GREATERTHAN     reduce using rule 159 (check_mul_div -> empty .)
+    GREATERORQUAL   reduce using rule 159 (check_mul_div -> empty .)
+    LESSTHAN        reduce using rule 159 (check_mul_div -> empty .)
+    LESSOREQUAL     reduce using rule 159 (check_mul_div -> empty .)
+    OR              reduce using rule 159 (check_mul_div -> empty .)
+    AND             reduce using rule 159 (check_mul_div -> empty .)
+    SEMICOL         reduce using rule 159 (check_mul_div -> empty .)
+    RPAR            reduce using rule 159 (check_mul_div -> empty .)
+    COMMA           reduce using rule 159 (check_mul_div -> empty .)
+    RBRACK          reduce using rule 159 (check_mul_div -> empty .)
+    LCURLY          reduce using rule 159 (check_mul_div -> empty .)
+    TO              reduce using rule 159 (check_mul_div -> empty .)
+
+
+state 193
+
+    (113) factor_1 -> ID see_id . push_id factor_3 print_value
     (69) callfunc -> ID see_id . verify_func LPAR activate_record callfunc_1 verify_p_num RPAR
-    (169) push_id -> . empty
+    (168) push_id -> . empty
     (183) verify_func -> . empty
     (190) empty -> .
 
@@ -3334,11 +3330,11 @@ state 192
     TO              reduce using rule 190 (empty -> .)
     LPAR            reduce using rule 190 (empty -> .)
 
-    push_id                        shift and go to state 261
+    push_id                        shift and go to state 260
     verify_func                    shift and go to state 132
     empty                          shift and go to state 133
 
-state 193
+state 194
 
     (115) factor_1 -> CTEI push_int .
 
@@ -3363,32 +3359,32 @@ state 193
     TO              reduce using rule 115 (factor_1 -> CTEI push_int .)
 
 
-state 194
-
-    (164) push_int -> empty .
-
-    TIMES           reduce using rule 164 (push_int -> empty .)
-    DIV             reduce using rule 164 (push_int -> empty .)
-    PLUS            reduce using rule 164 (push_int -> empty .)
-    MINUS           reduce using rule 164 (push_int -> empty .)
-    ISEQUAL         reduce using rule 164 (push_int -> empty .)
-    EQUAL           reduce using rule 164 (push_int -> empty .)
-    NOTEQUAL        reduce using rule 164 (push_int -> empty .)
-    GREATERTHAN     reduce using rule 164 (push_int -> empty .)
-    GREATERORQUAL   reduce using rule 164 (push_int -> empty .)
-    LESSTHAN        reduce using rule 164 (push_int -> empty .)
-    LESSOREQUAL     reduce using rule 164 (push_int -> empty .)
-    OR              reduce using rule 164 (push_int -> empty .)
-    AND             reduce using rule 164 (push_int -> empty .)
-    SEMICOL         reduce using rule 164 (push_int -> empty .)
-    RPAR            reduce using rule 164 (push_int -> empty .)
-    COMMA           reduce using rule 164 (push_int -> empty .)
-    RBRACK          reduce using rule 164 (push_int -> empty .)
-    LCURLY          reduce using rule 164 (push_int -> empty .)
-    TO              reduce using rule 164 (push_int -> empty .)
-
-
 state 195
+
+    (163) push_int -> empty .
+
+    TIMES           reduce using rule 163 (push_int -> empty .)
+    DIV             reduce using rule 163 (push_int -> empty .)
+    PLUS            reduce using rule 163 (push_int -> empty .)
+    MINUS           reduce using rule 163 (push_int -> empty .)
+    ISEQUAL         reduce using rule 163 (push_int -> empty .)
+    EQUAL           reduce using rule 163 (push_int -> empty .)
+    NOTEQUAL        reduce using rule 163 (push_int -> empty .)
+    GREATERTHAN     reduce using rule 163 (push_int -> empty .)
+    GREATERORQUAL   reduce using rule 163 (push_int -> empty .)
+    LESSTHAN        reduce using rule 163 (push_int -> empty .)
+    LESSOREQUAL     reduce using rule 163 (push_int -> empty .)
+    OR              reduce using rule 163 (push_int -> empty .)
+    AND             reduce using rule 163 (push_int -> empty .)
+    SEMICOL         reduce using rule 163 (push_int -> empty .)
+    RPAR            reduce using rule 163 (push_int -> empty .)
+    COMMA           reduce using rule 163 (push_int -> empty .)
+    RBRACK          reduce using rule 163 (push_int -> empty .)
+    LCURLY          reduce using rule 163 (push_int -> empty .)
+    TO              reduce using rule 163 (push_int -> empty .)
+
+
+state 196
 
     (116) factor_1 -> CTEF push_float .
 
@@ -3413,32 +3409,32 @@ state 195
     TO              reduce using rule 116 (factor_1 -> CTEF push_float .)
 
 
-state 196
-
-    (165) push_float -> empty .
-
-    TIMES           reduce using rule 165 (push_float -> empty .)
-    DIV             reduce using rule 165 (push_float -> empty .)
-    PLUS            reduce using rule 165 (push_float -> empty .)
-    MINUS           reduce using rule 165 (push_float -> empty .)
-    ISEQUAL         reduce using rule 165 (push_float -> empty .)
-    EQUAL           reduce using rule 165 (push_float -> empty .)
-    NOTEQUAL        reduce using rule 165 (push_float -> empty .)
-    GREATERTHAN     reduce using rule 165 (push_float -> empty .)
-    GREATERORQUAL   reduce using rule 165 (push_float -> empty .)
-    LESSTHAN        reduce using rule 165 (push_float -> empty .)
-    LESSOREQUAL     reduce using rule 165 (push_float -> empty .)
-    OR              reduce using rule 165 (push_float -> empty .)
-    AND             reduce using rule 165 (push_float -> empty .)
-    SEMICOL         reduce using rule 165 (push_float -> empty .)
-    RPAR            reduce using rule 165 (push_float -> empty .)
-    COMMA           reduce using rule 165 (push_float -> empty .)
-    RBRACK          reduce using rule 165 (push_float -> empty .)
-    LCURLY          reduce using rule 165 (push_float -> empty .)
-    TO              reduce using rule 165 (push_float -> empty .)
-
-
 state 197
+
+    (164) push_float -> empty .
+
+    TIMES           reduce using rule 164 (push_float -> empty .)
+    DIV             reduce using rule 164 (push_float -> empty .)
+    PLUS            reduce using rule 164 (push_float -> empty .)
+    MINUS           reduce using rule 164 (push_float -> empty .)
+    ISEQUAL         reduce using rule 164 (push_float -> empty .)
+    EQUAL           reduce using rule 164 (push_float -> empty .)
+    NOTEQUAL        reduce using rule 164 (push_float -> empty .)
+    GREATERTHAN     reduce using rule 164 (push_float -> empty .)
+    GREATERORQUAL   reduce using rule 164 (push_float -> empty .)
+    LESSTHAN        reduce using rule 164 (push_float -> empty .)
+    LESSOREQUAL     reduce using rule 164 (push_float -> empty .)
+    OR              reduce using rule 164 (push_float -> empty .)
+    AND             reduce using rule 164 (push_float -> empty .)
+    SEMICOL         reduce using rule 164 (push_float -> empty .)
+    RPAR            reduce using rule 164 (push_float -> empty .)
+    COMMA           reduce using rule 164 (push_float -> empty .)
+    RBRACK          reduce using rule 164 (push_float -> empty .)
+    LCURLY          reduce using rule 164 (push_float -> empty .)
+    TO              reduce using rule 164 (push_float -> empty .)
+
+
+state 198
 
     (117) factor_1 -> CTEB push_bool .
 
@@ -3463,32 +3459,32 @@ state 197
     TO              reduce using rule 117 (factor_1 -> CTEB push_bool .)
 
 
-state 198
-
-    (166) push_bool -> empty .
-
-    TIMES           reduce using rule 166 (push_bool -> empty .)
-    DIV             reduce using rule 166 (push_bool -> empty .)
-    PLUS            reduce using rule 166 (push_bool -> empty .)
-    MINUS           reduce using rule 166 (push_bool -> empty .)
-    ISEQUAL         reduce using rule 166 (push_bool -> empty .)
-    EQUAL           reduce using rule 166 (push_bool -> empty .)
-    NOTEQUAL        reduce using rule 166 (push_bool -> empty .)
-    GREATERTHAN     reduce using rule 166 (push_bool -> empty .)
-    GREATERORQUAL   reduce using rule 166 (push_bool -> empty .)
-    LESSTHAN        reduce using rule 166 (push_bool -> empty .)
-    LESSOREQUAL     reduce using rule 166 (push_bool -> empty .)
-    OR              reduce using rule 166 (push_bool -> empty .)
-    AND             reduce using rule 166 (push_bool -> empty .)
-    SEMICOL         reduce using rule 166 (push_bool -> empty .)
-    RPAR            reduce using rule 166 (push_bool -> empty .)
-    COMMA           reduce using rule 166 (push_bool -> empty .)
-    RBRACK          reduce using rule 166 (push_bool -> empty .)
-    LCURLY          reduce using rule 166 (push_bool -> empty .)
-    TO              reduce using rule 166 (push_bool -> empty .)
-
-
 state 199
+
+    (165) push_bool -> empty .
+
+    TIMES           reduce using rule 165 (push_bool -> empty .)
+    DIV             reduce using rule 165 (push_bool -> empty .)
+    PLUS            reduce using rule 165 (push_bool -> empty .)
+    MINUS           reduce using rule 165 (push_bool -> empty .)
+    ISEQUAL         reduce using rule 165 (push_bool -> empty .)
+    EQUAL           reduce using rule 165 (push_bool -> empty .)
+    NOTEQUAL        reduce using rule 165 (push_bool -> empty .)
+    GREATERTHAN     reduce using rule 165 (push_bool -> empty .)
+    GREATERORQUAL   reduce using rule 165 (push_bool -> empty .)
+    LESSTHAN        reduce using rule 165 (push_bool -> empty .)
+    LESSOREQUAL     reduce using rule 165 (push_bool -> empty .)
+    OR              reduce using rule 165 (push_bool -> empty .)
+    AND             reduce using rule 165 (push_bool -> empty .)
+    SEMICOL         reduce using rule 165 (push_bool -> empty .)
+    RPAR            reduce using rule 165 (push_bool -> empty .)
+    COMMA           reduce using rule 165 (push_bool -> empty .)
+    RBRACK          reduce using rule 165 (push_bool -> empty .)
+    LCURLY          reduce using rule 165 (push_bool -> empty .)
+    TO              reduce using rule 165 (push_bool -> empty .)
+
+
+state 200
 
     (118) factor_1 -> CTEC push_char .
 
@@ -3513,32 +3509,32 @@ state 199
     TO              reduce using rule 118 (factor_1 -> CTEC push_char .)
 
 
-state 200
-
-    (167) push_char -> empty .
-
-    TIMES           reduce using rule 167 (push_char -> empty .)
-    DIV             reduce using rule 167 (push_char -> empty .)
-    PLUS            reduce using rule 167 (push_char -> empty .)
-    MINUS           reduce using rule 167 (push_char -> empty .)
-    ISEQUAL         reduce using rule 167 (push_char -> empty .)
-    EQUAL           reduce using rule 167 (push_char -> empty .)
-    NOTEQUAL        reduce using rule 167 (push_char -> empty .)
-    GREATERTHAN     reduce using rule 167 (push_char -> empty .)
-    GREATERORQUAL   reduce using rule 167 (push_char -> empty .)
-    LESSTHAN        reduce using rule 167 (push_char -> empty .)
-    LESSOREQUAL     reduce using rule 167 (push_char -> empty .)
-    OR              reduce using rule 167 (push_char -> empty .)
-    AND             reduce using rule 167 (push_char -> empty .)
-    SEMICOL         reduce using rule 167 (push_char -> empty .)
-    RPAR            reduce using rule 167 (push_char -> empty .)
-    COMMA           reduce using rule 167 (push_char -> empty .)
-    RBRACK          reduce using rule 167 (push_char -> empty .)
-    LCURLY          reduce using rule 167 (push_char -> empty .)
-    TO              reduce using rule 167 (push_char -> empty .)
-
-
 state 201
+
+    (166) push_char -> empty .
+
+    TIMES           reduce using rule 166 (push_char -> empty .)
+    DIV             reduce using rule 166 (push_char -> empty .)
+    PLUS            reduce using rule 166 (push_char -> empty .)
+    MINUS           reduce using rule 166 (push_char -> empty .)
+    ISEQUAL         reduce using rule 166 (push_char -> empty .)
+    EQUAL           reduce using rule 166 (push_char -> empty .)
+    NOTEQUAL        reduce using rule 166 (push_char -> empty .)
+    GREATERTHAN     reduce using rule 166 (push_char -> empty .)
+    GREATERORQUAL   reduce using rule 166 (push_char -> empty .)
+    LESSTHAN        reduce using rule 166 (push_char -> empty .)
+    LESSOREQUAL     reduce using rule 166 (push_char -> empty .)
+    OR              reduce using rule 166 (push_char -> empty .)
+    AND             reduce using rule 166 (push_char -> empty .)
+    SEMICOL         reduce using rule 166 (push_char -> empty .)
+    RPAR            reduce using rule 166 (push_char -> empty .)
+    COMMA           reduce using rule 166 (push_char -> empty .)
+    RBRACK          reduce using rule 166 (push_char -> empty .)
+    LCURLY          reduce using rule 166 (push_char -> empty .)
+    TO              reduce using rule 166 (push_char -> empty .)
+
+
+state 202
 
     (119) factor_1 -> MINUS factor_1 .
 
@@ -3563,7 +3559,7 @@ state 201
     TO              reduce using rule 119 (factor_1 -> MINUS factor_1 .)
 
 
-state 202
+state 203
 
     (126) factor_2 -> LPAR add_ff . expression RPAR pop_ff
     (86) expression -> . sexp check_and_or expression_1
@@ -3572,7 +3568,7 @@ state 202
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -3608,7 +3604,7 @@ state 202
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    expression                     shift and go to state 262
+    expression                     shift and go to state 261
     sexp                           shift and go to state 137
     exp                            shift and go to state 138
     term                           shift and go to state 139
@@ -3623,79 +3619,79 @@ state 202
     standard_deviation             shift and go to state 154
     average                        shift and go to state 155
 
-state 203
-
-    (162) add_ff -> empty .
-
-    ID              reduce using rule 162 (add_ff -> empty .)
-    CTEI            reduce using rule 162 (add_ff -> empty .)
-    CTEF            reduce using rule 162 (add_ff -> empty .)
-    CTEB            reduce using rule 162 (add_ff -> empty .)
-    CTEC            reduce using rule 162 (add_ff -> empty .)
-    MINUS           reduce using rule 162 (add_ff -> empty .)
-    LPAR            reduce using rule 162 (add_ff -> empty .)
-    MEAN            reduce using rule 162 (add_ff -> empty .)
-    MEDIAN          reduce using rule 162 (add_ff -> empty .)
-    MODE            reduce using rule 162 (add_ff -> empty .)
-    VARIANCE        reduce using rule 162 (add_ff -> empty .)
-    SD              reduce using rule 162 (add_ff -> empty .)
-    AVG             reduce using rule 162 (add_ff -> empty .)
-
-
 state 204
 
-    (131) mean -> MEAN LPAR . ID RPAR
+    (161) add_ff -> empty .
 
-    ID              shift and go to state 263
+    ID              reduce using rule 161 (add_ff -> empty .)
+    CTEI            reduce using rule 161 (add_ff -> empty .)
+    CTEF            reduce using rule 161 (add_ff -> empty .)
+    CTEB            reduce using rule 161 (add_ff -> empty .)
+    CTEC            reduce using rule 161 (add_ff -> empty .)
+    MINUS           reduce using rule 161 (add_ff -> empty .)
+    LPAR            reduce using rule 161 (add_ff -> empty .)
+    MEAN            reduce using rule 161 (add_ff -> empty .)
+    MEDIAN          reduce using rule 161 (add_ff -> empty .)
+    MODE            reduce using rule 161 (add_ff -> empty .)
+    VARIANCE        reduce using rule 161 (add_ff -> empty .)
+    SD              reduce using rule 161 (add_ff -> empty .)
+    AVG             reduce using rule 161 (add_ff -> empty .)
 
 
 state 205
 
-    (132) median -> MEDIAN LPAR . ID RPAR
+    (131) mean -> MEAN LPAR . ID RPAR
 
-    ID              shift and go to state 264
+    ID              shift and go to state 262
 
 
 state 206
 
-    (133) mode -> MODE LPAR . ID RPAR
+    (132) median -> MEDIAN LPAR . ID RPAR
 
-    ID              shift and go to state 265
+    ID              shift and go to state 263
 
 
 state 207
 
-    (134) variance -> VARIANCE LPAR . ID RPAR
+    (133) mode -> MODE LPAR . ID RPAR
 
-    ID              shift and go to state 266
+    ID              shift and go to state 264
 
 
 state 208
 
-    (135) standard_deviation -> SD LPAR . ID RPAR
+    (134) variance -> VARIANCE LPAR . ID RPAR
 
-    ID              shift and go to state 267
+    ID              shift and go to state 265
 
 
 state 209
 
-    (137) average -> AVG LPAR . ID RPAR
+    (135) standard_deviation -> SD LPAR . ID RPAR
 
-    ID              shift and go to state 268
+    ID              shift and go to state 266
 
 
 state 210
 
+    (137) average -> AVG LPAR . ID RPAR
+
+    ID              shift and go to state 267
+
+
+state 211
+
     (57) cond -> IF LPAR expression RPAR . generate_g_if block cond_1 finish_if
-    (172) generate_g_if -> . empty
+    (171) generate_g_if -> . empty
     (190) empty -> .
 
     LCURLY          reduce using rule 190 (empty -> .)
 
-    generate_g_if                  shift and go to state 269
-    empty                          shift and go to state 270
+    generate_g_if                  shift and go to state 268
+    empty                          shift and go to state 269
 
-state 211
+state 212
 
     (63) cloop -> WHILE cloop_push_jump LPAR expression . generate_g_cloop_start RPAR block generate_g_cloop_end
     (178) generate_g_cloop_start -> . empty
@@ -3703,22 +3699,22 @@ state 211
 
     RPAR            reduce using rule 190 (empty -> .)
 
-    generate_g_cloop_start         shift and go to state 271
-    empty                          shift and go to state 272
+    generate_g_cloop_start         shift and go to state 270
+    empty                          shift and go to state 271
 
-state 212
+state 213
 
     (64) nloop -> FROM ID see_id nloop_1 . push_id nloop_2 TO expression generate_g_nloop_s block generate_g_nloop_e
-    (169) push_id -> . empty
+    (168) push_id -> . empty
     (190) empty -> .
 
     TO              reduce using rule 190 (empty -> .)
     EQUAL           reduce using rule 190 (empty -> .)
 
-    push_id                        shift and go to state 273
-    empty                          shift and go to state 274
+    push_id                        shift and go to state 272
+    empty                          shift and go to state 273
 
-state 213
+state 214
 
     (65) nloop_1 -> dims .
 
@@ -3726,7 +3722,7 @@ state 213
     EQUAL           reduce using rule 65 (nloop_1 -> dims .)
 
 
-state 214
+state 215
 
     (66) nloop_1 -> empty .
 
@@ -3734,17 +3730,17 @@ state 214
     EQUAL           reduce using rule 66 (nloop_1 -> empty .)
 
 
-state 215
+state 216
 
     (74) read -> READ LPAR read_1 RPAR . SEMICOL
 
-    SEMICOL         shift and go to state 275
+    SEMICOL         shift and go to state 274
 
 
-state 216
+state 217
 
     (75) read_1 -> ID see_id . read_2 push_id generate_g_read read_3
-    (76) read_2 -> . dims reset_dims
+    (76) read_2 -> . dims read_clear_dims
     (77) read_2 -> . empty
     (42) dims -> . LBRACK see_dims expression generate_g_verify_f dims_1 RBRACK dims_end
     (190) empty -> .
@@ -3753,31 +3749,31 @@ state 216
     COMMA           reduce using rule 190 (empty -> .)
     RPAR            reduce using rule 190 (empty -> .)
 
-    read_2                         shift and go to state 276
-    dims                           shift and go to state 277
-    empty                          shift and go to state 278
+    read_2                         shift and go to state 275
+    dims                           shift and go to state 276
+    empty                          shift and go to state 277
 
-state 217
+state 218
 
     (80) write -> WRITE LPAR write_1 RPAR . SEMICOL
 
-    SEMICOL         shift and go to state 279
+    SEMICOL         shift and go to state 278
 
 
-state 218
+state 219
 
     (81) write_1 -> write_2 generate_g_write . write_3
     (84) write_3 -> . COMMA write_1
     (85) write_3 -> . empty
     (190) empty -> .
 
-    COMMA           shift and go to state 281
+    COMMA           shift and go to state 280
     RPAR            reduce using rule 190 (empty -> .)
 
-    write_3                        shift and go to state 280
-    empty                          shift and go to state 282
+    write_3                        shift and go to state 279
+    empty                          shift and go to state 281
 
-state 219
+state 220
 
     (176) generate_g_write -> empty .
 
@@ -3785,7 +3781,7 @@ state 219
     RPAR            reduce using rule 176 (generate_g_write -> empty .)
 
 
-state 220
+state 221
 
     (83) write_2 -> CTES push_string .
 
@@ -3793,15 +3789,15 @@ state 220
     RPAR            reduce using rule 83 (write_2 -> CTES push_string .)
 
 
-state 221
-
-    (168) push_string -> empty .
-
-    COMMA           reduce using rule 168 (push_string -> empty .)
-    RPAR            reduce using rule 168 (push_string -> empty .)
-
-
 state 222
+
+    (167) push_string -> empty .
+
+    COMMA           reduce using rule 167 (push_string -> empty .)
+    RPAR            reduce using rule 167 (push_string -> empty .)
+
+
+state 223
 
     (56) histogram -> HIST LPAR ID COMMA . expression RPAR SEMICOL
     (86) expression -> . sexp check_and_or expression_1
@@ -3810,7 +3806,7 @@ state 222
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -3846,7 +3842,7 @@ state 222
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    expression                     shift and go to state 283
+    expression                     shift and go to state 282
     sexp                           shift and go to state 137
     exp                            shift and go to state 138
     term                           shift and go to state 139
@@ -3861,62 +3857,34 @@ state 222
     standard_deviation             shift and go to state 154
     average                        shift and go to state 155
 
-state 223
+state 224
 
     (136) scale -> SCALE LPAR ID COMMA . ID RPAR
 
-    ID              shift and go to state 284
-
-
-state 224
-
-    (33) params_1 -> type ID see_id params_2 see_end_param reset_dims params_3 .
-
-    RPAR            reduce using rule 33 (params_1 -> type ID see_id params_2 see_end_param reset_dims params_3 .)
+    ID              shift and go to state 283
 
 
 state 225
 
-    (37) params_3 -> COMMA . params_1
-    (33) params_1 -> . type ID see_id params_2 see_end_param reset_dims params_3
-    (34) params_1 -> . empty
-    (15) type -> . INT
-    (16) type -> . FLOAT
-    (17) type -> . CHAR
-    (18) type -> . BOOL
-    (190) empty -> .
+    (37) params_3 -> COMMA params_1 .
 
-    INT             shift and go to state 14
-    FLOAT           shift and go to state 15
-    CHAR            shift and go to state 16
-    BOOL            shift and go to state 17
-    RPAR            reduce using rule 190 (empty -> .)
+    RPAR            reduce using rule 37 (params_3 -> COMMA params_1 .)
 
-    params_1                       shift and go to state 285
-    type                           shift and go to state 62
-    empty                          shift and go to state 63
 
 state 226
-
-    (38) params_3 -> empty .
-
-    RPAR            reduce using rule 38 (params_3 -> empty .)
-
-
-state 227
 
     (42) dims -> LBRACK see_dims expression generate_g_verify_f . dims_1 RBRACK dims_end
     (43) dims_1 -> . COMMA see_dims_s expression generate_g_verify_s
     (44) dims_1 -> . empty
     (190) empty -> .
 
-    COMMA           shift and go to state 287
+    COMMA           shift and go to state 285
     RBRACK          reduce using rule 190 (empty -> .)
 
-    dims_1                         shift and go to state 286
-    empty                          shift and go to state 288
+    dims_1                         shift and go to state 284
+    empty                          shift and go to state 286
 
-state 228
+state 227
 
     (141) generate_g_verify_f -> empty .
 
@@ -3924,7 +3892,7 @@ state 228
     RBRACK          reduce using rule 141 (generate_g_verify_f -> empty .)
 
 
-state 229
+state 228
 
     (129) main -> MAIN see_id LPAR RPAR LCURLY see_func_start main_1 set_func_init fill_main_goto statement END SEMICOL RCURLY . generate_end
     (182) generate_end -> . empty
@@ -3932,13 +3900,13 @@ state 229
 
     $end            reduce using rule 190 (empty -> .)
 
-    generate_end                   shift and go to state 289
-    empty                          shift and go to state 290
+    generate_end                   shift and go to state 287
+    empty                          shift and go to state 288
 
-state 230
+state 229
 
     (39) assign -> ID see_id push_id assign_1 EQUAL . push_equal expression generate_assign SEMICOL
-    (170) push_equal -> . empty
+    (169) push_equal -> . empty
     (190) empty -> .
 
     ID              reduce using rule 190 (empty -> .)
@@ -3955,10 +3923,10 @@ state 230
     SD              reduce using rule 190 (empty -> .)
     AVG             reduce using rule 190 (empty -> .)
 
-    push_equal                     shift and go to state 291
-    empty                          shift and go to state 292
+    push_equal                     shift and go to state 289
+    empty                          shift and go to state 290
 
-state 231
+state 230
 
     (69) callfunc -> ID see_id verify_func LPAR activate_record . callfunc_1 verify_p_num RPAR
     (70) callfunc_1 -> . expression verify_params callfunc_3
@@ -3970,7 +3938,7 @@ state 231
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -4007,9 +3975,9 @@ state 231
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    callfunc_1                     shift and go to state 293
-    expression                     shift and go to state 294
-    empty                          shift and go to state 295
+    callfunc_1                     shift and go to state 291
+    expression                     shift and go to state 292
+    empty                          shift and go to state 293
     sexp                           shift and go to state 137
     exp                            shift and go to state 138
     term                           shift and go to state 139
@@ -4024,7 +3992,7 @@ state 231
     standard_deviation             shift and go to state 154
     average                        shift and go to state 155
 
-state 232
+state 231
 
     (184) activate_record -> empty .
 
@@ -4044,28 +4012,28 @@ state 232
     RPAR            reduce using rule 184 (activate_record -> empty .)
 
 
-state 233
+state 232
 
     (26) funcs -> FUNC rtype ID see_id see_func_start params LCURLY funcs_1 set_func_init statement funcs_2 see_func_end RCURLY funcs_3 .
 
     MAIN            reduce using rule 26 (funcs -> FUNC rtype ID see_id see_func_start params LCURLY funcs_1 set_func_init statement funcs_2 see_func_end RCURLY funcs_3 .)
 
 
-state 234
+state 233
 
     (30) funcs_3 -> funcs .
 
     MAIN            reduce using rule 30 (funcs_3 -> funcs .)
 
 
-state 235
+state 234
 
     (31) funcs_3 -> empty .
 
     MAIN            reduce using rule 31 (funcs_3 -> empty .)
 
 
-state 236
+state 235
 
     (86) expression -> sexp check_and_or expression_1 .
 
@@ -4077,10 +4045,10 @@ state 236
     TO              reduce using rule 86 (expression -> sexp check_and_or expression_1 .)
 
 
-state 237
+state 236
 
     (87) expression_1 -> expression_2 . push_and_or expression
-    (155) push_and_or -> . empty
+    (154) push_and_or -> . empty
     (190) empty -> .
 
     ID              reduce using rule 190 (empty -> .)
@@ -4097,10 +4065,10 @@ state 237
     SD              reduce using rule 190 (empty -> .)
     AVG             reduce using rule 190 (empty -> .)
 
-    push_and_or                    shift and go to state 296
-    empty                          shift and go to state 297
+    push_and_or                    shift and go to state 294
+    empty                          shift and go to state 295
 
-state 238
+state 237
 
     (88) expression_1 -> empty .
 
@@ -4112,7 +4080,7 @@ state 238
     TO              reduce using rule 88 (expression_1 -> empty .)
 
 
-state 239
+state 238
 
     (89) expression_2 -> OR .
 
@@ -4131,7 +4099,7 @@ state 239
     AVG             reduce using rule 89 (expression_2 -> OR .)
 
 
-state 240
+state 239
 
     (90) expression_2 -> AND .
 
@@ -4150,7 +4118,7 @@ state 240
     AVG             reduce using rule 90 (expression_2 -> AND .)
 
 
-state 241
+state 240
 
     (91) sexp -> exp check_relational sexp_1 .
 
@@ -4164,10 +4132,10 @@ state 241
     TO              reduce using rule 91 (sexp -> exp check_relational sexp_1 .)
 
 
-state 242
+state 241
 
     (92) sexp_1 -> sexp_2 . push_relational sexp
-    (157) push_relational -> . empty
+    (156) push_relational -> . empty
     (190) empty -> .
 
     ID              reduce using rule 190 (empty -> .)
@@ -4184,10 +4152,10 @@ state 242
     SD              reduce using rule 190 (empty -> .)
     AVG             reduce using rule 190 (empty -> .)
 
-    push_relational                shift and go to state 298
-    empty                          shift and go to state 299
+    push_relational                shift and go to state 296
+    empty                          shift and go to state 297
 
-state 243
+state 242
 
     (93) sexp_1 -> empty .
 
@@ -4201,7 +4169,7 @@ state 243
     TO              reduce using rule 93 (sexp_1 -> empty .)
 
 
-state 244
+state 243
 
     (94) sexp_2 -> ISEQUAL .
 
@@ -4220,7 +4188,7 @@ state 244
     AVG             reduce using rule 94 (sexp_2 -> ISEQUAL .)
 
 
-state 245
+state 244
 
     (95) sexp_2 -> EQUAL .
 
@@ -4239,7 +4207,7 @@ state 245
     AVG             reduce using rule 95 (sexp_2 -> EQUAL .)
 
 
-state 246
+state 245
 
     (96) sexp_2 -> NOTEQUAL .
 
@@ -4258,7 +4226,7 @@ state 246
     AVG             reduce using rule 96 (sexp_2 -> NOTEQUAL .)
 
 
-state 247
+state 246
 
     (97) sexp_2 -> GREATERTHAN .
 
@@ -4277,7 +4245,7 @@ state 247
     AVG             reduce using rule 97 (sexp_2 -> GREATERTHAN .)
 
 
-state 248
+state 247
 
     (98) sexp_2 -> GREATERORQUAL .
 
@@ -4296,7 +4264,7 @@ state 248
     AVG             reduce using rule 98 (sexp_2 -> GREATERORQUAL .)
 
 
-state 249
+state 248
 
     (99) sexp_2 -> LESSTHAN .
 
@@ -4315,7 +4283,7 @@ state 249
     AVG             reduce using rule 99 (sexp_2 -> LESSTHAN .)
 
 
-state 250
+state 249
 
     (100) sexp_2 -> LESSOREQUAL .
 
@@ -4334,7 +4302,7 @@ state 250
     AVG             reduce using rule 100 (sexp_2 -> LESSOREQUAL .)
 
 
-state 251
+state 250
 
     (101) exp -> term check_sum exp_1 .
 
@@ -4355,10 +4323,10 @@ state 251
     TO              reduce using rule 101 (exp -> term check_sum exp_1 .)
 
 
-state 252
+state 251
 
     (102) exp_1 -> exp_2 . push_sum exp
-    (159) push_sum -> . empty
+    (158) push_sum -> . empty
     (190) empty -> .
 
     ID              reduce using rule 190 (empty -> .)
@@ -4375,10 +4343,10 @@ state 252
     SD              reduce using rule 190 (empty -> .)
     AVG             reduce using rule 190 (empty -> .)
 
-    push_sum                       shift and go to state 300
-    empty                          shift and go to state 301
+    push_sum                       shift and go to state 298
+    empty                          shift and go to state 299
 
-state 253
+state 252
 
     (103) exp_1 -> empty .
 
@@ -4399,7 +4367,7 @@ state 253
     TO              reduce using rule 103 (exp_1 -> empty .)
 
 
-state 254
+state 253
 
     (104) exp_2 -> PLUS .
 
@@ -4418,7 +4386,7 @@ state 254
     AVG             reduce using rule 104 (exp_2 -> PLUS .)
 
 
-state 255
+state 254
 
     (105) exp_2 -> MINUS .
 
@@ -4437,7 +4405,7 @@ state 255
     AVG             reduce using rule 105 (exp_2 -> MINUS .)
 
 
-state 256
+state 255
 
     (106) term -> factor check_mul_div term_1 .
 
@@ -4460,10 +4428,10 @@ state 256
     TO              reduce using rule 106 (term -> factor check_mul_div term_1 .)
 
 
-state 257
+state 256
 
     (107) term_1 -> term_2 . push_mul_div term
-    (161) push_mul_div -> . empty
+    (160) push_mul_div -> . empty
     (190) empty -> .
 
     ID              reduce using rule 190 (empty -> .)
@@ -4480,10 +4448,10 @@ state 257
     SD              reduce using rule 190 (empty -> .)
     AVG             reduce using rule 190 (empty -> .)
 
-    push_mul_div                   shift and go to state 302
-    empty                          shift and go to state 303
+    push_mul_div                   shift and go to state 300
+    empty                          shift and go to state 301
 
-state 258
+state 257
 
     (108) term_1 -> empty .
 
@@ -4506,7 +4474,7 @@ state 258
     TO              reduce using rule 108 (term_1 -> empty .)
 
 
-state 259
+state 258
 
     (109) term_2 -> TIMES .
 
@@ -4525,7 +4493,7 @@ state 259
     AVG             reduce using rule 109 (term_2 -> TIMES .)
 
 
-state 260
+state 259
 
     (110) term_2 -> DIV .
 
@@ -4544,9 +4512,9 @@ state 260
     AVG             reduce using rule 110 (term_2 -> DIV .)
 
 
-state 261
+state 260
 
-    (113) factor_1 -> ID see_id push_id . factor_3 print_value reset_dims
+    (113) factor_1 -> ID see_id push_id . factor_3 print_value
     (127) factor_3 -> . dims
     (128) factor_3 -> . empty
     (42) dims -> . LBRACK see_dims expression generate_g_verify_f dims_1 RBRACK dims_end
@@ -4573,115 +4541,115 @@ state 261
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    factor_3                       shift and go to state 304
-    dims                           shift and go to state 305
-    empty                          shift and go to state 306
+    factor_3                       shift and go to state 302
+    dims                           shift and go to state 303
+    empty                          shift and go to state 304
 
-state 262
+state 261
 
     (126) factor_2 -> LPAR add_ff expression . RPAR pop_ff
 
-    RPAR            shift and go to state 307
+    RPAR            shift and go to state 305
+
+
+state 262
+
+    (131) mean -> MEAN LPAR ID . RPAR
+
+    RPAR            shift and go to state 306
 
 
 state 263
 
-    (131) mean -> MEAN LPAR ID . RPAR
+    (132) median -> MEDIAN LPAR ID . RPAR
 
-    RPAR            shift and go to state 308
+    RPAR            shift and go to state 307
 
 
 state 264
 
-    (132) median -> MEDIAN LPAR ID . RPAR
+    (133) mode -> MODE LPAR ID . RPAR
 
-    RPAR            shift and go to state 309
+    RPAR            shift and go to state 308
 
 
 state 265
 
-    (133) mode -> MODE LPAR ID . RPAR
+    (134) variance -> VARIANCE LPAR ID . RPAR
 
-    RPAR            shift and go to state 310
+    RPAR            shift and go to state 309
 
 
 state 266
 
-    (134) variance -> VARIANCE LPAR ID . RPAR
+    (135) standard_deviation -> SD LPAR ID . RPAR
 
-    RPAR            shift and go to state 311
+    RPAR            shift and go to state 310
 
 
 state 267
 
-    (135) standard_deviation -> SD LPAR ID . RPAR
+    (137) average -> AVG LPAR ID . RPAR
 
-    RPAR            shift and go to state 312
+    RPAR            shift and go to state 311
 
 
 state 268
 
-    (137) average -> AVG LPAR ID . RPAR
-
-    RPAR            shift and go to state 313
-
-
-state 269
-
     (57) cond -> IF LPAR expression RPAR generate_g_if . block cond_1 finish_if
     (24) block -> . LCURLY block_1 RCURLY
 
-    LCURLY          shift and go to state 315
+    LCURLY          shift and go to state 313
 
-    block                          shift and go to state 314
+    block                          shift and go to state 312
+
+state 269
+
+    (171) generate_g_if -> empty .
+
+    LCURLY          reduce using rule 171 (generate_g_if -> empty .)
+
 
 state 270
 
-    (172) generate_g_if -> empty .
+    (63) cloop -> WHILE cloop_push_jump LPAR expression generate_g_cloop_start . RPAR block generate_g_cloop_end
 
-    LCURLY          reduce using rule 172 (generate_g_if -> empty .)
+    RPAR            shift and go to state 314
 
 
 state 271
-
-    (63) cloop -> WHILE cloop_push_jump LPAR expression generate_g_cloop_start . RPAR block generate_g_cloop_end
-
-    RPAR            shift and go to state 316
-
-
-state 272
 
     (178) generate_g_cloop_start -> empty .
 
     RPAR            reduce using rule 178 (generate_g_cloop_start -> empty .)
 
 
-state 273
+state 272
 
     (64) nloop -> FROM ID see_id nloop_1 push_id . nloop_2 TO expression generate_g_nloop_s block generate_g_nloop_e
     (67) nloop_2 -> . push_id EQUAL push_equal expression generate_assign
     (68) nloop_2 -> . empty
-    (169) push_id -> . empty
+    (168) push_id -> . empty
     (190) empty -> .
 
     TO              reduce using rule 190 (empty -> .)
     EQUAL           reduce using rule 190 (empty -> .)
 
-    push_id                        shift and go to state 317
-    nloop_2                        shift and go to state 318
-    empty                          shift and go to state 319
+    push_id                        shift and go to state 315
+    nloop_2                        shift and go to state 316
+    empty                          shift and go to state 317
+
+state 273
+
+    (168) push_id -> empty .
+
+    TO              reduce using rule 168 (push_id -> empty .)
+    EQUAL           reduce using rule 168 (push_id -> empty .)
+    COMMA           reduce using rule 168 (push_id -> empty .)
+    RPAR            reduce using rule 168 (push_id -> empty .)
+
 
 state 274
-
-    (169) push_id -> empty .
-
-    TO              reduce using rule 169 (push_id -> empty .)
-    EQUAL           reduce using rule 169 (push_id -> empty .)
-    COMMA           reduce using rule 169 (push_id -> empty .)
-    RPAR            reduce using rule 169 (push_id -> empty .)
-
-
-state 275
 
     (74) read -> READ LPAR read_1 RPAR SEMICOL .
 
@@ -4698,31 +4666,31 @@ state 275
     END             reduce using rule 74 (read -> READ LPAR read_1 RPAR SEMICOL .)
 
 
-state 276
+state 275
 
     (75) read_1 -> ID see_id read_2 . push_id generate_g_read read_3
-    (169) push_id -> . empty
+    (168) push_id -> . empty
     (190) empty -> .
 
     COMMA           reduce using rule 190 (empty -> .)
     RPAR            reduce using rule 190 (empty -> .)
 
-    push_id                        shift and go to state 320
-    empty                          shift and go to state 274
+    push_id                        shift and go to state 318
+    empty                          shift and go to state 273
+
+state 276
+
+    (76) read_2 -> dims . read_clear_dims
+    (175) read_clear_dims -> . empty
+    (190) empty -> .
+
+    COMMA           reduce using rule 190 (empty -> .)
+    RPAR            reduce using rule 190 (empty -> .)
+
+    read_clear_dims                shift and go to state 319
+    empty                          shift and go to state 320
 
 state 277
-
-    (76) read_2 -> dims . reset_dims
-    (152) reset_dims -> . empty
-    (190) empty -> .
-
-    COMMA           reduce using rule 190 (empty -> .)
-    RPAR            reduce using rule 190 (empty -> .)
-
-    reset_dims                     shift and go to state 321
-    empty                          shift and go to state 175
-
-state 278
 
     (77) read_2 -> empty .
 
@@ -4730,7 +4698,7 @@ state 278
     RPAR            reduce using rule 77 (read_2 -> empty .)
 
 
-state 279
+state 278
 
     (80) write -> WRITE LPAR write_1 RPAR SEMICOL .
 
@@ -4747,14 +4715,14 @@ state 279
     END             reduce using rule 80 (write -> WRITE LPAR write_1 RPAR SEMICOL .)
 
 
-state 280
+state 279
 
     (81) write_1 -> write_2 generate_g_write write_3 .
 
     RPAR            reduce using rule 81 (write_1 -> write_2 generate_g_write write_3 .)
 
 
-state 281
+state 280
 
     (84) write_3 -> COMMA . write_1
     (81) write_1 -> . write_2 generate_g_write write_3
@@ -4766,7 +4734,7 @@ state 281
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -4803,7 +4771,7 @@ state 281
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    write_1                        shift and go to state 322
+    write_1                        shift and go to state 321
     write_2                        shift and go to state 169
     expression                     shift and go to state 170
     sexp                           shift and go to state 137
@@ -4820,42 +4788,35 @@ state 281
     standard_deviation             shift and go to state 154
     average                        shift and go to state 155
 
-state 282
+state 281
 
     (85) write_3 -> empty .
 
     RPAR            reduce using rule 85 (write_3 -> empty .)
 
 
-state 283
+state 282
 
     (56) histogram -> HIST LPAR ID COMMA expression . RPAR SEMICOL
+
+    RPAR            shift and go to state 322
+
+
+state 283
+
+    (136) scale -> SCALE LPAR ID COMMA ID . RPAR
 
     RPAR            shift and go to state 323
 
 
 state 284
 
-    (136) scale -> SCALE LPAR ID COMMA ID . RPAR
+    (42) dims -> LBRACK see_dims expression generate_g_verify_f dims_1 . RBRACK dims_end
 
-    RPAR            shift and go to state 324
+    RBRACK          shift and go to state 324
 
 
 state 285
-
-    (37) params_3 -> COMMA params_1 .
-
-    RPAR            reduce using rule 37 (params_3 -> COMMA params_1 .)
-
-
-state 286
-
-    (42) dims -> LBRACK see_dims expression generate_g_verify_f dims_1 . RBRACK dims_end
-
-    RBRACK          shift and go to state 325
-
-
-state 287
 
     (43) dims_1 -> COMMA . see_dims_s expression generate_g_verify_s
     (140) see_dims_s -> . empty
@@ -4875,31 +4836,31 @@ state 287
     SD              reduce using rule 190 (empty -> .)
     AVG             reduce using rule 190 (empty -> .)
 
-    see_dims_s                     shift and go to state 326
-    empty                          shift and go to state 327
+    see_dims_s                     shift and go to state 325
+    empty                          shift and go to state 326
 
-state 288
+state 286
 
     (44) dims_1 -> empty .
 
     RBRACK          reduce using rule 44 (dims_1 -> empty .)
 
 
-state 289
+state 287
 
     (129) main -> MAIN see_id LPAR RPAR LCURLY see_func_start main_1 set_func_init fill_main_goto statement END SEMICOL RCURLY generate_end .
 
     $end            reduce using rule 129 (main -> MAIN see_id LPAR RPAR LCURLY see_func_start main_1 set_func_init fill_main_goto statement END SEMICOL RCURLY generate_end .)
 
 
-state 290
+state 288
 
     (182) generate_end -> empty .
 
     $end            reduce using rule 182 (generate_end -> empty .)
 
 
-state 291
+state 289
 
     (39) assign -> ID see_id push_id assign_1 EQUAL push_equal . expression generate_assign SEMICOL
     (86) expression -> . sexp check_and_or expression_1
@@ -4908,7 +4869,7 @@ state 291
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -4944,7 +4905,7 @@ state 291
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    expression                     shift and go to state 328
+    expression                     shift and go to state 327
     sexp                           shift and go to state 137
     exp                            shift and go to state 138
     term                           shift and go to state 139
@@ -4959,26 +4920,26 @@ state 291
     standard_deviation             shift and go to state 154
     average                        shift and go to state 155
 
-state 292
+state 290
 
-    (170) push_equal -> empty .
+    (169) push_equal -> empty .
 
-    ID              reduce using rule 170 (push_equal -> empty .)
-    CTEI            reduce using rule 170 (push_equal -> empty .)
-    CTEF            reduce using rule 170 (push_equal -> empty .)
-    CTEB            reduce using rule 170 (push_equal -> empty .)
-    CTEC            reduce using rule 170 (push_equal -> empty .)
-    MINUS           reduce using rule 170 (push_equal -> empty .)
-    LPAR            reduce using rule 170 (push_equal -> empty .)
-    MEAN            reduce using rule 170 (push_equal -> empty .)
-    MEDIAN          reduce using rule 170 (push_equal -> empty .)
-    MODE            reduce using rule 170 (push_equal -> empty .)
-    VARIANCE        reduce using rule 170 (push_equal -> empty .)
-    SD              reduce using rule 170 (push_equal -> empty .)
-    AVG             reduce using rule 170 (push_equal -> empty .)
+    ID              reduce using rule 169 (push_equal -> empty .)
+    CTEI            reduce using rule 169 (push_equal -> empty .)
+    CTEF            reduce using rule 169 (push_equal -> empty .)
+    CTEB            reduce using rule 169 (push_equal -> empty .)
+    CTEC            reduce using rule 169 (push_equal -> empty .)
+    MINUS           reduce using rule 169 (push_equal -> empty .)
+    LPAR            reduce using rule 169 (push_equal -> empty .)
+    MEAN            reduce using rule 169 (push_equal -> empty .)
+    MEDIAN          reduce using rule 169 (push_equal -> empty .)
+    MODE            reduce using rule 169 (push_equal -> empty .)
+    VARIANCE        reduce using rule 169 (push_equal -> empty .)
+    SD              reduce using rule 169 (push_equal -> empty .)
+    AVG             reduce using rule 169 (push_equal -> empty .)
 
 
-state 293
+state 291
 
     (69) callfunc -> ID see_id verify_func LPAR activate_record callfunc_1 . verify_p_num RPAR
     (187) verify_p_num -> . empty
@@ -4986,10 +4947,10 @@ state 293
 
     RPAR            reduce using rule 190 (empty -> .)
 
-    verify_p_num                   shift and go to state 329
-    empty                          shift and go to state 330
+    verify_p_num                   shift and go to state 328
+    empty                          shift and go to state 329
 
-state 294
+state 292
 
     (70) callfunc_1 -> expression . verify_params callfunc_3
     (185) verify_params -> . empty
@@ -4998,17 +4959,17 @@ state 294
     COMMA           reduce using rule 190 (empty -> .)
     RPAR            reduce using rule 190 (empty -> .)
 
-    verify_params                  shift and go to state 331
-    empty                          shift and go to state 332
+    verify_params                  shift and go to state 330
+    empty                          shift and go to state 331
 
-state 295
+state 293
 
     (71) callfunc_1 -> empty .
 
     RPAR            reduce using rule 71 (callfunc_1 -> empty .)
 
 
-state 296
+state 294
 
     (87) expression_1 -> expression_2 push_and_or . expression
     (86) expression -> . sexp check_and_or expression_1
@@ -5017,7 +4978,7 @@ state 296
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -5053,8 +5014,85 @@ state 296
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    expression                     shift and go to state 333
+    expression                     shift and go to state 332
     sexp                           shift and go to state 137
+    exp                            shift and go to state 138
+    term                           shift and go to state 139
+    factor                         shift and go to state 140
+    factor_1                       shift and go to state 141
+    factor_2                       shift and go to state 142
+    callfunc                       shift and go to state 144
+    mean                           shift and go to state 150
+    median                         shift and go to state 151
+    mode                           shift and go to state 152
+    variance                       shift and go to state 153
+    standard_deviation             shift and go to state 154
+    average                        shift and go to state 155
+
+state 295
+
+    (154) push_and_or -> empty .
+
+    ID              reduce using rule 154 (push_and_or -> empty .)
+    CTEI            reduce using rule 154 (push_and_or -> empty .)
+    CTEF            reduce using rule 154 (push_and_or -> empty .)
+    CTEB            reduce using rule 154 (push_and_or -> empty .)
+    CTEC            reduce using rule 154 (push_and_or -> empty .)
+    MINUS           reduce using rule 154 (push_and_or -> empty .)
+    LPAR            reduce using rule 154 (push_and_or -> empty .)
+    MEAN            reduce using rule 154 (push_and_or -> empty .)
+    MEDIAN          reduce using rule 154 (push_and_or -> empty .)
+    MODE            reduce using rule 154 (push_and_or -> empty .)
+    VARIANCE        reduce using rule 154 (push_and_or -> empty .)
+    SD              reduce using rule 154 (push_and_or -> empty .)
+    AVG             reduce using rule 154 (push_and_or -> empty .)
+
+
+state 296
+
+    (92) sexp_1 -> sexp_2 push_relational . sexp
+    (91) sexp -> . exp check_relational sexp_1
+    (101) exp -> . term check_sum exp_1
+    (106) term -> . factor check_mul_div term_1
+    (111) factor -> . factor_1
+    (112) factor -> . factor_2
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
+    (114) factor_1 -> . callfunc
+    (115) factor_1 -> . CTEI push_int
+    (116) factor_1 -> . CTEF push_float
+    (117) factor_1 -> . CTEB push_bool
+    (118) factor_1 -> . CTEC push_char
+    (119) factor_1 -> . MINUS factor_1
+    (120) factor_1 -> . mean
+    (121) factor_1 -> . median
+    (122) factor_1 -> . mode
+    (123) factor_1 -> . variance
+    (124) factor_1 -> . standard_deviation
+    (125) factor_1 -> . average
+    (126) factor_2 -> . LPAR add_ff expression RPAR pop_ff
+    (69) callfunc -> . ID see_id verify_func LPAR activate_record callfunc_1 verify_p_num RPAR
+    (131) mean -> . MEAN LPAR ID RPAR
+    (132) median -> . MEDIAN LPAR ID RPAR
+    (133) mode -> . MODE LPAR ID RPAR
+    (134) variance -> . VARIANCE LPAR ID RPAR
+    (135) standard_deviation -> . SD LPAR ID RPAR
+    (137) average -> . AVG LPAR ID RPAR
+
+    ID              shift and go to state 143
+    CTEI            shift and go to state 145
+    CTEF            shift and go to state 146
+    CTEB            shift and go to state 147
+    CTEC            shift and go to state 148
+    MINUS           shift and go to state 149
+    LPAR            shift and go to state 156
+    MEAN            shift and go to state 157
+    MEDIAN          shift and go to state 158
+    MODE            shift and go to state 159
+    VARIANCE        shift and go to state 160
+    SD              shift and go to state 161
+    AVG             shift and go to state 162
+
+    sexp                           shift and go to state 333
     exp                            shift and go to state 138
     term                           shift and go to state 139
     factor                         shift and go to state 140
@@ -5070,32 +5108,31 @@ state 296
 
 state 297
 
-    (155) push_and_or -> empty .
+    (156) push_relational -> empty .
 
-    ID              reduce using rule 155 (push_and_or -> empty .)
-    CTEI            reduce using rule 155 (push_and_or -> empty .)
-    CTEF            reduce using rule 155 (push_and_or -> empty .)
-    CTEB            reduce using rule 155 (push_and_or -> empty .)
-    CTEC            reduce using rule 155 (push_and_or -> empty .)
-    MINUS           reduce using rule 155 (push_and_or -> empty .)
-    LPAR            reduce using rule 155 (push_and_or -> empty .)
-    MEAN            reduce using rule 155 (push_and_or -> empty .)
-    MEDIAN          reduce using rule 155 (push_and_or -> empty .)
-    MODE            reduce using rule 155 (push_and_or -> empty .)
-    VARIANCE        reduce using rule 155 (push_and_or -> empty .)
-    SD              reduce using rule 155 (push_and_or -> empty .)
-    AVG             reduce using rule 155 (push_and_or -> empty .)
+    ID              reduce using rule 156 (push_relational -> empty .)
+    CTEI            reduce using rule 156 (push_relational -> empty .)
+    CTEF            reduce using rule 156 (push_relational -> empty .)
+    CTEB            reduce using rule 156 (push_relational -> empty .)
+    CTEC            reduce using rule 156 (push_relational -> empty .)
+    MINUS           reduce using rule 156 (push_relational -> empty .)
+    LPAR            reduce using rule 156 (push_relational -> empty .)
+    MEAN            reduce using rule 156 (push_relational -> empty .)
+    MEDIAN          reduce using rule 156 (push_relational -> empty .)
+    MODE            reduce using rule 156 (push_relational -> empty .)
+    VARIANCE        reduce using rule 156 (push_relational -> empty .)
+    SD              reduce using rule 156 (push_relational -> empty .)
+    AVG             reduce using rule 156 (push_relational -> empty .)
 
 
 state 298
 
-    (92) sexp_1 -> sexp_2 push_relational . sexp
-    (91) sexp -> . exp check_relational sexp_1
+    (102) exp_1 -> exp_2 push_sum . exp
     (101) exp -> . term check_sum exp_1
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -5131,8 +5168,7 @@ state 298
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    sexp                           shift and go to state 334
-    exp                            shift and go to state 138
+    exp                            shift and go to state 334
     term                           shift and go to state 139
     factor                         shift and go to state 140
     factor_1                       shift and go to state 141
@@ -5147,31 +5183,30 @@ state 298
 
 state 299
 
-    (157) push_relational -> empty .
+    (158) push_sum -> empty .
 
-    ID              reduce using rule 157 (push_relational -> empty .)
-    CTEI            reduce using rule 157 (push_relational -> empty .)
-    CTEF            reduce using rule 157 (push_relational -> empty .)
-    CTEB            reduce using rule 157 (push_relational -> empty .)
-    CTEC            reduce using rule 157 (push_relational -> empty .)
-    MINUS           reduce using rule 157 (push_relational -> empty .)
-    LPAR            reduce using rule 157 (push_relational -> empty .)
-    MEAN            reduce using rule 157 (push_relational -> empty .)
-    MEDIAN          reduce using rule 157 (push_relational -> empty .)
-    MODE            reduce using rule 157 (push_relational -> empty .)
-    VARIANCE        reduce using rule 157 (push_relational -> empty .)
-    SD              reduce using rule 157 (push_relational -> empty .)
-    AVG             reduce using rule 157 (push_relational -> empty .)
+    ID              reduce using rule 158 (push_sum -> empty .)
+    CTEI            reduce using rule 158 (push_sum -> empty .)
+    CTEF            reduce using rule 158 (push_sum -> empty .)
+    CTEB            reduce using rule 158 (push_sum -> empty .)
+    CTEC            reduce using rule 158 (push_sum -> empty .)
+    MINUS           reduce using rule 158 (push_sum -> empty .)
+    LPAR            reduce using rule 158 (push_sum -> empty .)
+    MEAN            reduce using rule 158 (push_sum -> empty .)
+    MEDIAN          reduce using rule 158 (push_sum -> empty .)
+    MODE            reduce using rule 158 (push_sum -> empty .)
+    VARIANCE        reduce using rule 158 (push_sum -> empty .)
+    SD              reduce using rule 158 (push_sum -> empty .)
+    AVG             reduce using rule 158 (push_sum -> empty .)
 
 
 state 300
 
-    (102) exp_1 -> exp_2 push_sum . exp
-    (101) exp -> . term check_sum exp_1
+    (107) term_1 -> term_2 push_mul_div . term
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -5207,8 +5242,7 @@ state 300
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    exp                            shift and go to state 335
-    term                           shift and go to state 139
+    term                           shift and go to state 335
     factor                         shift and go to state 140
     factor_1                       shift and go to state 141
     factor_2                       shift and go to state 142
@@ -5222,100 +5256,27 @@ state 300
 
 state 301
 
-    (159) push_sum -> empty .
+    (160) push_mul_div -> empty .
 
-    ID              reduce using rule 159 (push_sum -> empty .)
-    CTEI            reduce using rule 159 (push_sum -> empty .)
-    CTEF            reduce using rule 159 (push_sum -> empty .)
-    CTEB            reduce using rule 159 (push_sum -> empty .)
-    CTEC            reduce using rule 159 (push_sum -> empty .)
-    MINUS           reduce using rule 159 (push_sum -> empty .)
-    LPAR            reduce using rule 159 (push_sum -> empty .)
-    MEAN            reduce using rule 159 (push_sum -> empty .)
-    MEDIAN          reduce using rule 159 (push_sum -> empty .)
-    MODE            reduce using rule 159 (push_sum -> empty .)
-    VARIANCE        reduce using rule 159 (push_sum -> empty .)
-    SD              reduce using rule 159 (push_sum -> empty .)
-    AVG             reduce using rule 159 (push_sum -> empty .)
+    ID              reduce using rule 160 (push_mul_div -> empty .)
+    CTEI            reduce using rule 160 (push_mul_div -> empty .)
+    CTEF            reduce using rule 160 (push_mul_div -> empty .)
+    CTEB            reduce using rule 160 (push_mul_div -> empty .)
+    CTEC            reduce using rule 160 (push_mul_div -> empty .)
+    MINUS           reduce using rule 160 (push_mul_div -> empty .)
+    LPAR            reduce using rule 160 (push_mul_div -> empty .)
+    MEAN            reduce using rule 160 (push_mul_div -> empty .)
+    MEDIAN          reduce using rule 160 (push_mul_div -> empty .)
+    MODE            reduce using rule 160 (push_mul_div -> empty .)
+    VARIANCE        reduce using rule 160 (push_mul_div -> empty .)
+    SD              reduce using rule 160 (push_mul_div -> empty .)
+    AVG             reduce using rule 160 (push_mul_div -> empty .)
 
 
 state 302
 
-    (107) term_1 -> term_2 push_mul_div . term
-    (106) term -> . factor check_mul_div term_1
-    (111) factor -> . factor_1
-    (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
-    (114) factor_1 -> . callfunc
-    (115) factor_1 -> . CTEI push_int
-    (116) factor_1 -> . CTEF push_float
-    (117) factor_1 -> . CTEB push_bool
-    (118) factor_1 -> . CTEC push_char
-    (119) factor_1 -> . MINUS factor_1
-    (120) factor_1 -> . mean
-    (121) factor_1 -> . median
-    (122) factor_1 -> . mode
-    (123) factor_1 -> . variance
-    (124) factor_1 -> . standard_deviation
-    (125) factor_1 -> . average
-    (126) factor_2 -> . LPAR add_ff expression RPAR pop_ff
-    (69) callfunc -> . ID see_id verify_func LPAR activate_record callfunc_1 verify_p_num RPAR
-    (131) mean -> . MEAN LPAR ID RPAR
-    (132) median -> . MEDIAN LPAR ID RPAR
-    (133) mode -> . MODE LPAR ID RPAR
-    (134) variance -> . VARIANCE LPAR ID RPAR
-    (135) standard_deviation -> . SD LPAR ID RPAR
-    (137) average -> . AVG LPAR ID RPAR
-
-    ID              shift and go to state 143
-    CTEI            shift and go to state 145
-    CTEF            shift and go to state 146
-    CTEB            shift and go to state 147
-    CTEC            shift and go to state 148
-    MINUS           shift and go to state 149
-    LPAR            shift and go to state 156
-    MEAN            shift and go to state 157
-    MEDIAN          shift and go to state 158
-    MODE            shift and go to state 159
-    VARIANCE        shift and go to state 160
-    SD              shift and go to state 161
-    AVG             shift and go to state 162
-
-    term                           shift and go to state 336
-    factor                         shift and go to state 140
-    factor_1                       shift and go to state 141
-    factor_2                       shift and go to state 142
-    callfunc                       shift and go to state 144
-    mean                           shift and go to state 150
-    median                         shift and go to state 151
-    mode                           shift and go to state 152
-    variance                       shift and go to state 153
-    standard_deviation             shift and go to state 154
-    average                        shift and go to state 155
-
-state 303
-
-    (161) push_mul_div -> empty .
-
-    ID              reduce using rule 161 (push_mul_div -> empty .)
-    CTEI            reduce using rule 161 (push_mul_div -> empty .)
-    CTEF            reduce using rule 161 (push_mul_div -> empty .)
-    CTEB            reduce using rule 161 (push_mul_div -> empty .)
-    CTEC            reduce using rule 161 (push_mul_div -> empty .)
-    MINUS           reduce using rule 161 (push_mul_div -> empty .)
-    LPAR            reduce using rule 161 (push_mul_div -> empty .)
-    MEAN            reduce using rule 161 (push_mul_div -> empty .)
-    MEDIAN          reduce using rule 161 (push_mul_div -> empty .)
-    MODE            reduce using rule 161 (push_mul_div -> empty .)
-    VARIANCE        reduce using rule 161 (push_mul_div -> empty .)
-    SD              reduce using rule 161 (push_mul_div -> empty .)
-    AVG             reduce using rule 161 (push_mul_div -> empty .)
-
-
-state 304
-
-    (113) factor_1 -> ID see_id push_id factor_3 . print_value reset_dims
-    (153) print_value -> . empty
+    (113) factor_1 -> ID see_id push_id factor_3 . print_value
+    (152) print_value -> . empty
     (190) empty -> .
 
     TIMES           reduce using rule 190 (empty -> .)
@@ -5338,10 +5299,10 @@ state 304
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    print_value                    shift and go to state 337
-    empty                          shift and go to state 338
+    print_value                    shift and go to state 336
+    empty                          shift and go to state 337
 
-state 305
+state 303
 
     (127) factor_3 -> dims .
 
@@ -5366,7 +5327,7 @@ state 305
     TO              reduce using rule 127 (factor_3 -> dims .)
 
 
-state 306
+state 304
 
     (128) factor_3 -> empty .
 
@@ -5391,10 +5352,10 @@ state 306
     TO              reduce using rule 128 (factor_3 -> empty .)
 
 
-state 307
+state 305
 
     (126) factor_2 -> LPAR add_ff expression RPAR . pop_ff
-    (163) pop_ff -> . empty
+    (162) pop_ff -> . empty
     (190) empty -> .
 
     TIMES           reduce using rule 190 (empty -> .)
@@ -5417,10 +5378,10 @@ state 307
     LCURLY          reduce using rule 190 (empty -> .)
     TO              reduce using rule 190 (empty -> .)
 
-    pop_ff                         shift and go to state 339
-    empty                          shift and go to state 340
+    pop_ff                         shift and go to state 338
+    empty                          shift and go to state 339
 
-state 308
+state 306
 
     (131) mean -> MEAN LPAR ID RPAR .
 
@@ -5445,7 +5406,7 @@ state 308
     TO              reduce using rule 131 (mean -> MEAN LPAR ID RPAR .)
 
 
-state 309
+state 307
 
     (132) median -> MEDIAN LPAR ID RPAR .
 
@@ -5470,7 +5431,7 @@ state 309
     TO              reduce using rule 132 (median -> MEDIAN LPAR ID RPAR .)
 
 
-state 310
+state 308
 
     (133) mode -> MODE LPAR ID RPAR .
 
@@ -5495,7 +5456,7 @@ state 310
     TO              reduce using rule 133 (mode -> MODE LPAR ID RPAR .)
 
 
-state 311
+state 309
 
     (134) variance -> VARIANCE LPAR ID RPAR .
 
@@ -5520,7 +5481,7 @@ state 311
     TO              reduce using rule 134 (variance -> VARIANCE LPAR ID RPAR .)
 
 
-state 312
+state 310
 
     (135) standard_deviation -> SD LPAR ID RPAR .
 
@@ -5545,7 +5506,7 @@ state 312
     TO              reduce using rule 135 (standard_deviation -> SD LPAR ID RPAR .)
 
 
-state 313
+state 311
 
     (137) average -> AVG LPAR ID RPAR .
 
@@ -5570,16 +5531,30 @@ state 313
     TO              reduce using rule 137 (average -> AVG LPAR ID RPAR .)
 
 
-state 314
+state 312
 
     (57) cond -> IF LPAR expression RPAR generate_g_if block . cond_1 finish_if
     (58) cond_1 -> . ELSE generate_g_else cond_2
+    (59) cond_1 -> . empty
+    (190) empty -> .
 
-    ELSE            shift and go to state 342
+    ELSE            shift and go to state 341
+    ID              reduce using rule 190 (empty -> .)
+    IF              reduce using rule 190 (empty -> .)
+    WHILE           reduce using rule 190 (empty -> .)
+    FROM            reduce using rule 190 (empty -> .)
+    READ            reduce using rule 190 (empty -> .)
+    WRITE           reduce using rule 190 (empty -> .)
+    HIST            reduce using rule 190 (empty -> .)
+    SCALE           reduce using rule 190 (empty -> .)
+    RETURN          reduce using rule 190 (empty -> .)
+    RCURLY          reduce using rule 190 (empty -> .)
+    END             reduce using rule 190 (empty -> .)
 
-    cond_1                         shift and go to state 341
+    cond_1                         shift and go to state 340
+    empty                          shift and go to state 342
 
-state 315
+state 313
 
     (24) block -> LCURLY . block_1 RCURLY
     (25) block_1 -> . statement
@@ -5629,42 +5604,42 @@ state 315
     histogram                      shift and go to state 95
     scale                          shift and go to state 96
 
-state 316
+state 314
 
     (63) cloop -> WHILE cloop_push_jump LPAR expression generate_g_cloop_start RPAR . block generate_g_cloop_end
     (24) block -> . LCURLY block_1 RCURLY
 
-    LCURLY          shift and go to state 315
+    LCURLY          shift and go to state 313
 
     block                          shift and go to state 345
 
-state 317
+state 315
 
     (67) nloop_2 -> push_id . EQUAL push_equal expression generate_assign
 
     EQUAL           shift and go to state 346
 
 
-state 318
+state 316
 
     (64) nloop -> FROM ID see_id nloop_1 push_id nloop_2 . TO expression generate_g_nloop_s block generate_g_nloop_e
 
     TO              shift and go to state 347
 
 
-state 319
+state 317
 
     (68) nloop_2 -> empty .
-    (169) push_id -> empty .
+    (168) push_id -> empty .
 
     TO              reduce using rule 68 (nloop_2 -> empty .)
-    EQUAL           reduce using rule 169 (push_id -> empty .)
+    EQUAL           reduce using rule 168 (push_id -> empty .)
 
 
-state 320
+state 318
 
     (75) read_1 -> ID see_id read_2 push_id . generate_g_read read_3
-    (175) generate_g_read -> . empty
+    (174) generate_g_read -> . empty
     (190) empty -> .
 
     COMMA           reduce using rule 190 (empty -> .)
@@ -5673,36 +5648,44 @@ state 320
     generate_g_read                shift and go to state 348
     empty                          shift and go to state 349
 
+state 319
+
+    (76) read_2 -> dims read_clear_dims .
+
+    COMMA           reduce using rule 76 (read_2 -> dims read_clear_dims .)
+    RPAR            reduce using rule 76 (read_2 -> dims read_clear_dims .)
+
+
+state 320
+
+    (175) read_clear_dims -> empty .
+
+    COMMA           reduce using rule 175 (read_clear_dims -> empty .)
+    RPAR            reduce using rule 175 (read_clear_dims -> empty .)
+
+
 state 321
-
-    (76) read_2 -> dims reset_dims .
-
-    COMMA           reduce using rule 76 (read_2 -> dims reset_dims .)
-    RPAR            reduce using rule 76 (read_2 -> dims reset_dims .)
-
-
-state 322
 
     (84) write_3 -> COMMA write_1 .
 
     RPAR            reduce using rule 84 (write_3 -> COMMA write_1 .)
 
 
-state 323
+state 322
 
     (56) histogram -> HIST LPAR ID COMMA expression RPAR . SEMICOL
 
     SEMICOL         shift and go to state 350
 
 
-state 324
+state 323
 
     (136) scale -> SCALE LPAR ID COMMA ID RPAR .
 
     SEMICOL         reduce using rule 136 (scale -> SCALE LPAR ID COMMA ID RPAR .)
 
 
-state 325
+state 324
 
     (42) dims -> LBRACK see_dims expression generate_g_verify_f dims_1 RBRACK . dims_end
     (143) dims_end -> . empty
@@ -5731,7 +5714,7 @@ state 325
     dims_end                       shift and go to state 351
     empty                          shift and go to state 352
 
-state 326
+state 325
 
     (43) dims_1 -> COMMA see_dims_s . expression generate_g_verify_s
     (86) expression -> . sexp check_and_or expression_1
@@ -5740,7 +5723,7 @@ state 326
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -5791,7 +5774,7 @@ state 326
     standard_deviation             shift and go to state 154
     average                        shift and go to state 155
 
-state 327
+state 326
 
     (140) see_dims_s -> empty .
 
@@ -5810,10 +5793,10 @@ state 327
     AVG             reduce using rule 140 (see_dims_s -> empty .)
 
 
-state 328
+state 327
 
     (39) assign -> ID see_id push_id assign_1 EQUAL push_equal expression . generate_assign SEMICOL
-    (171) generate_assign -> . empty
+    (170) generate_assign -> . empty
     (190) empty -> .
 
     SEMICOL         reduce using rule 190 (empty -> .)
@@ -5821,21 +5804,21 @@ state 328
     generate_assign                shift and go to state 354
     empty                          shift and go to state 355
 
-state 329
+state 328
 
     (69) callfunc -> ID see_id verify_func LPAR activate_record callfunc_1 verify_p_num . RPAR
 
     RPAR            shift and go to state 356
 
 
-state 330
+state 329
 
     (187) verify_p_num -> empty .
 
     RPAR            reduce using rule 187 (verify_p_num -> empty .)
 
 
-state 331
+state 330
 
     (70) callfunc_1 -> expression verify_params . callfunc_3
     (72) callfunc_3 -> . COMMA increase_p_count callfunc_1
@@ -5848,7 +5831,7 @@ state 331
     callfunc_3                     shift and go to state 357
     empty                          shift and go to state 359
 
-state 332
+state 331
 
     (185) verify_params -> empty .
 
@@ -5856,7 +5839,7 @@ state 332
     RPAR            reduce using rule 185 (verify_params -> empty .)
 
 
-state 333
+state 332
 
     (87) expression_1 -> expression_2 push_and_or expression .
 
@@ -5868,7 +5851,7 @@ state 333
     TO              reduce using rule 87 (expression_1 -> expression_2 push_and_or expression .)
 
 
-state 334
+state 333
 
     (92) sexp_1 -> sexp_2 push_relational sexp .
 
@@ -5882,7 +5865,7 @@ state 334
     TO              reduce using rule 92 (sexp_1 -> sexp_2 push_relational sexp .)
 
 
-state 335
+state 334
 
     (102) exp_1 -> exp_2 push_sum exp .
 
@@ -5903,7 +5886,7 @@ state 335
     TO              reduce using rule 102 (exp_1 -> exp_2 push_sum exp .)
 
 
-state 336
+state 335
 
     (107) term_1 -> term_2 push_mul_div term .
 
@@ -5926,61 +5909,57 @@ state 336
     TO              reduce using rule 107 (term_1 -> term_2 push_mul_div term .)
 
 
+state 336
+
+    (113) factor_1 -> ID see_id push_id factor_3 print_value .
+
+    TIMES           reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    DIV             reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    PLUS            reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    MINUS           reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    ISEQUAL         reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    EQUAL           reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    NOTEQUAL        reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    GREATERTHAN     reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    GREATERORQUAL   reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    LESSTHAN        reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    LESSOREQUAL     reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    OR              reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    AND             reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    SEMICOL         reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    RPAR            reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    COMMA           reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    RBRACK          reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    LCURLY          reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+    TO              reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value .)
+
+
 state 337
 
-    (113) factor_1 -> ID see_id push_id factor_3 print_value . reset_dims
-    (152) reset_dims -> . empty
-    (190) empty -> .
+    (152) print_value -> empty .
 
-    TIMES           reduce using rule 190 (empty -> .)
-    DIV             reduce using rule 190 (empty -> .)
-    PLUS            reduce using rule 190 (empty -> .)
-    MINUS           reduce using rule 190 (empty -> .)
-    ISEQUAL         reduce using rule 190 (empty -> .)
-    EQUAL           reduce using rule 190 (empty -> .)
-    NOTEQUAL        reduce using rule 190 (empty -> .)
-    GREATERTHAN     reduce using rule 190 (empty -> .)
-    GREATERORQUAL   reduce using rule 190 (empty -> .)
-    LESSTHAN        reduce using rule 190 (empty -> .)
-    LESSOREQUAL     reduce using rule 190 (empty -> .)
-    OR              reduce using rule 190 (empty -> .)
-    AND             reduce using rule 190 (empty -> .)
-    SEMICOL         reduce using rule 190 (empty -> .)
-    RPAR            reduce using rule 190 (empty -> .)
-    COMMA           reduce using rule 190 (empty -> .)
-    RBRACK          reduce using rule 190 (empty -> .)
-    LCURLY          reduce using rule 190 (empty -> .)
-    TO              reduce using rule 190 (empty -> .)
+    TIMES           reduce using rule 152 (print_value -> empty .)
+    DIV             reduce using rule 152 (print_value -> empty .)
+    PLUS            reduce using rule 152 (print_value -> empty .)
+    MINUS           reduce using rule 152 (print_value -> empty .)
+    ISEQUAL         reduce using rule 152 (print_value -> empty .)
+    EQUAL           reduce using rule 152 (print_value -> empty .)
+    NOTEQUAL        reduce using rule 152 (print_value -> empty .)
+    GREATERTHAN     reduce using rule 152 (print_value -> empty .)
+    GREATERORQUAL   reduce using rule 152 (print_value -> empty .)
+    LESSTHAN        reduce using rule 152 (print_value -> empty .)
+    LESSOREQUAL     reduce using rule 152 (print_value -> empty .)
+    OR              reduce using rule 152 (print_value -> empty .)
+    AND             reduce using rule 152 (print_value -> empty .)
+    SEMICOL         reduce using rule 152 (print_value -> empty .)
+    RPAR            reduce using rule 152 (print_value -> empty .)
+    COMMA           reduce using rule 152 (print_value -> empty .)
+    RBRACK          reduce using rule 152 (print_value -> empty .)
+    LCURLY          reduce using rule 152 (print_value -> empty .)
+    TO              reduce using rule 152 (print_value -> empty .)
 
-    reset_dims                     shift and go to state 360
-    empty                          shift and go to state 175
 
 state 338
-
-    (153) print_value -> empty .
-
-    TIMES           reduce using rule 153 (print_value -> empty .)
-    DIV             reduce using rule 153 (print_value -> empty .)
-    PLUS            reduce using rule 153 (print_value -> empty .)
-    MINUS           reduce using rule 153 (print_value -> empty .)
-    ISEQUAL         reduce using rule 153 (print_value -> empty .)
-    EQUAL           reduce using rule 153 (print_value -> empty .)
-    NOTEQUAL        reduce using rule 153 (print_value -> empty .)
-    GREATERTHAN     reduce using rule 153 (print_value -> empty .)
-    GREATERORQUAL   reduce using rule 153 (print_value -> empty .)
-    LESSTHAN        reduce using rule 153 (print_value -> empty .)
-    LESSOREQUAL     reduce using rule 153 (print_value -> empty .)
-    OR              reduce using rule 153 (print_value -> empty .)
-    AND             reduce using rule 153 (print_value -> empty .)
-    SEMICOL         reduce using rule 153 (print_value -> empty .)
-    RPAR            reduce using rule 153 (print_value -> empty .)
-    COMMA           reduce using rule 153 (print_value -> empty .)
-    RBRACK          reduce using rule 153 (print_value -> empty .)
-    LCURLY          reduce using rule 153 (print_value -> empty .)
-    TO              reduce using rule 153 (print_value -> empty .)
-
-
-state 339
 
     (126) factor_2 -> LPAR add_ff expression RPAR pop_ff .
 
@@ -6005,35 +5984,35 @@ state 339
     TO              reduce using rule 126 (factor_2 -> LPAR add_ff expression RPAR pop_ff .)
 
 
+state 339
+
+    (162) pop_ff -> empty .
+
+    TIMES           reduce using rule 162 (pop_ff -> empty .)
+    DIV             reduce using rule 162 (pop_ff -> empty .)
+    PLUS            reduce using rule 162 (pop_ff -> empty .)
+    MINUS           reduce using rule 162 (pop_ff -> empty .)
+    ISEQUAL         reduce using rule 162 (pop_ff -> empty .)
+    EQUAL           reduce using rule 162 (pop_ff -> empty .)
+    NOTEQUAL        reduce using rule 162 (pop_ff -> empty .)
+    GREATERTHAN     reduce using rule 162 (pop_ff -> empty .)
+    GREATERORQUAL   reduce using rule 162 (pop_ff -> empty .)
+    LESSTHAN        reduce using rule 162 (pop_ff -> empty .)
+    LESSOREQUAL     reduce using rule 162 (pop_ff -> empty .)
+    OR              reduce using rule 162 (pop_ff -> empty .)
+    AND             reduce using rule 162 (pop_ff -> empty .)
+    SEMICOL         reduce using rule 162 (pop_ff -> empty .)
+    RPAR            reduce using rule 162 (pop_ff -> empty .)
+    COMMA           reduce using rule 162 (pop_ff -> empty .)
+    RBRACK          reduce using rule 162 (pop_ff -> empty .)
+    LCURLY          reduce using rule 162 (pop_ff -> empty .)
+    TO              reduce using rule 162 (pop_ff -> empty .)
+
+
 state 340
 
-    (163) pop_ff -> empty .
-
-    TIMES           reduce using rule 163 (pop_ff -> empty .)
-    DIV             reduce using rule 163 (pop_ff -> empty .)
-    PLUS            reduce using rule 163 (pop_ff -> empty .)
-    MINUS           reduce using rule 163 (pop_ff -> empty .)
-    ISEQUAL         reduce using rule 163 (pop_ff -> empty .)
-    EQUAL           reduce using rule 163 (pop_ff -> empty .)
-    NOTEQUAL        reduce using rule 163 (pop_ff -> empty .)
-    GREATERTHAN     reduce using rule 163 (pop_ff -> empty .)
-    GREATERORQUAL   reduce using rule 163 (pop_ff -> empty .)
-    LESSTHAN        reduce using rule 163 (pop_ff -> empty .)
-    LESSOREQUAL     reduce using rule 163 (pop_ff -> empty .)
-    OR              reduce using rule 163 (pop_ff -> empty .)
-    AND             reduce using rule 163 (pop_ff -> empty .)
-    SEMICOL         reduce using rule 163 (pop_ff -> empty .)
-    RPAR            reduce using rule 163 (pop_ff -> empty .)
-    COMMA           reduce using rule 163 (pop_ff -> empty .)
-    RBRACK          reduce using rule 163 (pop_ff -> empty .)
-    LCURLY          reduce using rule 163 (pop_ff -> empty .)
-    TO              reduce using rule 163 (pop_ff -> empty .)
-
-
-state 341
-
     (57) cond -> IF LPAR expression RPAR generate_g_if block cond_1 . finish_if
-    (173) finish_if -> . empty
+    (172) finish_if -> . empty
     (190) empty -> .
 
     ID              reduce using rule 190 (empty -> .)
@@ -6048,36 +6027,43 @@ state 341
     RCURLY          reduce using rule 190 (empty -> .)
     END             reduce using rule 190 (empty -> .)
 
-    finish_if                      shift and go to state 361
-    empty                          shift and go to state 362
+    finish_if                      shift and go to state 360
+    empty                          shift and go to state 361
 
-state 342
+state 341
 
     (58) cond_1 -> ELSE . generate_g_else cond_2
-    (174) generate_g_else -> . empty
+    (173) generate_g_else -> . empty
     (190) empty -> .
 
     LCURLY          reduce using rule 190 (empty -> .)
     IF              reduce using rule 190 (empty -> .)
-    ID              reduce using rule 190 (empty -> .)
-    WHILE           reduce using rule 190 (empty -> .)
-    FROM            reduce using rule 190 (empty -> .)
-    READ            reduce using rule 190 (empty -> .)
-    WRITE           reduce using rule 190 (empty -> .)
-    HIST            reduce using rule 190 (empty -> .)
-    SCALE           reduce using rule 190 (empty -> .)
-    RETURN          reduce using rule 190 (empty -> .)
-    RCURLY          reduce using rule 190 (empty -> .)
-    END             reduce using rule 190 (empty -> .)
 
-    generate_g_else                shift and go to state 363
-    empty                          shift and go to state 364
+    generate_g_else                shift and go to state 362
+    empty                          shift and go to state 363
+
+state 342
+
+    (59) cond_1 -> empty .
+
+    ID              reduce using rule 59 (cond_1 -> empty .)
+    IF              reduce using rule 59 (cond_1 -> empty .)
+    WHILE           reduce using rule 59 (cond_1 -> empty .)
+    FROM            reduce using rule 59 (cond_1 -> empty .)
+    READ            reduce using rule 59 (cond_1 -> empty .)
+    WRITE           reduce using rule 59 (cond_1 -> empty .)
+    HIST            reduce using rule 59 (cond_1 -> empty .)
+    SCALE           reduce using rule 59 (cond_1 -> empty .)
+    RETURN          reduce using rule 59 (cond_1 -> empty .)
+    RCURLY          reduce using rule 59 (cond_1 -> empty .)
+    END             reduce using rule 59 (cond_1 -> empty .)
+
 
 state 343
 
     (24) block -> LCURLY block_1 . RCURLY
 
-    RCURLY          shift and go to state 365
+    RCURLY          shift and go to state 364
 
 
 state 344
@@ -6105,13 +6091,13 @@ state 345
     RCURLY          reduce using rule 190 (empty -> .)
     END             reduce using rule 190 (empty -> .)
 
-    generate_g_cloop_end           shift and go to state 366
-    empty                          shift and go to state 367
+    generate_g_cloop_end           shift and go to state 365
+    empty                          shift and go to state 366
 
 state 346
 
     (67) nloop_2 -> push_id EQUAL . push_equal expression generate_assign
-    (170) push_equal -> . empty
+    (169) push_equal -> . empty
     (190) empty -> .
 
     ID              reduce using rule 190 (empty -> .)
@@ -6128,8 +6114,8 @@ state 346
     SD              reduce using rule 190 (empty -> .)
     AVG             reduce using rule 190 (empty -> .)
 
-    push_equal                     shift and go to state 368
-    empty                          shift and go to state 292
+    push_equal                     shift and go to state 367
+    empty                          shift and go to state 290
 
 state 347
 
@@ -6140,7 +6126,7 @@ state 347
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -6176,7 +6162,7 @@ state 347
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    expression                     shift and go to state 369
+    expression                     shift and go to state 368
     sexp                           shift and go to state 137
     exp                            shift and go to state 138
     term                           shift and go to state 139
@@ -6198,18 +6184,18 @@ state 348
     (79) read_3 -> . empty
     (190) empty -> .
 
-    COMMA           shift and go to state 371
+    COMMA           shift and go to state 370
     RPAR            reduce using rule 190 (empty -> .)
 
-    read_3                         shift and go to state 370
-    empty                          shift and go to state 372
+    read_3                         shift and go to state 369
+    empty                          shift and go to state 371
 
 state 349
 
-    (175) generate_g_read -> empty .
+    (174) generate_g_read -> empty .
 
-    COMMA           reduce using rule 175 (generate_g_read -> empty .)
-    RPAR            reduce using rule 175 (generate_g_read -> empty .)
+    COMMA           reduce using rule 174 (generate_g_read -> empty .)
+    RPAR            reduce using rule 174 (generate_g_read -> empty .)
 
 
 state 350
@@ -6287,22 +6273,22 @@ state 353
 
     RBRACK          reduce using rule 190 (empty -> .)
 
-    generate_g_verify_s            shift and go to state 373
-    empty                          shift and go to state 374
+    generate_g_verify_s            shift and go to state 372
+    empty                          shift and go to state 373
 
 state 354
 
     (39) assign -> ID see_id push_id assign_1 EQUAL push_equal expression generate_assign . SEMICOL
 
-    SEMICOL         shift and go to state 375
+    SEMICOL         shift and go to state 374
 
 
 state 355
 
-    (171) generate_assign -> empty .
+    (170) generate_assign -> empty .
 
-    SEMICOL         reduce using rule 171 (generate_assign -> empty .)
-    TO              reduce using rule 171 (generate_assign -> empty .)
+    SEMICOL         reduce using rule 170 (generate_assign -> empty .)
+    TO              reduce using rule 170 (generate_assign -> empty .)
 
 
 state 356
@@ -6358,8 +6344,8 @@ state 358
     AVG             reduce using rule 190 (empty -> .)
     RPAR            reduce using rule 190 (empty -> .)
 
-    increase_p_count               shift and go to state 376
-    empty                          shift and go to state 377
+    increase_p_count               shift and go to state 375
+    empty                          shift and go to state 376
 
 state 359
 
@@ -6369,31 +6355,6 @@ state 359
 
 
 state 360
-
-    (113) factor_1 -> ID see_id push_id factor_3 print_value reset_dims .
-
-    TIMES           reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    DIV             reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    PLUS            reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    MINUS           reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    ISEQUAL         reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    EQUAL           reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    NOTEQUAL        reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    GREATERTHAN     reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    GREATERORQUAL   reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    LESSTHAN        reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    LESSOREQUAL     reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    OR              reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    AND             reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    SEMICOL         reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    RPAR            reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    COMMA           reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    RBRACK          reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    LCURLY          reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-    TO              reduce using rule 113 (factor_1 -> ID see_id push_id factor_3 print_value reset_dims .)
-
-
-state 361
 
     (57) cond -> IF LPAR expression RPAR generate_g_if block cond_1 finish_if .
 
@@ -6410,75 +6371,49 @@ state 361
     END             reduce using rule 57 (cond -> IF LPAR expression RPAR generate_g_if block cond_1 finish_if .)
 
 
+state 361
+
+    (172) finish_if -> empty .
+
+    ID              reduce using rule 172 (finish_if -> empty .)
+    IF              reduce using rule 172 (finish_if -> empty .)
+    WHILE           reduce using rule 172 (finish_if -> empty .)
+    FROM            reduce using rule 172 (finish_if -> empty .)
+    READ            reduce using rule 172 (finish_if -> empty .)
+    WRITE           reduce using rule 172 (finish_if -> empty .)
+    HIST            reduce using rule 172 (finish_if -> empty .)
+    SCALE           reduce using rule 172 (finish_if -> empty .)
+    RETURN          reduce using rule 172 (finish_if -> empty .)
+    RCURLY          reduce using rule 172 (finish_if -> empty .)
+    END             reduce using rule 172 (finish_if -> empty .)
+
+
 state 362
 
-    (173) finish_if -> empty .
+    (58) cond_1 -> ELSE generate_g_else . cond_2
+    (60) cond_2 -> . cond_3
+    (61) cond_2 -> . block
+    (62) cond_3 -> . cond
+    (24) block -> . LCURLY block_1 RCURLY
+    (57) cond -> . IF LPAR expression RPAR generate_g_if block cond_1 finish_if
 
-    ID              reduce using rule 173 (finish_if -> empty .)
-    IF              reduce using rule 173 (finish_if -> empty .)
-    WHILE           reduce using rule 173 (finish_if -> empty .)
-    FROM            reduce using rule 173 (finish_if -> empty .)
-    READ            reduce using rule 173 (finish_if -> empty .)
-    WRITE           reduce using rule 173 (finish_if -> empty .)
-    HIST            reduce using rule 173 (finish_if -> empty .)
-    SCALE           reduce using rule 173 (finish_if -> empty .)
-    RETURN          reduce using rule 173 (finish_if -> empty .)
-    RCURLY          reduce using rule 173 (finish_if -> empty .)
-    END             reduce using rule 173 (finish_if -> empty .)
+    LCURLY          shift and go to state 313
+    IF              shift and go to state 97
 
+    cond_2                         shift and go to state 377
+    cond_3                         shift and go to state 378
+    block                          shift and go to state 379
+    cond                           shift and go to state 380
 
 state 363
 
-    (58) cond_1 -> ELSE generate_g_else . cond_2
-    (59) cond_2 -> . cond_3
-    (60) cond_2 -> . block
-    (61) cond_3 -> . cond
-    (62) cond_3 -> . empty
-    (24) block -> . LCURLY block_1 RCURLY
-    (57) cond -> . IF LPAR expression RPAR generate_g_if block cond_1 finish_if
-    (190) empty -> .
+    (173) generate_g_else -> empty .
 
-  ! shift/reduce conflict for IF resolved as shift
-    LCURLY          shift and go to state 315
-    IF              shift and go to state 97
-    ID              reduce using rule 190 (empty -> .)
-    WHILE           reduce using rule 190 (empty -> .)
-    FROM            reduce using rule 190 (empty -> .)
-    READ            reduce using rule 190 (empty -> .)
-    WRITE           reduce using rule 190 (empty -> .)
-    HIST            reduce using rule 190 (empty -> .)
-    SCALE           reduce using rule 190 (empty -> .)
-    RETURN          reduce using rule 190 (empty -> .)
-    RCURLY          reduce using rule 190 (empty -> .)
-    END             reduce using rule 190 (empty -> .)
+    LCURLY          reduce using rule 173 (generate_g_else -> empty .)
+    IF              reduce using rule 173 (generate_g_else -> empty .)
 
-  ! IF              [ reduce using rule 190 (empty -> .) ]
-
-    cond_2                         shift and go to state 378
-    cond_3                         shift and go to state 379
-    block                          shift and go to state 380
-    cond                           shift and go to state 381
-    empty                          shift and go to state 382
 
 state 364
-
-    (174) generate_g_else -> empty .
-
-    LCURLY          reduce using rule 174 (generate_g_else -> empty .)
-    IF              reduce using rule 174 (generate_g_else -> empty .)
-    ID              reduce using rule 174 (generate_g_else -> empty .)
-    WHILE           reduce using rule 174 (generate_g_else -> empty .)
-    FROM            reduce using rule 174 (generate_g_else -> empty .)
-    READ            reduce using rule 174 (generate_g_else -> empty .)
-    WRITE           reduce using rule 174 (generate_g_else -> empty .)
-    HIST            reduce using rule 174 (generate_g_else -> empty .)
-    SCALE           reduce using rule 174 (generate_g_else -> empty .)
-    RETURN          reduce using rule 174 (generate_g_else -> empty .)
-    RCURLY          reduce using rule 174 (generate_g_else -> empty .)
-    END             reduce using rule 174 (generate_g_else -> empty .)
-
-
-state 365
 
     (24) block -> LCURLY block_1 RCURLY .
 
@@ -6496,7 +6431,7 @@ state 365
     END             reduce using rule 24 (block -> LCURLY block_1 RCURLY .)
 
 
-state 366
+state 365
 
     (63) cloop -> WHILE cloop_push_jump LPAR expression generate_g_cloop_start RPAR block generate_g_cloop_end .
 
@@ -6513,7 +6448,7 @@ state 366
     END             reduce using rule 63 (cloop -> WHILE cloop_push_jump LPAR expression generate_g_cloop_start RPAR block generate_g_cloop_end .)
 
 
-state 367
+state 366
 
     (179) generate_g_cloop_end -> empty .
 
@@ -6530,7 +6465,7 @@ state 367
     END             reduce using rule 179 (generate_g_cloop_end -> empty .)
 
 
-state 368
+state 367
 
     (67) nloop_2 -> push_id EQUAL push_equal . expression generate_assign
     (86) expression -> . sexp check_and_or expression_1
@@ -6539,7 +6474,7 @@ state 368
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -6575,7 +6510,7 @@ state 368
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    expression                     shift and go to state 383
+    expression                     shift and go to state 381
     sexp                           shift and go to state 137
     exp                            shift and go to state 138
     term                           shift and go to state 139
@@ -6590,7 +6525,7 @@ state 368
     standard_deviation             shift and go to state 154
     average                        shift and go to state 155
 
-state 369
+state 368
 
     (64) nloop -> FROM ID see_id nloop_1 push_id nloop_2 TO expression . generate_g_nloop_s block generate_g_nloop_e
     (180) generate_g_nloop_s -> . empty
@@ -6598,47 +6533,47 @@ state 369
 
     LCURLY          reduce using rule 190 (empty -> .)
 
-    generate_g_nloop_s             shift and go to state 384
-    empty                          shift and go to state 385
+    generate_g_nloop_s             shift and go to state 382
+    empty                          shift and go to state 383
 
-state 370
+state 369
 
     (75) read_1 -> ID see_id read_2 push_id generate_g_read read_3 .
 
     RPAR            reduce using rule 75 (read_1 -> ID see_id read_2 push_id generate_g_read read_3 .)
 
 
-state 371
+state 370
 
     (78) read_3 -> COMMA . read_1
     (75) read_1 -> . ID see_id read_2 push_id generate_g_read read_3
 
     ID              shift and go to state 167
 
-    read_1                         shift and go to state 386
+    read_1                         shift and go to state 384
 
-state 372
+state 371
 
     (79) read_3 -> empty .
 
     RPAR            reduce using rule 79 (read_3 -> empty .)
 
 
-state 373
+state 372
 
     (43) dims_1 -> COMMA see_dims_s expression generate_g_verify_s .
 
     RBRACK          reduce using rule 43 (dims_1 -> COMMA see_dims_s expression generate_g_verify_s .)
 
 
-state 374
+state 373
 
     (142) generate_g_verify_s -> empty .
 
     RBRACK          reduce using rule 142 (generate_g_verify_s -> empty .)
 
 
-state 375
+state 374
 
     (39) assign -> ID see_id push_id assign_1 EQUAL push_equal expression generate_assign SEMICOL .
 
@@ -6655,7 +6590,7 @@ state 375
     END             reduce using rule 39 (assign -> ID see_id push_id assign_1 EQUAL push_equal expression generate_assign SEMICOL .)
 
 
-state 376
+state 375
 
     (72) callfunc_3 -> COMMA increase_p_count . callfunc_1
     (70) callfunc_1 -> . expression verify_params callfunc_3
@@ -6667,7 +6602,7 @@ state 376
     (106) term -> . factor check_mul_div term_1
     (111) factor -> . factor_1
     (112) factor -> . factor_2
-    (113) factor_1 -> . ID see_id push_id factor_3 print_value reset_dims
+    (113) factor_1 -> . ID see_id push_id factor_3 print_value
     (114) factor_1 -> . callfunc
     (115) factor_1 -> . CTEI push_int
     (116) factor_1 -> . CTEF push_float
@@ -6704,9 +6639,9 @@ state 376
     SD              shift and go to state 161
     AVG             shift and go to state 162
 
-    callfunc_1                     shift and go to state 387
-    expression                     shift and go to state 294
-    empty                          shift and go to state 295
+    callfunc_1                     shift and go to state 385
+    expression                     shift and go to state 292
+    empty                          shift and go to state 293
     sexp                           shift and go to state 137
     exp                            shift and go to state 138
     term                           shift and go to state 139
@@ -6721,7 +6656,7 @@ state 376
     standard_deviation             shift and go to state 154
     average                        shift and go to state 155
 
-state 377
+state 376
 
     (186) increase_p_count -> empty .
 
@@ -6741,7 +6676,7 @@ state 377
     RPAR            reduce using rule 186 (increase_p_count -> empty .)
 
 
-state 378
+state 377
 
     (58) cond_1 -> ELSE generate_g_else cond_2 .
 
@@ -6758,123 +6693,106 @@ state 378
     END             reduce using rule 58 (cond_1 -> ELSE generate_g_else cond_2 .)
 
 
+state 378
+
+    (60) cond_2 -> cond_3 .
+
+    ID              reduce using rule 60 (cond_2 -> cond_3 .)
+    IF              reduce using rule 60 (cond_2 -> cond_3 .)
+    WHILE           reduce using rule 60 (cond_2 -> cond_3 .)
+    FROM            reduce using rule 60 (cond_2 -> cond_3 .)
+    READ            reduce using rule 60 (cond_2 -> cond_3 .)
+    WRITE           reduce using rule 60 (cond_2 -> cond_3 .)
+    HIST            reduce using rule 60 (cond_2 -> cond_3 .)
+    SCALE           reduce using rule 60 (cond_2 -> cond_3 .)
+    RETURN          reduce using rule 60 (cond_2 -> cond_3 .)
+    RCURLY          reduce using rule 60 (cond_2 -> cond_3 .)
+    END             reduce using rule 60 (cond_2 -> cond_3 .)
+
+
 state 379
 
-    (59) cond_2 -> cond_3 .
+    (61) cond_2 -> block .
 
-    ID              reduce using rule 59 (cond_2 -> cond_3 .)
-    IF              reduce using rule 59 (cond_2 -> cond_3 .)
-    WHILE           reduce using rule 59 (cond_2 -> cond_3 .)
-    FROM            reduce using rule 59 (cond_2 -> cond_3 .)
-    READ            reduce using rule 59 (cond_2 -> cond_3 .)
-    WRITE           reduce using rule 59 (cond_2 -> cond_3 .)
-    HIST            reduce using rule 59 (cond_2 -> cond_3 .)
-    SCALE           reduce using rule 59 (cond_2 -> cond_3 .)
-    RETURN          reduce using rule 59 (cond_2 -> cond_3 .)
-    RCURLY          reduce using rule 59 (cond_2 -> cond_3 .)
-    END             reduce using rule 59 (cond_2 -> cond_3 .)
+    ID              reduce using rule 61 (cond_2 -> block .)
+    IF              reduce using rule 61 (cond_2 -> block .)
+    WHILE           reduce using rule 61 (cond_2 -> block .)
+    FROM            reduce using rule 61 (cond_2 -> block .)
+    READ            reduce using rule 61 (cond_2 -> block .)
+    WRITE           reduce using rule 61 (cond_2 -> block .)
+    HIST            reduce using rule 61 (cond_2 -> block .)
+    SCALE           reduce using rule 61 (cond_2 -> block .)
+    RETURN          reduce using rule 61 (cond_2 -> block .)
+    RCURLY          reduce using rule 61 (cond_2 -> block .)
+    END             reduce using rule 61 (cond_2 -> block .)
 
 
 state 380
 
-    (60) cond_2 -> block .
+    (62) cond_3 -> cond .
 
-    ID              reduce using rule 60 (cond_2 -> block .)
-    IF              reduce using rule 60 (cond_2 -> block .)
-    WHILE           reduce using rule 60 (cond_2 -> block .)
-    FROM            reduce using rule 60 (cond_2 -> block .)
-    READ            reduce using rule 60 (cond_2 -> block .)
-    WRITE           reduce using rule 60 (cond_2 -> block .)
-    HIST            reduce using rule 60 (cond_2 -> block .)
-    SCALE           reduce using rule 60 (cond_2 -> block .)
-    RETURN          reduce using rule 60 (cond_2 -> block .)
-    RCURLY          reduce using rule 60 (cond_2 -> block .)
-    END             reduce using rule 60 (cond_2 -> block .)
+    ID              reduce using rule 62 (cond_3 -> cond .)
+    IF              reduce using rule 62 (cond_3 -> cond .)
+    WHILE           reduce using rule 62 (cond_3 -> cond .)
+    FROM            reduce using rule 62 (cond_3 -> cond .)
+    READ            reduce using rule 62 (cond_3 -> cond .)
+    WRITE           reduce using rule 62 (cond_3 -> cond .)
+    HIST            reduce using rule 62 (cond_3 -> cond .)
+    SCALE           reduce using rule 62 (cond_3 -> cond .)
+    RETURN          reduce using rule 62 (cond_3 -> cond .)
+    RCURLY          reduce using rule 62 (cond_3 -> cond .)
+    END             reduce using rule 62 (cond_3 -> cond .)
 
 
 state 381
 
-    (61) cond_3 -> cond .
-
-    ID              reduce using rule 61 (cond_3 -> cond .)
-    IF              reduce using rule 61 (cond_3 -> cond .)
-    WHILE           reduce using rule 61 (cond_3 -> cond .)
-    FROM            reduce using rule 61 (cond_3 -> cond .)
-    READ            reduce using rule 61 (cond_3 -> cond .)
-    WRITE           reduce using rule 61 (cond_3 -> cond .)
-    HIST            reduce using rule 61 (cond_3 -> cond .)
-    SCALE           reduce using rule 61 (cond_3 -> cond .)
-    RETURN          reduce using rule 61 (cond_3 -> cond .)
-    RCURLY          reduce using rule 61 (cond_3 -> cond .)
-    END             reduce using rule 61 (cond_3 -> cond .)
-
-
-state 382
-
-    (62) cond_3 -> empty .
-
-    ID              reduce using rule 62 (cond_3 -> empty .)
-    IF              reduce using rule 62 (cond_3 -> empty .)
-    WHILE           reduce using rule 62 (cond_3 -> empty .)
-    FROM            reduce using rule 62 (cond_3 -> empty .)
-    READ            reduce using rule 62 (cond_3 -> empty .)
-    WRITE           reduce using rule 62 (cond_3 -> empty .)
-    HIST            reduce using rule 62 (cond_3 -> empty .)
-    SCALE           reduce using rule 62 (cond_3 -> empty .)
-    RETURN          reduce using rule 62 (cond_3 -> empty .)
-    RCURLY          reduce using rule 62 (cond_3 -> empty .)
-    END             reduce using rule 62 (cond_3 -> empty .)
-
-
-state 383
-
     (67) nloop_2 -> push_id EQUAL push_equal expression . generate_assign
-    (171) generate_assign -> . empty
+    (170) generate_assign -> . empty
     (190) empty -> .
 
     TO              reduce using rule 190 (empty -> .)
 
-    generate_assign                shift and go to state 388
+    generate_assign                shift and go to state 386
     empty                          shift and go to state 355
 
-state 384
+state 382
 
     (64) nloop -> FROM ID see_id nloop_1 push_id nloop_2 TO expression generate_g_nloop_s . block generate_g_nloop_e
     (24) block -> . LCURLY block_1 RCURLY
 
-    LCURLY          shift and go to state 315
+    LCURLY          shift and go to state 313
 
-    block                          shift and go to state 389
+    block                          shift and go to state 387
 
-state 385
+state 383
 
     (180) generate_g_nloop_s -> empty .
 
     LCURLY          reduce using rule 180 (generate_g_nloop_s -> empty .)
 
 
-state 386
+state 384
 
     (78) read_3 -> COMMA read_1 .
 
     RPAR            reduce using rule 78 (read_3 -> COMMA read_1 .)
 
 
-state 387
+state 385
 
     (72) callfunc_3 -> COMMA increase_p_count callfunc_1 .
 
     RPAR            reduce using rule 72 (callfunc_3 -> COMMA increase_p_count callfunc_1 .)
 
 
-state 388
+state 386
 
     (67) nloop_2 -> push_id EQUAL push_equal expression generate_assign .
 
     TO              reduce using rule 67 (nloop_2 -> push_id EQUAL push_equal expression generate_assign .)
 
 
-state 389
+state 387
 
     (64) nloop -> FROM ID see_id nloop_1 push_id nloop_2 TO expression generate_g_nloop_s block . generate_g_nloop_e
     (181) generate_g_nloop_e -> . empty
@@ -6892,10 +6810,10 @@ state 389
     RCURLY          reduce using rule 190 (empty -> .)
     END             reduce using rule 190 (empty -> .)
 
-    generate_g_nloop_e             shift and go to state 390
-    empty                          shift and go to state 391
+    generate_g_nloop_e             shift and go to state 388
+    empty                          shift and go to state 389
 
-state 390
+state 388
 
     (64) nloop -> FROM ID see_id nloop_1 push_id nloop_2 TO expression generate_g_nloop_s block generate_g_nloop_e .
 
@@ -6912,7 +6830,7 @@ state 390
     END             reduce using rule 64 (nloop -> FROM ID see_id nloop_1 push_id nloop_2 TO expression generate_g_nloop_s block generate_g_nloop_e .)
 
 
-state 391
+state 389
 
     (181) generate_g_nloop_e -> empty .
 
@@ -6928,7 +6846,3 @@ state 391
     RCURLY          reduce using rule 181 (generate_g_nloop_e -> empty .)
     END             reduce using rule 181 (generate_g_nloop_e -> empty .)
 
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for IF in state 363 resolved as shift
