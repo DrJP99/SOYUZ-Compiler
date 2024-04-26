@@ -10,7 +10,7 @@ import ply.yacc as yacc
 from myC_Lex import tokens
 from functionDirectory import DirFunc as DF
 from functionDirectory import varAttributes as VA
-from quadruples import QuadrupleTable 
+from quadruples import QuadrupleTable
 
 df = DF()
 vAtts = VA()
@@ -1185,35 +1185,36 @@ def p_error(p):
 		print ("Unexpected end of input")
 	exit()
 
+# Parse file and begin compilation
+def start_parse(filename = ''):
+	parser = yacc.yacc()
 
+	if (filename == ''):
+		filename = input("file name: ")
 
-parser = yacc.yacc()
+	try:
+		f = open(filename, 'r')
+		data = f.read()
+		f.close()
+		result = parser.parse(data)
+		print('File compiled successfully!')
+		# df.print_memory()
+		# df.print()
+		quad.print()
 
-filename = input("file name: ")
+		# Generate OBJECT (.ovj) file
+		with open('object.ovj', 'wb') as handle:
+			pickle.dump(
+				{
+					"quadruples": quad.listOfQuadruples,
+					"dirFunc": df.table,
+					"memory": df.memory
+				}, handle
+			)
 
-try:
-	f = open(filename, 'r')
-	data = f.read()
-	f.close()
-	result = parser.parse(data)
-	print('File compiled successfully!')
-	# df.print_memory()
-	# df.print()
-	quad.print()
+		print("\n============ E >< e c u t i o n =============\n")
+		subprocess.call(['python', 'virtualMachine.py'])
+		print("\n=============================================\n\n")
 
-	# Generate OBJECT (.ovj) file
-	with open('object.ovj', 'wb') as handle:
-		pickle.dump(
-			{
-				"quadruples": quad.listOfQuadruples,
-				"dirFunc": df.table,
-				"memory": df.memory
-			}, handle
-		)
-
-	print("\n============ E >< e c u t i o n =============\n")
-	subprocess.call(['python', 'VirtualMachine.py'])
-	print("=============================================\n\n")
-
-except EOFError:
-	print(EOFError)
+	except EOFError:
+		print(EOFError)
